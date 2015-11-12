@@ -10,12 +10,27 @@ fancybox: true
 
 # Sidebar
 sidebar: right
-widgets:
-- category
-- tag
-- tagcloud
-- archive
-- recent_posts
+gravatar: https://avatars1.githubusercontent.com/u/1656327?v=3&s=460
+
+nav:
+  archive: /archive
+  about: /about
+  tags: /tags
+
+# Social
+# social:
+# - github: 
+# - dribbble: 
+# - weibo: 
+# - wechat: 
+# - rss: 
+
+social:
+  github: http://github.com/codersir
+  dribbble: 
+  weibo: 
+  wechat: 
+  rss: 
 
 # Miscellaneous
 google_analytics:
