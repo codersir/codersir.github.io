@@ -1,5 +1,25 @@
-<aside id="sidebar"<% if (theme.sidebar === 'bottom'){ %> class="outer"<% } %>>
-  <% theme.widgets.forEach(function(widget){ %>
-    <%- partial('_widget/' + widget) %>
-  <% }) %>
+<div class="gravatar">
+	<figure>
+		<img class="gravatar-image" src="<%- theme.gravatar %>" alt="">
+	</figure>
+</div>
+<nav class="nav" role="nav">
+	<ul>
+	<% for(var k in theme.nav){ %>
+		<li>
+			<a href="<%- theme.nav[k] %>"><%- k %></a>
+		</li>
+	<% } %> 
+	</ul>
+</nav>
+<aside class="social-link" role="contact-info">
+	<% if (theme.social){ %>
+		<% for(var k in theme.social){ %>
+			<% if (theme.social[k]){ %>
+			<a class="social-<%- k %>" target="_blank" href="<%- theme.social[k] %>">
+				<span class="icon-<%- k %>"><%- k %></span>
+			</a>
+			<% } %>
+		<% } %> 
+	<% } %>
 </aside>
