@@ -22,13 +22,22 @@ input, button
        url(font-icon-path + ".ttf?v=#" + font-icon-version) format("truetype"),
        url(font-icon-path + ".svg#fontawesomeregular?v=#" + font-icon-version) format("svg")
 
-html, body, #container
+html, body
   height: 100%
 
 body
+  display flex
+  flex-direction row
   background: color-background
   font: font-size font-sans
   -webkit-text-size-adjust: 100%
+
+.sidebar
+  order -1
+  width 320px
+  background #fefefe
+.content
+  flex 1
 
 .outer
   clearfix()
