@@ -13,17 +13,9 @@ sidebar: right
 gravatar: https://avatars1.githubusercontent.com/u/1656327?v=3&s=460
 
 nav:
-  archive: /archive
-  about: /about
-  tags: /tags
-
-# Social
-# social:
-# - github: 
-# - dribbble: 
-# - weibo: 
-# - wechat: 
-# - rss: 
+  Posts: /archive
+  About: /about
+  Tags: /tags
 
 social:
   github: http://github.com/codersir
@@ -31,12 +23,13 @@ social:
   weibo: 
   wechat: 
   instagram: http://instagram.com/codersir
-  rss: 
+  rss: /atom.xml
 
 # Miscellaneous
+disqus_shortname: codsirblog
 google_analytics:
 favicon: /favicon.png
 twitter:
 google_plus:
 fb_admins:
-fb_app_id:
+fb_app_id: 

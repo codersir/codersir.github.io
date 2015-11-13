@@ -1,6 +1,35 @@
 .sidebar
-  .gravatar
-    img
-      border-radius 100%
-      max-width 100%
-  
+  &__profile
+    margin 40px 0
+  &__profile-link
+      text-align center
+  &__profile-img
+    border-radius 100%
+    width 125px 
+    height 125px
+  &__profile-name
+    font-size 18px
+    font-weight bold
+    text-align center
+  &__profile-nav
+      text-align center
+      padding 20px
+    li 
+        list-style none
+        display inline-block
+        padding 0 10px
+        border-right 1px solid #ddd
+        &:last-child
+            border-right none
+        a 
+            text-decoration none
+            color #444
+            font-weight 900
+            
+  &__profile-social
+      text-align center
+      a
+          display inline-block
+          text-decoration none
+          color #999
+    

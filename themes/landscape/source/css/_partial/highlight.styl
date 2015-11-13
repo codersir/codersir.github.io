@@ -1,33 +1,32 @@
 // https://github.com/chriskempson/tomorrow-theme
-highlight-background = #2d2d2d
+highlight-background =#f5f6f5
 highlight-current-line = #393939
 highlight-selection = #515151
 highlight-foreground = #cccccc
 highlight-comment = #999999
-highlight-red = #f2777a
+highlight-red = #dd1144
 highlight-orange = #f99157
 highlight-yellow = #ffcc66
 highlight-green = #99cc99
 highlight-aqua = #66cccc
 highlight-blue = #6699cc
 highlight-purple = #cc99cc
+highlight-black = #444
 
 $code-block
-  background: highlight-background
-  margin: 0 article-padding * -1
-  padding: 15px article-padding
-  border-style: solid
-  border-color: color-border
-  border-width: 1px 0
-  overflow: auto
-  color: highlight-foreground
-  line-height: font-size * line-height
+  background highlight-background
+  margin 0 
+  padding 15px
+  border-radius 3px 
+  overflow auto
+  color highlight-black
+  line-height font-size * line-height
 
 $line-numbers
   color: #666
   font-size: 0.85em
 
-.article-entry
+.article__entry
   pre, code
     font-family: font-mono
   code
@@ -43,9 +42,10 @@ $line-numbers
   .highlight
     @extend $code-block
     pre
-      border: none
-      margin: 0
-      padding: 0
+      border none
+      margin 0
+      padding 0
+      background #f5f6f5
     table
       margin: 0
       width: auto
@@ -139,7 +139,7 @@ pre
   .header
   .ruby .symbol
   .xml .cdata
-    color: highlight-green
+    color: highlight-red
   .css .hexcolor
     color: highlight-aqua
   .function
@@ -148,9 +148,13 @@ pre
   .ruby .function .title
   .ruby .title .keyword
   .perl .sub
-  .javascript .title
   .coffeescript .title
-    color: highlight-blue
+    color highlight-black
+    font-weight 900
   .keyword
   .javascript .function
-    color: highlight-purple
+    color highlight-black
+    font-weight 900
+  .javascript .title
+    color highlight-black
+    font-weight 500

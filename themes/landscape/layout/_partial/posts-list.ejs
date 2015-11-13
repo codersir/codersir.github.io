@@ -1,0 +1,9 @@
+<li>
+	<% if (post.link || post.title){ %>
+	<header class="post__header">
+        <%- partial('post/title', {class_name: 'post__title'}) %>
+    </header>
+    <% } %>
+	<%- partial('post/date', {class_name: 'post__date', date_format: 'MMMM M, YYYY'}) %>
+	<!--%- partial('post/tag', {class_name: 'post__title'}) %-->
+</li>

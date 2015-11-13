@@ -1,9 +1,12 @@
-<div class="gravatar">
-	<figure>
-		<img class="gravatar-image" src="<%- theme.gravatar %>" alt="">
-	</figure>
+<div class="sidebar__profile">
+	<a class="sidebar__profile-link" href="/">
+		<figure>
+			<img class="sidebar__profile-img" src="<%- theme.gravatar %>" alt="">
+		</figure>
+	</a>
+	<h1 class="sidebar__profile-name">Codersir</h1>
 </div>
-<nav class="nav" role="nav">
+<nav class="sidebar__profile-nav" role="nav">
 	<ul>
 	<% for(var k in theme.nav){ %>
 		<li>
@@ -12,7 +15,7 @@
 	<% } %> 
 	</ul>
 </nav>
-<aside class="social-link" role="contact-info">
+<aside class="sidebar__profile-social" role="social">
 	<% if (theme.social){ %>
 		<% for(var k in theme.social){ %>
 			<% if (theme.social[k]){ %>
