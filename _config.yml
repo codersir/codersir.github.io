@@ -12,10 +12,16 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://idev:4000
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
+
+# Rss
+feed:
+	type: atom
+	path: /atom.xml
+	limit: 20
 
 # Directory
 source_dir: source
@@ -44,7 +50,7 @@ highlight:
 
 # Category & Tag
 default_category: uncategorized
-category_map:
+category_map: 
 tag_map:
 
 # Date / Time format
@@ -62,7 +68,15 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: landscape
+theme: coder
+
+# Comments
+disqus_shortname: codsirblog
+
+# Github
+repo: https://github.com/codersir/codersir.github.io
+
+# Google analytics
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
