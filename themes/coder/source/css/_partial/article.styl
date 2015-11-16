@@ -1,0 +1,107 @@
+.article
+	display flex
+	flex-direction column
+	width 800px
+	overflow hidden
+	min-height 100vh
+	padding-top 35px
+	&__meta
+		font-size 12px
+		font-weight 900
+		color color-bold
+		padding 0 0 10px 
+		margin 5px 0 25px
+		border-bottom 1px solid #ddd 
+		&-edit
+			display inline-block
+			background #f5f6f5
+			padding 2px 8px 2px 8px
+			border-radius 3px
+			.fa-github
+				font-size 14px
+		&-date
+			display inline-block
+			margin 0 0 0 5px
+	&__title
+		font-size 30px
+		font-weight bold
+		color color-bold
+		line-height 1.4
+		transition color 0.2s
+		a&:hover
+			color color-link
+	&__inner
+		flex 1 0 auto
+		padding 0 35px
+		word-breck break-word
+	&__entry
+		@extend $article-style
+	&__footer
+		clearfix()
+		font-size: 0.85em
+		line-height: line-height
+		padding-top: line-height
+		a
+			color: color-grey
+			text-decoration: none
+			&:hover
+				color: color-default
+	&__tag-list-item
+		float: left
+		margin-right: 10px
+	&__tag-list-link
+		&:before
+			content: "#"
+	&__nav
+		clearfix()
+		position relative
+		flex none
+		@media mq-normal
+			margin 0
+			&:before
+				absolute-center(8px)
+				content: ""
+				border-radius: 50%
+				background: color-border
+				box-shadow: 0 1px 2px #fff
+		&-link-wrap
+			text-decoration none
+			text-shadow 0 1px #fff
+			color color-grey
+			background #F5F6F4
+			box-sizing border-box
+			padding 10px 
+			text-align center
+			display block
+			width 50%
+			&:hover
+				color: #333
+				background #E8EAE8
+		&--disable
+			&:hover
+				color color-grey
+				background #F5F6F4
+		&-newer
+			float: left
+			text-align: right
+			padding-right: 20px
+			border-right 1px solid #eee
+		&-older
+			float: right
+			text-align: left
+			padding-left: 20px
+		&-caption
+			text-transform: uppercase
+			letter-spacing: 2px
+			color: #aaa
+			line-height: 1em
+			font-weight: bold
+		&-title
+			font-size 0.85em
+			line-height line-height
+			margin-top 0.5em
+			@media mq-mobile
+				display none
+	@media mq-mobile
+		width 100%
+		

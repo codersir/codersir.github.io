@@ -1,0 +1,67 @@
+.archives
+	clearfix()
+	column-gap 10px
+	@media mq-tablet
+		column-count 3
+	@media mq-normal
+		column-count 4
+	&__wrap
+		margin block-margin 0
+		padding 0 article-padding 
+		
+.archive
+	&__year-wrap
+	&__tag-wrap
+	&__category-wrap
+		margin-bottom 1em
+	&__year
+	&__tag-item
+	&__category-item
+		@extend $block-caption
+	&__article
+		avoid-column-break()
+	&__article-inner
+		@extend $block
+		padding 10px
+		margin-bottom 15px
+	&__article-title
+		text-decoration none
+		font-weight bold
+		color color-default
+		transition color 0.2s
+		line-height line-height
+		&:hover
+			color color-link
+	&__article-footer
+		margin-top 1em
+	&__article-date
+		color color-grey
+		text-decoration none
+		font-size 0.85em
+		line-height 1em
+		margin-bottom 0.5em
+		display block
+
+.page__nav
+	clearfix()
+	background #f5f6f4
+	&-item
+		background #f5f6f4
+		width 50%
+		float left
+		text-align center
+		font-size 16px
+		padding 15px 25px
+		&:hover
+			background #e8eae8
+			color #333
+	&-prev
+		text-align left
+	&-next
+		text-align right
+	&--disable
+		&:hover
+			background #f5f6f4
+			color #444
+	
+		

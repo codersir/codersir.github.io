@@ -1,0 +1,13 @@
+<%- partial('_partial/head') %>
+<body>
+  <header class="sidebar" role="header">
+    <% if (theme.sidebar && theme.sidebar !== 'bottom'){ %>
+      <%- partial('_partial/sidebar', null, {cache: !config.relative_link}) %>
+    <% } %>
+  </header>
+  <main class="main" role="main">
+    <%- body %>
+  </main>
+  <%- partial('_partial/after-footer') %>
+</body>
+</html>

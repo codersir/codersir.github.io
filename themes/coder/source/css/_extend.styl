@@ -1,0 +1,143 @@
+$block-caption
+  text-decoration none
+  text-transform uppercase
+  letter-spacing 2px
+  color color-grey
+  margin-bottom 1em
+  margin-left 5px
+  line-height 1em
+  text-shadow 0 1px #fff
+  font-weight bold
+
+$block
+  background #fff
+  box-shadow 1px 2px 3px #ddd
+  border 1px solid color-border
+  border-radius 3px
+
+$base-style
+  h1
+    font-size 2em
+  h2
+    font-size 1.5em
+  h3
+    font-size 1.3em
+  h4
+    font-size 1.2em
+  h5
+    font-size 1em
+  h6
+    font-size 1em
+    color color-grey
+  hr
+    border 1px dashed color-border
+  strong
+    font-weight bold
+  em, cite
+    font-style italic
+  sup, sub
+    font-size 0.75em
+    line-height 0
+    position relative
+    vertical-align baseline
+  sup
+    top -0.5em
+  sub
+    bottom -0.2em
+  small
+    font-size 0.85em
+  acronym, abbr
+    border-bottom 1px dotted
+  ul, ol, dl
+    margin 0 20px
+    line-height line-height
+  ul, ol
+    ul, ol
+      margin-top 0
+      margin-bottom 0
+  ul
+    list-style disc
+  ol
+    list-style decimal
+  dt
+    font-weight bold
+$article-style
+  @extend $base-style
+  clearfix()
+  color color-default
+  p
+    margin 10px 0
+  h2, h3
+    font-size 20px
+    margin 10px 0 20px 
+    font-weight bold
+    border-bottom 1px solid #eee
+  a
+    color #333
+    text-decoration none
+    &:hover
+      text-decoration underline
+  ul, ol, dl
+    margin-top line-height
+    margin-bottom line-height
+  img, video
+    max-width 100%
+    height auto
+    display block
+    margin auto
+  iframe                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    border none
+  table
+    width 100%
+    border-collapse collapse
+    border-spacing 0
+  th
+    font-weight bold
+    border-bottom 3px solid color-border
+    padding-bottom 0.5em
+  td
+    border-bottom 1px solid color-border
+    padding 10px 0
+  blockquote
+    font-family font-serif
+    font-size 1.4em
+    margin line-height 20px
+    text-align center
+    footer
+      font-size font-size
+      margin line-height 0
+      font-family font-sans
+      cite
+        &:before
+          content "—"
+          padding 0 0.5em
+  .pullquote
+    text-align left
+    width 45%
+    margin 0
+    &.left
+      margin-left 0.5em
+      margin-right 1em
+    &.right
+      margin-right 0.5em
+      margin-left 1em
+  .caption
+    color color-grey
+    display block
+    font-size 0.9em
+    margin-top 0.5em
+    position relative
+    text-align center
+  // http//webdesignerwall.com/tutorials/css-elastic-videos
+  .video-container
+    position relative
+    padding-top (9 / 16 * 100)% // 169 ratio
+    height 0
+    overflow hidden
+    iframe, object, embed
+      position absolute
+      top 0
+      left 0
+      width 100%
+      height 100%
+      margin-top 0

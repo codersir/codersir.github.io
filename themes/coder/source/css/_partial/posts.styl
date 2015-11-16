@@ -1,0 +1,31 @@
+.posts
+	width 800px
+	min-height 100vh
+	display flex
+	flex-direction column
+	&__list
+		flex 1 0 auto
+		li
+			display block
+			padding 20px 25px
+	@media mq-mobile
+		width 100%
+.post
+	&__title
+		font-size 22px
+		line-height 1.5
+		font-weight bold
+	&__meta-date
+		display inline-block
+		font-size 12px
+		font-weight bold
+		padding 0 0 10px 
+		border-bottom 1px solid #ddd
+	&__excerpt
+		@extend $article-style
+		padding 15px 0
+	&__more-link
+		float right
+		padding-right 35px
+		&:hover
+			text-decoration underline

@@ -1,0 +1,35 @@
+# Header
+menu:
+  Home: /
+  Archives: /archives
+rss: /atom.xml
+
+# Content
+excerpt_link: Read More
+fancybox: true
+
+# Sidebar
+sidebar: right
+gravatar: /image/site/gravatar.png
+
+nav:
+  Archives: /archives
+  About: /about
+  Tags: /tags
+
+social:
+  github: http://github.com/codersir
+  dribbble: 
+  weibo: 
+  wechat: 
+  instagram: http://instagram.com/codersir
+  rss: /atom.xml
+
+# Miscellaneous
+disqus_shortname: codsirblog
+google_analytics:
+favicon: /favicon.png
+twitter:
+google_plus:
+fb_admins:
+fb_app_id: 

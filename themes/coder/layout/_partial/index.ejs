@@ -1,0 +1,25 @@
+<div class="posts">
+  <ul class="posts__list">
+    <% page.posts.each(function(post, i){ %>
+      <%- partial('posts-list', {post: post, i: i, index: true}) %>
+    <% }) %>
+  </ul>
+  <% if (page.total > 1){ %>
+  <nav id="page__nav">
+    <% if(page.prev){ %>
+      <% if(page.current === 2) { %> 
+        <a class="page__nav-prev page__nav-item" href="/">&laquo; Previous</a>
+      <% }else{ %> 
+        <a class="page__nav-prev page__nav-item" href="<%- '/page/' + page.prev %>">&laquo; Previous</a>
+      <% } %>     
+    <% }else { %>
+      <span class="page__nav-prev page__nav-item page__nav--disable">&laquo; Previous</span>
+    <% } %>
+    <% if(page.next){ %> 
+      <a class="page__nav-next page__nav-item" href="<%- '/page/' + page.next%>"> Next &raquo;</a>
+    <% }else { %>
+      <span class="page__nav-next page__nav--disable page__nav-item"> Next &raquo;</span>
+    <% } %>
+  </nav>
+<% } %>
+</div>

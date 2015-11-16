@@ -1,0 +1,14 @@
+<li>
+	<% if (post.link || post.title){ %>
+	<header class="post__header">
+        <%- partial('post/title', {class_name: 'post__title'}) %>
+    </header>
+    <% } %>
+    <div class="post__meta">
+    	<%- partial('post/date', {class_name: 'post__meta-date', date_format: 'MMMM M, YYYY'}) %>
+    </div>
+	<% if(i===0 && page.current === 1){ %> 
+		<article class="post__excerpt article__entry"><%- post.excerpt %></article>
+		<a class="post__more-link" href="<%- post.permalink %>">Read More &raquo;</a>
+	<% } %>
+</li>

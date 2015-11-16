@@ -1,0 +1,3 @@
+<% post.categories.forEach(function(category){ %> 
+	<a class="<%- class_name %>" title="<%- category.posts.length %>篇文章" href="<%- category.permalink %>"><%- category.slug %></a>
+<% }) %>

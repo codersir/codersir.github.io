@@ -1,0 +1,7 @@
+<% if(page.path==='tags/index.html'){ %>
+	<%- partial('_partial/tagCloud', {post: page}) %>
+<% } else if(page.path==='categories/index.html'){ %>
+	<%- partial('_partial/categories', {post: page}) %>
+<% } else{ %>
+	<%- partial('_partial/page', {post: page, index: false}) %>
+<% } %>

@@ -1,0 +1,3 @@
+<% post.tags.forEach(function(tag){ %> 
+	<a class="<%- class_name %>" title="<%- tag.posts.length %>篇文章" href="<%- tag.permalink %>"><%- tag.slug %></a>
+<% }) %>

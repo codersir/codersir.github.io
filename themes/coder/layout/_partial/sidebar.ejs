@@ -1,0 +1,31 @@
+<div class="sidebar__profile">
+	<a class="sidebar__profile-link" href="/">
+		<figure>
+			<img class="sidebar__profile-img" src="<%- theme.gravatar %>" alt="">
+		</figure>
+	</a>
+	<h1 class="sidebar__profile-name">Codersir</h1>
+	<div class="sidebar__profile-bio">
+		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insteresting in Javascript, AngularJS, ReactJS and NodeJS.</p>
+	</div>
+</div>
+<nav class="sidebar__profile-nav" role="nav">
+	<ul>
+	<% for(var k in theme.nav){ %>
+		<li>
+			<a href="<%- theme.nav[k] %>"><%- k %></a>
+		</li>
+	<% } %> 
+	</ul>
+</nav>
+<aside class="sidebar__profile-social" role="social">
+	<% if (theme.social){ %>
+		<% for(var k in theme.social){ %>
+			<% if (theme.social[k]){ %>
+			<a class="social-<%- k %>" target="_blank" href="<%- theme.social[k] %>">
+				<span class="fa fa-<%- k %>"></span>
+			</a>
+			<% } %>
+		<% } %> 
+	<% } %>
+</aside>

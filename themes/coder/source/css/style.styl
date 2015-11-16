@@ -1,0 +1,88 @@
+@import "nib"
+@import "_variables"
+@import "_util/mixin"
+
+global-reset()
+
+input, button
+  margin 0
+  padding 0
+  &::-moz-focus-inner
+    border 0
+    padding 0
+
+@font-face
+  font-family FontAwesome
+  font-style normal
+  font-weight normal
+  src url(font-icon-path + ".eot?v=#" + font-icon-version)
+  src url(font-icon-path + ".eot?#iefix&v=#" + font-icon-version) format("embedded-opentype"),
+       url(font-icon-path + ".woff?v=#" + font-icon-version) format("woff"),
+       url(font-icon-path + ".ttf?v=#" + font-icon-version) format("truetype"),
+       url(font-icon-path + ".svg#fontawesomeregular?v=#" + font-icon-version) format("svg")
+
+* 
+  box-sizing border-box
+  text-rendering optimizeLegibility
+  font-smoothing antialiased
+  
+a 
+    color #444
+    text-decoration none
+  
+html, body
+  height 100%
+  color #444
+  
+
+body
+  display flex
+  flex-direction row
+  background color-background
+  font 400 16px/1.375 'Helvetica Neue', Helvetica, Arial
+  -webkit-text-size-adjust 100%
+  @media mq-mobile
+    flex-direction column
+
+.sidebar
+  position fixed
+  top 0
+  left 0
+  height 100%
+  width 340px
+  order -1
+  background color-sidebar
+  @media mq-mobile
+    position static
+    display block
+    width 100%
+    height auto
+.main
+  margin 0 0 0 340px
+  background color-background
+  @media mq-mobile
+    margin 0
+    width 100%
+
+.left, .alignleft
+  float left
+
+.right, .alignright
+  float right
+
+.clear
+  clear both
+  
+::selection
+  background #F55567
+  color #fff
+
+@import "_extend"
+@import "_partial/font-awesome"
+@import "_partial/posts"
+@import "_partial/article"
+@import "_partial/page"
+@import "_partial/comment"
+@import "_partial/archive"
+@import "_partial/highlight"
+@import "_partial/sidebar"
