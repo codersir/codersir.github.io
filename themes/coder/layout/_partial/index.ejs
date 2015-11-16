@@ -1,37 +1,25 @@
-<% if (pagination == 2){ %>
 <div class="posts">
   <ul class="posts__list">
-    <% page.posts.each(function(post){ %>
-      <%- partial('posts-list', {post: post, index: true}) %>
+    <% page.posts.each(function(post, i){ %>
+      <%- partial('posts-list', {post: post, i: i, index: true}) %>
     <% }) %>
   </ul>
-</div>
   <% if (page.total > 1){ %>
-    <nav id="page-nav">
-      <%- paginator({
-        prev_text: '&laquo; Prev',
-        next_text: 'Next &raquo;'
-      }) %>
-    </nav>
-  <% } %>
-<% } else { %>
-  <% var last; %>
-  <% page.posts.each(function(post, i){ %>
-    <% var year = post.date.year(); %>
-    <% if (last != year){ %>
-      <% if (last != null){ %>
-        </div></section>
-      <% } %>
-      <% last = year; %>
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="<%- url_for('archives/' + year) %>" class="archive-year"><%= year %></a>
-        </div>
-        <div class="archives">
+  <nav id="page__nav">
+    <% if(page.prev){ %>
+      <% if(page.current === 2) { %> 
+        <a class="page__nav-prev page__nav-item" href="/">&laquo; Previous</a>
+      <% }else{ %> 
+        <a class="page__nav-prev page__nav-item" href="<%- '/page/' + page.prev %>">&laquo; Previous</a>
+      <% } %>     
+    <% }else { %>
+      <span class="page__nav-prev page__nav-item page__nav--disable">&laquo; Previous</span>
     <% } %>
-    <%- partial('archive-post', {post: post, even: i % 2 == 0}) %>
-  <% }) %>
-  <% if (page.posts.length){ %>
-    </div></section>
-  <% } %>
+    <% if(page.next){ %> 
+      <a class="page__nav-next page__nav-item" href="<%- '/page/' + page.next%>"> Next &raquo;</a>
+    <% }else { %>
+      <span class="page__nav-next page__nav--disable page__nav-item"> Next &raquo;</span>
+    <% } %>
+  </nav>
 <% } %>
+</div>

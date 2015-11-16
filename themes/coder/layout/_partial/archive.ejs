@@ -19,10 +19,22 @@
         </div></section>
       <% } %>
       <% last = year; %>
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="<%- url_for('archives/' + year) %>" class="archive-year"><%= year %></a>
-        </div>
+      <section class="archives__wrap">
+        <% if (is_tag()){ %> 
+          <div class="archive__tag-wrap">
+            <span class="archive__tag-item"><%- page.tag %></span>
+          </div>
+        <% } %>
+        <% if(is_category()){ %>
+          <div class="archive__category-wrap">
+            <span class="archive__category-item"><%- page.category %></span>
+          </div>
+        <% } %>
+        <%if (is_archive()){ %>
+          <div class="archive__year-wrap">
+            <a href="<%- url_for('archives/' + year) %>" class="archive__year-link"><%= year %></a>
+          </div>
+        <% } %>
         <div class="archives">
     <% } %>
     <%- partial('archive-post', {post: post, even: i % 2 == 0}) %>

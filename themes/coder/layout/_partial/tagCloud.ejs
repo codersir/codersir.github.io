@@ -1,0 +1,11 @@
+<article id="<%= post.layout %>-<%= post.slug %>" class="article article--type-<%= post.layout %>" itemscope itemprop="blogPost">
+
+  <div class="article__inner">
+    <header class="article__header page__header">
+      <h1 class="article__title page__title" itemprop="name">
+        <%= post.title %>
+      </h1>
+    </header>
+    <%- tagcloud({"min_font": 14}) %>
+  </div>
+</article>

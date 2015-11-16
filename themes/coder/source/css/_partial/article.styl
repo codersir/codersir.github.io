@@ -2,6 +2,7 @@
 	display flex
 	flex-direction column
 	width 800px
+	overflow hidden
 	min-height 100vh
 	padding-top 35px
 	&__meta
@@ -14,9 +15,10 @@
 		&-edit
 			display inline-block
 			background #f5f6f5
-			position relative
-			padding 2px 8px 2px 25px
+			padding 2px 8px 2px 8px
 			border-radius 3px
+			.fa-github
+				font-size 14px
 		&-date
 			display inline-block
 			margin 0 0 0 5px
@@ -31,111 +33,9 @@
 	&__inner
 		flex 1 0 auto
 		padding 0 35px
+		word-breck break-word
 	&__entry
-		@extend $base-style
-		clearfix()
-		color color-default
-		p
-			margin 10px 0
-		h2, h3
-			font-size 20px
-			margin 10px 0 20px 
-			font-weight bold
-			border-bottom 1px solid #eee
-		a
-			color #333
-			text-decoration none
-			&:hover
-				text-decoration underline
-		ul, ol, dl
-			margin-top line-height
-			margin-bottom line-height
-		img, video
-			max-width 100%
-			height auto
-			display block
-			margin auto
-		iframe                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-			border none
-		table
-			width 100%
-			border-collapse collapse
-			border-spacing 0
-		th
-			font-weight bold
-			border-bottom 3px solid color-border
-			padding-bottom 0.5em
-		td
-			border-bottom 1px solid color-border
-			padding 10px 0
-		blockquote
-			font-family font-serif
-			font-size 1.4em
-			margin line-height 20px
-			text-align center
-			footer
-				font-size font-size
-				margin line-height 0
-				font-family font-sans
-				cite
-					&:before
-						content "—"
-						padding 0 0.5em
-		.pullquote
-			text-align left
-			width 45%
-			margin 0
-			&.left
-				margin-left 0.5em
-				margin-right 1em
-			&.right
-				margin-right 0.5em
-				margin-left 1em
-		.caption
-			color color-grey
-			display block
-			font-size 0.9em
-			margin-top 0.5em
-			position relative
-			text-align center
-		// http//webdesignerwall.com/tutorials/css-elastic-videos
-		.video-container
-			position relative
-			padding-top (9 / 16 * 100)% // 169 ratio
-			height 0
-			overflow hidden
-			iframe, object, embed
-				position absolute
-				top 0
-				left 0
-				width 100%
-				height 100%
-				margin-top 0
-	&__category
-		float left
-		line-height 1em
-		color #ccc
-		text-shadow 0 1px #fff
-		margin-left 8px
-		&:before
-			content: "\2022"
-	&__category-link
-		@extend $block-caption
-		margin: 0 12px 1em
-	&__more-link a
-		display: inline-block
-		line-height: 1em
-		padding: 6px 15px
-		border-radius: 15px
-		background: color-background
-		color: color-grey
-		text-shadow: 0 1px #fff
-		text-decoration: none
-		&:hover
-			background: color-link
-			color: #fff
-			text-decoration: none
-			text-shadow: 0 1px darken(color-link, 20%)
+		@extend $article-style
 	&__footer
 		clearfix()
 		font-size: 0.85em
@@ -170,31 +70,26 @@
 			color color-grey
 			background #F5F6F4
 			box-sizing border-box
-			margin-top block-margin
 			padding 10px 
 			text-align center
 			display block
+			width 50%
 			&:hover
 				color: #333
 				background #E8EAE8
-			@media mq-normal
-				width: 50%
-				margin-top: 0
 		&--disable
 			&:hover
 				color color-grey
 				background #F5F6F4
 		&-newer
-			@media mq-normal
-				float: left
-				text-align: right
-				padding-right: 20px
-				border-right 1px solid #eee
+			float: left
+			text-align: right
+			padding-right: 20px
+			border-right 1px solid #eee
 		&-older
-			@media mq-normal
-				float: right
-				text-align: left
-				padding-left: 20px
+			float: right
+			text-align: left
+			padding-left: 20px
 		&-caption
 			text-transform: uppercase
 			letter-spacing: 2px
@@ -205,27 +100,8 @@
 			font-size 0.85em
 			line-height line-height
 			margin-top 0.5em
-
-$article-share-link
-	width: 50px
-	height: 36px
-	display: block
-	float: left
-	position: relative
-	color: #999
-	text-shadow: 0 1px #fff
-	&:before
-		font-size: 20px
-		font-family: font-icon
-		absolute-center(@font-size)
-		text-align: center
-	&:hover
-		color: #fff
-
-.article-share-twitter
-	@extend $article-share-link
-	&:before
-		content: "\f099"
-	&:hover
-		background: color-twitter
-		text-shadow: 0 1px darken(color-twitter, 20%)
+			@media mq-mobile
+				display none
+	@media mq-mobile
+		width 100%
+		

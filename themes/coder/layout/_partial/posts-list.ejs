@@ -4,6 +4,11 @@
         <%- partial('post/title', {class_name: 'post__title'}) %>
     </header>
     <% } %>
-	<%- partial('post/date', {class_name: 'post__date', date_format: 'MMMM M, YYYY'}) %>
-	<!--%- partial('post/tag', {class_name: 'post__title'}) %-->
+    <div class="post__meta">
+    	<%- partial('post/date', {class_name: 'post__meta-date', date_format: 'MMMM M, YYYY'}) %>
+    </div>
+	<% if(i===0 && page.current === 1){ %> 
+		<article class="post__excerpt article__entry"><%- post.excerpt %></article>
+		<a class="post__more-link" href="<%- post.permalink %>">Read More &raquo;</a>
+	<% } %>
 </li>
