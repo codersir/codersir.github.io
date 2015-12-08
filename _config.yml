@@ -9,7 +9,7 @@ description: The coder sir behind http://codersir.com
 author: xuhong
 language:
 timezone:
-
+render_drafts: true
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: http://idev:4000
