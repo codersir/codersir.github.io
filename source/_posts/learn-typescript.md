@@ -253,8 +253,10 @@ TypeScript 支持静态属性声明，所有的静态属性只在类的内部可
 ```
 
 #### 剩余参数
-参数名前加上 `...`表明这是个剩余参数：
-``` 
+剩余参数是一个参数数组，让你可以一次传入任意数量的参数：
+
+```
+    //restOfName is an Array
     function buildName(firstName: string, ...restOfName: string[]){
         return firstName + " " + restOfName.join(" ")
     }
@@ -263,8 +265,112 @@ TypeScript 支持静态属性声明，所有的静态属性只在类的内部可
 ```
 
 #### 重载
+重载我们都很熟悉，就是根据传入的参数的不同进行不同的操作或返回不同的值。
 
+```
+    function pickCard(x: {suit: string; card: number; }[]): number;
+    function pickCard(x: number): {suit: string; card: number; };
+    function pickCard(x): any {
+        if(typeof x == "object"){
+            var pickedCard = Math.floor(Math.random() * x.length);
+            return pickedCard;
+        }else if (typeof x == "number"){
+            var pickedSuit = Math.floor(x / 13);
+            return { suit: suits[pickedSuit], card: x % 13 };
+        }
+    }
+```
 
+### 泛型
+软件工程的一个重要部分就是开发不仅具有良好设计和一致的 API，而且还可以复用的组件。在 C# 和 Java 中，泛型就是实现可复用组件的重要工具，泛型使组件可以支持一系列的类型而不仅仅是某一种类型。
+Angular2 的 Component 就是通过泛型实现复用。
 
+```
+    function identify<T>(arg: T): T {
+        return arg;
+    }
+    var output = identity<string>("myString")
+    var output = identity("myString")           //type 参数可以省略，编译器可以根据传入的参数推断类型
+```
+
+#### 接口泛型
+接口泛型可以使所有实现该接口的对象元素保持同一种类型：
+
+```
+    interface GenericIdentityFn<T> {
+        (arg: T): T;
+    }
+
+    function identity<T>(arg: T): T {
+        return arg;
+    }
+
+    var myIdentity: GenericIdentityFn<number> = identity;
+```
+
+#### 类泛型
+和接口泛型一样，类泛型可以确保所有的成员都是同一种类型。但是请注意，泛型只和类的实例部分相关，类的静态部分可以是其他的类型。
+
+#### 约束泛型
+有时候，我们不仅仅要求组件可以支持所有的类型，还会有其他的限制，比如要求至少有一个 length 属性：
+
+```
+    interface Lengthwise {
+        length: number; 
+    }
+
+    function identity<T extends Lengthwise>(arg: T): T {
+        console.log(arg.length)
+        return;
+    }
+```
+
+### 混合（mixin ）
+TypeScript 的 mixin 并不够优雅。在 TypeScript 中，mixin 使用关键字 `implements` 而不是 `extends`，这意味着类被当成接口来使用，所以只会检查被混合类成员的类型而不是实现，也就是说我们必须在混合后的类中提供类成员的实现。然而这正是我们使用 mixin 想要避免的。
+
+```
+    class Disposable {
+        isDisposed: boolean;
+        dispose() {
+            this.isDisposed = true;
+        }
+    }
+
+    class Activatable {
+        isActive: boolean;
+        activate() {
+            this.isActive = true;
+        }
+    }
+
+    class smartObj implements Disposable, Activatable {
+        constructor() {
+            setInterval(() => console.log(this.isActive + ":" + this.isDisposed), 500);
+        }
+
+        interact() {
+            this.activate();
+        }
+        
+        //这里要再写一遍
+        isDisposed: boolean = false;
+        dispose: () => void;
+        isActive: boolean = false;
+        activate: () => void;
+    }
+```
+
+### 声明合并
+在 TypeScript 中，声明无非三种：命名空间/模块，类型，值。
+
+#### 合并接口
+同名接口合并其成员：
+- 非函数成员必须唯一。
+- 函数成员视为重载。
+
+#### 合并模块
+声明模块会同时创建命名空间和值：
+- 命名空间的合并： 每个模块中  `export` 的类型定义自行合并，组成一个新的命名空间
+- 值的合并：如果模块已经有同名的值，合并时会把第二个模块中 `export` 的值添加到第一个模块中
 
 
