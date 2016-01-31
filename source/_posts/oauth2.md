@@ -7,7 +7,7 @@ tags: oauth2
 OAuth2 允许采用不同的授权类型(grant_type) 获取 access_token
 - Authorization Code
 这是最常见也是最安全的授权方式，这种方式为 confidential 客户端设计，通过这种方式可以同时获得 access_token 和 refresh_token
-
+```
      +----------+
      | Resource |
      |   Owner  |
@@ -33,7 +33,7 @@ OAuth2 允许采用不同的授权类型(grant_type) 获取 access_token
      |         |                                             |
      |         |<---(E)----- Access Token -------------------'
      +---------+       (w/ Optional Refresh Token)
-
+```
 
 - Implicit
 
