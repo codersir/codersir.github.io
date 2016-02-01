@@ -102,6 +102,7 @@ var Hero = (function () {
 ```
 
 上面的代码在返回`Hero`构造函数之前，将它作为参数传给了`__decorate`函数，那`__decorate`函数做了什么？看编译后的 JavaScript 代码，可以看到该函数实现如下：
+
 ```
 // 保证上下文中只有一个 __decorate 函数，不会被反复重载
 var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
@@ -109,7 +110,7 @@ var __decorate = (this && this.__decorate) || function(decorators, target, key, 
     	// 装饰类的时候，__decorate 函数接受两个参数，所以 r = target，也就是上文的构造函数 Hero
         r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
         d;
-    // 这是另外一个 ES7 API 了，后面再讲
+    // 这是另外一个 ES7 API 了，先不管，看fallback方案
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else
     	// 从右向左依次执行 decorator 函数，对 class 而言，相当于 decorators.reduceRight(function(o, d){ return (d && d(r)) || o }, r)
@@ -119,6 +120,12 @@ var __decorate = (this && this.__decorate) || function(decorators, target, key, 
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 ```
+`__decorate` 函数体其实很简单，主要是进行一些条件判断，根据传入参数个数的不同判断装饰器的类型，并执行相关的装饰器函数。
+
+需要注意的两个函数是：
+- [Object.getOwnPropertyDescriptor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor)
+- [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
+第一个函数是获取对象自有属性的描述符，第二是添加或修改对象的自有属性，具体可以看 MDN 上的教程。
 
 知道装饰器装饰类是如何进行工作后，下面来完善 `@logClass` 装饰器。通过类装饰器接口可以知道，它接受一个函数作为参数，并返回函数。 `@logClass` 装饰器的目的是，在每次英雄被派出去拯救世界的时候，
 记录下来是哪个英雄出去了，为他祈祷，实现如下：
@@ -168,6 +175,7 @@ TypeScript 属性装饰器接口如下：
 ```
 declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
 ```
+
 由接口可以知道，属性装饰器接受两个参数，一个是目标对象，另一个是属性名称，没有返回值。
 继续使用上面 Hero 类，这次给 `power` 属性加上 `@logProperty` 属性装饰器，在给英雄使用超能力的时候，添加 Bgm，代码如下：
 
@@ -271,6 +279,13 @@ batman.power = 'doublekill'
 ```
 
 ### 装饰方法
+
+TypeScript 属性方法接口如下：
+
+```
+declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
+```
+
 
 ### 装饰参数
 
