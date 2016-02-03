@@ -125,7 +125,7 @@ var __decorate = (this && this.__decorate) || function(decorators, target, key, 
 需要注意的两个函数是：
 - [Object.getOwnPropertyDescriptor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor)
 - [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
-第一个函数是获取对象自有属性的描述符，第二是添加或修改对象的自有属性，具体可以看 MDN 上的教程。
+第一个函数是获取对象自有属性的描述符，第二是添加或修改对象的自有属性，具体用法查看 MDN。
 
 知道装饰器装饰类是如何进行工作后，下面来完善 `@logClass` 装饰器。通过类装饰器接口可以知道，它接受一个函数作为参数，并返回函数。 `@logClass` 装饰器的目的是，在每次英雄被派出去拯救世界的时候，
 记录下来是哪个英雄出去了，为他祈祷，实现如下：
@@ -285,10 +285,79 @@ TypeScript 属性方法接口如下：
 ```
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
 ```
+方法装饰器接受的参数最多，接受三个参数，返回属性描述符或者没有返回。这次我们装饰 `showPower`方法，给它添加 `@logMethod` 装饰器：
+
+```
+class Hero {
+    public name: string
+    public power: string
+
+    constructor(name:string, power:string){
+        this.name = name
+        this.power = power
+    }
+    
+    @logMethod
+    showPower(){
+        return `${this.name} has special power: ${this.power}`
+    }
+}
+```
+
+编译为 JavaScript 得到：
+
+```
+var Hero = (function () {
+    function Hero(name, power) {
+        this.name = name;
+        this.power = power;
+    }
+    Hero.prototype.showPower = function () {
+        return this.name + " has special power: " + this.power;
+    };
+    __decorate([
+        logMethod
+    ], Hero.prototype, "showPower");
+    return Hero;
+})();
+````
+此时 `__decoreate`函数去掉条件判断得到：
+
+```
+var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
+    var c = arguments.length,
+        r = desc || Object.getOwnPropertyDescriptor(target, key),
+        d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else
+        for (var i = decorators.length - 1; i >= 0; i--)
+            if (d = decorators[i]) r = d(target, key, r) || r;
+    return r && Object.defineProperty(target, key, r), r;
+};
+```
+这里的实现我觉得是有问题的，
+下面我们来实现 `@logMethod` 装饰器：
+```
+function logMethod(target:any, key:string, descriptor: object){
+  var originalMethod = descriptor.value; 
+
+  descriptor.value =  function (...args: any[]) {
+      var a = args.map(a => JSON.stringify(a)).join();
+      var result = originalMethod.apply(this, args);
+      var r = JSON.stringify(result);
+      console.log(`Call: ${key}(${a}) => ${r}`);
+      return result;
+  }
+
+  return descriptor;
+}
+```
 
 
 ### 装饰参数
 
+
+### 给装饰器传入参数
 
 ## reference
 
