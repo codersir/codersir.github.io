@@ -1,6 +1,8 @@
 title: 'dive-deep-in-redux '
 date: 2016-01-25 16:33:25
-tags:[react, redux]
+tags:
+- react
+- redux
 ---
 
 redux 是 react 的一个状态管理方案，它的名称来自 `array.reduce`，要掌握它的要义，首先要知道数组 `reduce` 方法的用法。

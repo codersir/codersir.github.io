@@ -1,6 +1,9 @@
 title: what-is-decorator-in-javascript
 date: 2016-01-31 00:36:01
-tags: [es2016, decorator, typescript]
+tags: 
+- es2016
+- decorator
+- typescript
 ---
 
 装饰器是 ES7（也就是ES2016）的提案，虽然听着感觉好像还有点遥远，毕竟 ES6 还没有走多久呢，但实际上，2016年已经到来，也就是说，ES7 的提案今年就会成为新的标准，同时借助一些编译器（比如babel），我们早已经可以在正式环境中使用它了。另外，TypeScript 在去年和
@@ -110,7 +113,7 @@ var __decorate = (this && this.__decorate) || function(decorators, target, key, 
     	// 装饰类的时候，__decorate 函数接受两个参数，所以 r = target，也就是上文的构造函数 Hero
         r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
         d;
-    // 这是另外一个 ES7 API 了，先不管，看fallback方案
+    // 这是另外一个 ES7 API 了，先不管，看 fallback 方案
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else
     	// 从右向左依次执行 decorator 函数，对 class 而言，相当于 decorators.reduceRight(function(o, d){ return (d && d(r)) || o }, r)
@@ -167,6 +170,7 @@ var batman = new Hero('batman', 'fly')
 batman instanceof Hero
 // true
 ```
+<a href="http://www.typescriptlang.org/Playground#src=%40logClass%0D%0Aclass%20Hero%20%7B%0D%0A%20%20%20%20public%20name%3A%20string%3B%0D%0A%20%20%20%20public%20power%3A%20string%3B%0D%0A%0D%0A%20%20%20%20constructor(name%3A%20string%2C%20power%3A%20string)%20%7B%0D%0A%20%20%20%20%20%20%20%20this.name%20%3D%20name%0D%0A%20%20%20%20%20%20%20%20this.power%20%3D%20power%0D%0A%20%20%20%20%7D%0D%0A%0D%0A%20%20%20%20showPower()%7B%0D%0A%20%20%20%20%09return%20%60%24%7Bthis.name%7D%20has%20special%20power%3A%20%24%7Bthis.power%7D%60%0D%0A%20%20%20%20%7D%0D%0A%7D%0D%0A%0D%0Afunction%20logClass(target%3A%20any)%20%7B%0D%0A%0D%0A%20%20%2F%2F%20%E4%BF%9D%E5%AD%98%E5%8E%9F%E5%A7%8B%E6%9E%84%E9%80%A0%E5%99%A8%0D%0A%20%20var%20original%20%3D%20target%3B%0D%0A%0D%0A%20%20%2F%2F%20%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0%EF%BC%8C%E7%94%9F%E6%88%90%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B%0D%0A%20%20function%20construct(constructor%2C%20args)%20%7B%0D%0A%20%20%20%20var%20c%20%3A%20any%20%3D%20function%20()%20%7B%0D%0A%20%20%20%20%20%20return%20constructor.apply(this%2C%20args)%3B%0D%0A%20%20%20%20%7D%0D%0A%20%20%20%20c.prototype%20%3D%20constructor.prototype%3B%0D%0A%20%20%20%20return%20new%20c()%3B%0D%0A%20%20%7D%0D%0A%0D%0A%20%20%2F%2F%20%E6%B7%BB%E5%8A%A0%E8%A1%8C%E4%B8%BA%E5%88%B0%E6%9E%84%E9%80%A0%E5%99%A8%E8%B0%83%E7%94%A8%E6%97%B6%0D%0A%20%20var%20f%20%3A%20any%20%3D%20function%20(...args)%20%7B%0D%0A%20%20%20%20console.log(%22God%20bless%20%22%20%2B%20args%5B0%5D)%3B%20%0D%0A%20%20%20%20return%20construct(original%2C%20args)%3B%0D%0A%20%20%7D%0D%0A%0D%0A%20%20%2F%2F%20%E5%A4%8D%E5%88%B6%E5%8E%9F%E5%A7%8B%E6%9E%84%E9%80%A0%E5%99%A8%E7%9A%84%E5%8E%9F%E5%9E%8B%0D%0A%20%20f.prototype%20%3D%20original.prototype%3B%0D%0A%0D%0A%20%20%2F%2F%20%E8%BF%94%E5%9B%9E%E6%96%B0%E7%9A%84%E6%9E%84%E9%80%A0%E5%99%A8%0D%0A%20%20return%20f%3B%0D%0A%7D%0D%0Anew%20Hero('batman'%2C%20'fly')">play</a>
 
 ### 装饰属性
 
@@ -205,11 +209,11 @@ var Hero = (function () {
         this.power = power;
     }
     Hero.prototype.showPower = function () {
-        return this.name + " has " + this.power;
+        return this.name + " has special power: " + this.power;
     };
     __decorate([
         logProperty
-    ], Hero.prototype, "power");
+    ], Hero.prototype, "power", void 0);
     return Hero;
 })();
 ```
@@ -221,11 +225,9 @@ var __decorate = (this && this.__decorate) || function(decorators, target, key, 
     var c = arguments.length,
     	r = Object.getOwnPropertyDescriptor(target, key)
         d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else
-    	// 从右向左依次执行 decorator 函数，相当于 decorators.reduceRight(function(o, d){ return (d && d(target, key) || o }, r)
-        for (var i = decorators.length - 1; i >= 0; i--)
-            if (d = decorators[i]) r = d(target, key) || r;
+    // 从右向左依次执行 decorator 函数，相当于 decorators.reduceRight(function(o, d){ return (d && d(target, key) || o }, r)
+    for (var i = decorators.length - 1; i >= 0; i--)
+        if (d = decorators[i]) r = d(target, key) || r;
     return r;
 };
 ```
@@ -278,6 +280,8 @@ batman.power = 'doublekill'
 // 切换特技 doublekill
 ```
 
+<a href="http://www.typescriptlang.org/Playground#src=class%20Hero%20%7B%0D%0A%20%20%20%20public%20name%3A%20string%0D%0A%20%20%20%20%40logProperty%0D%0A%20%20%20%20public%20power%3A%20string%0D%0A%0D%0A%20%20%20%20constructor(name%3Astring%2C%20power%3Astring)%7B%0D%0A%20%20%20%20%20%20%20%20this.name%20%3D%20name%0D%0A%20%20%20%20%20%20%20%20this.power%20%3D%20power%0D%0A%20%20%20%20%7D%0D%0A%0D%0A%20%20%20%20showPower()%7B%0D%0A%20%20%20%20%20%20%20%20return%20%60%24%7Bthis.name%7D%20has%20special%20power%3A%20%24%7Bthis.power%7D%60%0D%0A%20%20%20%20%7D%0D%0A%7D%0D%0A%0D%0Afunction%20logProperty(target%3A%20any%2C%20key%3A%20string)%20%7B%0D%0A%0D%0A%20%20%2F%2F%20%E5%AD%98%E5%82%A8%E5%B1%9E%E6%80%A7%E5%80%BC%0D%0A%20%20var%20_val%20%3D%20this%5Bkey%5D%3B%0D%0A%0D%0A%20%20%2F%2F%20%E8%8E%B7%E5%8F%96%E5%B1%9E%E6%80%A7%0D%0A%20%20var%20getter%20%3D%20function%20()%20%7B%0D%0A%20%20%20%20console.log(%60%E6%AD%A4%E5%A4%84%E5%BA%94%E6%9C%89%20Bgm%20%24%7B_val%7D%60)%3B%0D%0A%20%20%20%20return%20_val%3B%0D%0A%20%20%7D%3B%0D%0A%0D%0A%20%20%2F%2F%20%E8%AE%BE%E7%BD%AE%E5%B1%9E%E6%80%A7%0D%0A%20%20var%20setter%20%3D%20function%20(newVal)%20%7B%0D%0A%20%20%20%20console.log(%60%E5%88%87%E6%8D%A2%E7%89%B9%E6%8A%80%20%24%7BnewVal%7D%60)%3B%0D%0A%20%20%20%20_val%20%3D%20newVal%3B%0D%0A%20%20%7D%3B%0D%0A%0D%0A%20%20%2F%2F%20%E5%88%A0%E9%99%A4%E5%B1%9E%E6%80%A7%E5%B9%B6%E9%87%8D%E6%96%B0%E8%AE%BE%E7%BD%AE%E8%AF%A5%E5%B1%9E%E6%80%A7%0D%0A%20%20if%20(delete%20this%5Bkey%5D)%20%7B%0D%0A%0D%0A%20%20%20%20%2F%2F%20%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E5%B1%9E%E6%80%A7%EF%BC%8C%E4%BD%BF%E7%94%A8%E6%88%91%E4%BB%AC%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E5%AD%98%E5%82%A8%E5%99%A8%0D%0A%20%20%20%20Object.defineProperty(target%2C%20key%2C%20%7B%0D%0A%20%20%20%20%20%20get%3A%20getter%2C%0D%0A%20%20%20%20%20%20set%3A%20setter%2C%0D%0A%20%20%20%20%20%20enumerable%3A%20true%2C%0D%0A%20%20%20%20%20%20configurable%3A%20true%0D%0A%20%20%20%20%7D)%3B%0D%0A%20%20%7D%0D%0A%7D%0D%0A%0D%0Avar%20hero%20%3D%20new%20Hero('batman'%2C'fly')%0D%0Ahero.showPower()%0D%0Ahero.power%20%3D%20'doublekill'">play</a>
+
 ### 装饰方法
 
 TypeScript 属性方法接口如下：
@@ -285,7 +289,7 @@ TypeScript 属性方法接口如下：
 ```
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
 ```
-方法装饰器接受的参数最多，接受三个参数，返回属性描述符或者没有返回。这次我们装饰 `showPower`方法，给它添加 `@logMethod` 装饰器：
+方法装饰器接受三个参数，返回属性描述符或者没有返回。这次我们装饰 `showPower`方法，给它添加 `@logMethod` 装饰器：
 
 ```
 class Hero {
@@ -317,25 +321,22 @@ var Hero = (function () {
     };
     __decorate([
         logMethod
-    ], Hero.prototype, "showPower");
+    ], Hero.prototype, "showPower", null);
     return Hero;
 })();
-````
-此时 `__decoreate`函数去掉条件判断得到：
+```
+此时 `__decoreate` 函数去掉条件判断得到：
 
 ```
 var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
     var c = arguments.length,
         r = desc || Object.getOwnPropertyDescriptor(target, key),
         d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else
-        for (var i = decorators.length - 1; i >= 0; i--)
-            if (d = decorators[i]) r = d(target, key, r) || r;
+    for (var i = decorators.length - 1; i >= 0; i--)
+        if (d = decorators[i]) r = d(target, key, r) || r;
     return r && Object.defineProperty(target, key, r), r;
 };
 ```
-这里的实现我觉得是有问题的，
 下面我们来实现 `@logMethod` 装饰器：
 ```
 function logMethod(target:any, key:string, descriptor: object){
@@ -352,9 +353,80 @@ function logMethod(target:any, key:string, descriptor: object){
   return descriptor;
 }
 ```
-
+<a href="http://www.typescriptlang.org/Playground#src=class%20Hero%20%7B%0D%0A%20%20%20%20public%20name%3A%20string%3B%0D%0A%20%20%20%20public%20power%3A%20string%3B%0D%0A%0D%0A%20%20%20%20constructor(name%3A%20string%2C%20power%3A%20string)%20%7B%0D%0A%20%20%20%20%20%20%20%20this.name%20%3D%20name%0D%0A%20%20%20%20%20%20%20%20this.power%20%3D%20power%0D%0A%20%20%20%20%7D%0D%0A%0D%0A%20%20%20%20%40logMethod%0D%0A%20%20%20%20showPower()%20%7B%0D%0A%20%20%20%20%20%20%20%20return%20%60%24%7Bthis.name%7D%20has%20special%20power%3A%20%24%7Bthis.power%7D%60%0D%0A%20%20%20%20%7D%0D%0A%7D%0D%0A%0D%0Afunction%20logMethod(target%3A%20Object%2C%20key%3Astring%2C%20descriptor%3A%20TypedPropertyDescriptor%3Cany%3E)%7B%0D%0A%20%20var%20originalMethod%20%3D%20descriptor.value%3B%20%0D%0A%0D%0A%20%20%2F%2Fediting%20the%20descriptor%2Fvalue%20parameter%0D%0A%20%20descriptor.value%20%3D%20%20function%20(...args%3A%20any%5B%5D)%20%7B%0D%0A%20%20%20%20%20%20var%20a%20%3D%20args.map(a%20%3D%3E%20JSON.stringify(a)).join()%3B%0D%0A%20%20%20%20%20%20%2F%2F%20note%20usage%20of%20originalMethod%20here%0D%0A%20%20%20%20%20%20var%20result%20%3D%20originalMethod.apply(this%2C%20args)%3B%0D%0A%20%20%20%20%20%20var%20r%20%3D%20JSON.stringify(result)%3B%0D%0A%20%20%20%20%20%20console.log(%60Call%3A%20%24%7Bkey%7D(%24%7Ba%7D)%20%3D%3E%20%24%7Br%7D%60)%3B%0D%0A%20%20%20%20%20%20return%20result%3B%0D%0A%20%20%7D%0D%0A%0D%0A%20%20%2F%2F%20return%20edited%20descriptor%20as%20opposed%20to%20overwriting%20%0D%0A%20%20%2F%2F%20the%20descriptor%20by%20returning%20a%20new%20descriptor%0D%0A%20%20return%20descriptor%3B%0D%0A%7D%0D%0A%0D%0Anew%20Hero('batman'%2C%20'fly').showPower()">play</a>
 
 ### 装饰参数
+TypeScript 参数装饰器接口如下：
+
+```
+declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
+```
+参数装饰器也接受三个参数：
+- 对象
+- 属性名
+- 参数索引
+
+我们给 `showPower` 函数添加一个表示连击次数的参数，并用 `@logParameter` 装饰它：
+
+```
+class Hero {
+    public name: string
+    public power: string
+
+    constructor(name:string, power:string){
+        this.name = name
+        this.power = power
+    }
+
+    showPower(@logParameter time:number){
+        return `${time} times power damage`
+    }
+}
+```
+
+编译为 JavaScript 得到：
+
+```
+var Hero = (function () {
+    function Hero(name, power) {
+        this.name = name;
+        this.power = power;
+    }
+    Hero.prototype.showPower = function (time) {
+        return time + " times power damage";
+    };
+    __decorate([
+        __param(0, logParamater)
+    ], Hero.prototype, "showPower", null);
+    return Hero;
+})();
+```
+
+观察 `__decorate` 函数，我们发现这里调用了另外一个 `__param` 函数，`__param` 函数实现如下：
+```
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+```
+`__param` 函数接受两个参数，参数索引和装饰器函数，返回一个装饰器函数的包装函数。
+
+简化后的 `__decorate` 函数和上面的方法装饰器得到的一样。
+
+下面我们来实现 `@logParameter` 装饰器函数：
+
+```
+function logParameter(target: Object, key : string, index : number) {
+  var metadataKey = `log_${key}_parameters`;
+  if (Array.isArray(target[metadataKey])) {
+    target[metadataKey].push(index);
+  }
+  else { 
+    target[metadataKey] = [index];
+  }
+}
+```
+`logParameter` 函数在 `Hero.prototype` 上添加了一个属性 `log_showPower_parameters` 用来记录`showPower`函数被装饰参数的索引。
+
 
 
 ### 给装饰器传入参数
@@ -363,3 +435,4 @@ function logMethod(target:any, key:string, descriptor: object){
 
 - [javascript-decorators提案](https://github.com/wycats/javascript-decorators)以及 [我的翻译版本](https://github.com/xuhong/javascript-decorators)
 - [decorators-reflection-javascript-typescript](http://blog.wolksoftware.com/decorators-reflection-javascript-typescript)
+- [How to implement a typescript decorator?](http://stackoverflow.com/questions/29775830/how-to-implement-a-typescript-decorator/29837695#29837695)
