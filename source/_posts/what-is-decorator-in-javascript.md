@@ -11,7 +11,11 @@ AtScript 合并后发布的 1.5 版本，就已经支持装饰器语法了。基
 
 ## 什么是装饰器
 
-装饰器是
+用提案的描述来说，装饰器是：
+
+> 一个求值结果为函数的表达式，接受目标对象、名称和装饰器描述作为参数，可选地返回一个装饰器描述来安装到目标对象上。
+
+<!-- more -->
 
 ## 怎么使用装饰器
 
@@ -427,12 +431,37 @@ function logParameter(target: Object, key : string, index : number) {
 ```
 `logParameter` 函数在 `Hero.prototype` 上添加了一个属性 `log_showPower_parameters` 用来记录`showPower`函数被装饰参数的索引。
 
+参数装饰器不支持改变构造器、方法或属性的行为，它只应该用来生成一些元数据。
 
 
 ### 给装饰器传入参数
+
+我们可以通过装饰器构造函数来创建可配置的装饰器。下面创建一个可配置的类装饰器：
+
+```
+@logClassWithArgs({sex: "male"})
+class Hero { 
+  public name: string;
+
+  // ...
+}
+
+function logClassWidthArgs(options: Object){
+  return (target: Object) =>{
+    //...
+  }
+}
+
+```
+
+### 总结
+
+装饰器非常的强大，我们可以使用装饰器大量的简化代码，Angular2 中也大量使用了装饰器，比如 `@Component()`、`@view()`、`@Input()`、`@Output()`、`@Injectable()`等。后面
+将会深入写 Angular2 中的装饰器。
 
 ## reference
 
 - [javascript-decorators提案](https://github.com/wycats/javascript-decorators)以及 [我的翻译版本](https://github.com/xuhong/javascript-decorators)
 - [decorators-reflection-javascript-typescript](http://blog.wolksoftware.com/decorators-reflection-javascript-typescript)
 - [How to implement a typescript decorator?](http://stackoverflow.com/questions/29775830/how-to-implement-a-typescript-decorator/29837695#29837695)
+- [Google ES7 decorators sample](https://github.com/GoogleChrome/samples/tree/gh-pages/decorators-es7/read-write)
