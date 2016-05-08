@@ -1,6 +1,8 @@
-title: learn-typescript
+title: TypeScript 入门教程
 date: 2016-01-12 12:58:51
-tags: typescript, angular2
+tags: 
+- typescript
+- angular2
 ---
 
 TypeScript 是微软出的一个 JavaScript 超集，给 JavaScript 添加了类型，可以编译成 plain JavaScript。最近开始学习Angular2，Angular2 支持 TypeScript 来编写，也是社区推荐的方式。

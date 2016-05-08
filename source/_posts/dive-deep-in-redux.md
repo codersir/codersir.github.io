@@ -1,4 +1,4 @@
-title: 'dive-deep-in-redux '
+title: 深入学习 redux
 date: 2016-01-25 16:33:25
 tags:
 - react
