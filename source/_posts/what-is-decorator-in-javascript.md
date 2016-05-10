@@ -1,4 +1,4 @@
-title: what-is-decorator-in-javascript
+title: JavaScript 中的装饰器是什么？
 date: 2016-01-31 00:36:01
 tags: 
 - es2016

@@ -1,4 +1,4 @@
-title: what-is-shadow-dom
+title: 什么是 ShadowDOM
 date: 2016-02-26 11:13:16
 tags:
 - webcomponent
