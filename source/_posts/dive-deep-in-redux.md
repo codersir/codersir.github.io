@@ -8,7 +8,7 @@ tags:
 redux 是 react 的一个状态管理方案，它的名称来自 `array.reduce`，要掌握它的要义，首先要知道数组 `reduce` 方法的用法。
 
 ```
-    arr.reduce(callback[, initialValue])
+    array.reduce(callback[, initialValue])
 ```
 
 `reduce` 函数接受两个参数，一个回调函数和一个可选的初始值。回调函数接受四个可选参数：
@@ -25,8 +25,8 @@ redux 中有3个概念，分别是：
 它们之间的转换流程图如下：
 ![redux-flow](/image/blog/redux-flow.png)
 
-### 什么是 action 
-action 是简单的 JavaScript 对象，包含一个值唯一的 `type` 属性用**来描述状态的变化**。比如添加评论的 action: 
+### 什么是 action
+action 是简单的 JavaScript 对象，包含一个值唯一的 `type` 属性用**来描述状态的变化**。比如添加评论的 action:
 
 ```
     {
