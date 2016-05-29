@@ -61,8 +61,85 @@ Zones 可以通过 `Zone.fork()` 方法组合在一起。子 zone 可以创建�
 
 ## API
 
+### `Zone.fork(ZoneSpec)`
+复制一个子 zone，传入子 zone 的配置规则，通常是一系列的生命钩子：
+
+- `onFork`，拦截 zone 的复制
+- `onIntercept`，拦截回调函数的包装
+- `onInvoke`，拦截回调函数的调用
+- `onHandleError`，拦截错误处理
+- `onScheduleTask`，拦截任务调度
+- `onInvokeTask`，拦截任务执行
+- `onCancelTask`，拦截任务取消
+- `onHasTask`，任务队列状态变化通知
+
+通过 `properties` 参数，还可以给子 zone 传入其他的属性，通过 `zone.get` 方法获取这些属性：
+
+```
+function main(){
+  Zone.current.get('reset')()
+  setTimeout(function(){
+    console.log('Timeout callback called after ' + Zone.current.get('time')())
+  }, 1000)
+}
+
+var mySpec = (function(){
+  var time = 0, start = 0
+  var timer = performance ?
+                performance.now.bind(performance) :
+                Date.now.bind(Date)
+  return {
+    onScheduleTask: function(delegate, current, target, task){
+      start = timer()
+      delegate.scheduleTask(target, task)
+      console.log('scheduling ' + task.source + ' => ' + task.data.handleId)
+    },
+    onInvokeTask: function(delegate, current, target, task){
+      delegate.invokeTask(target, task)
+      time += timer() - start
+      console.log('Invoking ' + task.source + ' => ' + task.data.handleId + ' after ' + time + ' ms')
+    },
+    properties: {
+      reset: function(){
+        time = 0
+        start = 0
+      },
+      time: function(){
+        return timer() - start + ' ms'
+      }
+    }
+  }
+})()
+
+Zone.current.fork(mySpec).run(main)
+```
+
+### `Zone.wrap`
+
+包装回调函数使之在调用过程中可以正确的恢复当前 zone。在函数被包装起来之前，可以通过配置 `ZoneSpec.onIntercept` 来进行拦截。
+
+### `Zone.run`
+
+在指定的 zone 中调用函数，返回回调函数执行后的返回值。在回调函数被调用之前可以通过配置 `ZoneSpec.onInvoke` 来进行拦截。
+
+### `Zone.runGuarded`
+
+`Zone.run` + 错误处理，任何的错误都会被转到 `ZoneDelegate.HandleError`。错误在处理之前可以通过配置 `ZoneSpec.onHandleError` 来进行拦截。
+
+### `Zone.runTask`
+
+在任务的 zone 中恢复当前 zone 后执行任务。任务在执行之前，可以通过配置 `Zone.onInvokeTask` 来进行拦截。
+
+### `Zone.scheduleMicroTask` `Zone.scheduleMacroTask` `Zone.scheduleEventTask`
+
+安排不同类型的任务，通过 `ZoneSpec.onScheduleTask` 来进行拦截。
+
+### `Zone.cancelTask`
+拦截已安排任务的取消，任务取消之前可以通过 `ZoneSpec.onCancelTask` 来进行拦截，默认情况下任务取消会调用 `Task.cancelFn`。
+
 ## NgZone in Angular2
 
 
 ## 参考资料
-[zone.js@github](https://github.com/angular/zone.js/blob/master/lib/zone.ts)
+- [zone.js](https://github.com/angular/zone.js)
+- [angular](https://github.com/angular/angular)
