@@ -7,6 +7,7 @@ tags: javascript
 <!-- more -->
 
 ## 什么是作用域
+
 作用域是一套规则，用于确定在何处以及如何查找变量（标识符）。JS 中常见的作用域有：
 - 全局作用域
 - 函数作用域
@@ -14,11 +15,13 @@ tags: javascript
 - 模块作用域（存在于 NodeJS 和 ES6 Module中）
 
 ### 全局作用域
+
 全局作用域的一种判定方式就是看它是否影响到整个程序。在浏览器中，全局作用域就是 `window` 对象。NodeJS 采用全局命名空间对象（[global](https://nodejs.org/api/globals.html)）来存放全局变量，但是需要注意的是，`global` 对象中存放却不一定都是全局变量，有些变量是属于模块的，比如 `__dirname`、`__filename`。
 
 定义在全局作用域中的变量就是全局变量，全局变量在代码的各个位置都可以被访问，所以就可能会出现命名冲突，特别是在使用第三方脚本的时候。为了尽量避免暴露太多的全局变量到全局作用域，推荐使用命名空间或者模块化来解决这个问题。
 
 ### 函数作用域
+
 函数作用域的含义是：在函数内定义的变量可以在整个函数范围内（包括嵌套的作用域中）使用。在函数外的作用域中是无法访问函数内部定义的变量很函数的。
 ```
 function foo(){
@@ -42,17 +45,18 @@ console.log(a) // ReferenceError: a is not defined
 ```
 
 ### 块级作用域
+
 在 ES6 之前，我们通常会说 JS 是没有块级作用域的，最常用的一个例子就是 `for` 循环：
 ```js
 for(var i=0;i<10;i++){
-	
+
 }
 console.log(i)	// 10
 ```
-这段代码会输出 10 而不是 `undefined`，这就是由于缺少块级作用域导致的问题：我们原想定义在循环体内的变量在外部也可以访问。ES6 为了改变现状，新增了 `let` 用来解决这一问题。 
+这段代码会输出 10 而不是 `undefined`，这就是由于缺少块级作用域导致的问题：我们原想定义在循环体内的变量在外部也可以访问。ES6 为了改变现状，新增了 `let` 用来解决这一问题。
 ```js
 for(let i=0;i<10;i++){
-	
+
 }
 console.log(i)	// ReferenceError: i is not defined
 ```
@@ -79,12 +83,15 @@ console.log(err)	//ReferenceError: err is not defined
 ```
 
 ### 模块作用域
+
 模块作用域的含义是：在模块中定义的变量，只在这个模块范围内可以访问。在 ES6 之前，JavaScript 中并没有原生的模块的支持，所以模块作用域只对 NodeJS 有意义。ES6 引入了对模块的支持。
 
 ### 其他作用域
+
 和模块作用域类似的还有文件作用域，比如 C/C+++ 采用的就是文件作用域，定义在文件中的全局变量和全局函数都属于这个文件，在更高级的语言中，文件作用域被模块作用域所取代，比如 Python、NodeJS、ES6 module。
 
 ## 词法作用域查找的特点
+
 - 作用域会在找到第一个匹配的标识符时停止，在多层嵌套的作用域中可以定义同名的标识符，内部的标识符会“遮蔽”外部的标识符，这叫做“遮蔽效应”。
 - 词法作用域只会查找一级标识符，比如 `foo.bar.baz`，词法作用域只会试图查找 `foo` 标识符，找到这个变量后，对象访问属性规则接管对 `bar` 和 `baz` 的访问。
 
@@ -94,5 +101,6 @@ console.log(err)	//ReferenceError: err is not defined
 “静态 JavaScript ”感兴趣的话，强烈推荐你试一试 TypeScript，可以参考我写的[TypeScript 入门教程](/2016/01/12/learn-typescript/)
 
 ## 其他资源
+
 - <a href="https://en.wikipedia.org/wiki/Scope_(computer_science)">Wikipedia scope</a>
 - (JavaScript Scoping and Hoisting)[http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html]
