@@ -81,5 +81,5 @@ repo: https://github.com/codersir/codersir.github.io
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:codersir/codersir.github.io.git
-  branch: gh-pages
+  repo: git@github.cs:codersir/codersir.github.io.git
+  branch: master
