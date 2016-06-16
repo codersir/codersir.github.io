@@ -139,6 +139,60 @@ Zone.current.fork(mySpec).run(main)
 
 ## NgZone in Angular2
 
+Angular2 通过 **变化检测** 来更新视图，那么谁来告诉 Angular2 有状态发生了改变呢？那就是 NgZone。在 Angular2 中，将不再需要不停的进行脏检查来保持视图和状态的同步，当有状态发生变化时，NgZone 的事件钩子会通知 Angular 来更新视图。Angular2 的 ZoneSpec 如下：
+
+```javaScript
+{
+    name: 'angular',
+    properties:<any>{'isAngularZone': true},
+    onInvokeTask: (delegate: ZoneDelegate, current: Zone, target: Zone, task: Task,
+                   applyThis: any, applyArgs: any): any => {
+      try {
+        this.onEnter();
+        return delegate.invokeTask(target, task, applyThis, applyArgs);
+      } finally {
+        this.onLeave();
+      }
+    },
+
+    onInvoke: (delegate: ZoneDelegate, current: Zone, target: Zone, callback: Function,
+               applyThis: any, applyArgs: any[], source: string): any => {
+      try {
+        this.onEnter();
+        return delegate.invoke(target, callback, applyThis, applyArgs, source);
+      } finally {
+        this.onLeave();
+      }
+    },
+
+    onHasTask:(delegate: ZoneDelegate, current: Zone, target: Zone, hasTaskState: HasTaskState) => {
+        delegate.hasTask(target, hasTaskState);
+        if (current == target) {
+          // We are only interested in hasTask events which originate from our zone
+          // (A child hasTask event is not interesting to us)
+          if (hasTaskState.change == 'microTask') {
+            this.setMicrotask(hasTaskState.microTask);
+          } else if (hasTaskState.change == 'macroTask') {
+            this.setMacrotask(hasTaskState.macroTask);
+          }
+        }
+    },
+
+    onHandleError: (delegate: ZoneDelegate, current: Zone, target: Zone, error: any): boolean => {
+       delegate.handleError(target, error);
+       this.onError(new NgZoneError(error, error.stack));
+       return false;
+     }
+}
+```
+
+下面这些情况会被 Angular2 判断为有状态发生了改变：
+
+- 用户行为
+- http 返回
+- 定时器，`setTimeout`,`setInterval`
+
+Zone 为这些事件都添加了钩子，用来通知 Angular 再完美不过了。
 
 ## 参考资料
 - [zone.js](https://github.com/angular/zone.js)
