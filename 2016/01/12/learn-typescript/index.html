@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>TypeScript 入门教程 | Coder Sir</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="TypeScript 是微软出的一个 JavaScript 超集，给 JavaScript 添加了类型，可以编译成 plain JavaScript。最近开始学习Angular2，Angular2 支持 TypeScript 来编写，也是社区推荐的方式。
+基本类型TypeScript 为你添加了你期望 JavaScript 拥有的基本数据类型：numbers、strings、structures、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript 入门教程">
+<meta property="og:url" content="http://codersir.github.com/2016/01/12/learn-typescript/index.html">
+<meta property="og:site_name" content="Coder Sir">
+<meta property="og:description" content="TypeScript 是微软出的一个 JavaScript 超集，给 JavaScript 添加了类型，可以编译成 plain JavaScript。最近开始学习Angular2，Angular2 支持 TypeScript 来编写，也是社区推荐的方式。
+基本类型TypeScript 为你添加了你期望 JavaScript 拥有的基本数据类型：numbers、strings、structures、">
+<meta property="og:updated_time" content="2016-05-29T18:17:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TypeScript 入门教程">
+<meta name="twitter:description" content="TypeScript 是微软出的一个 JavaScript 超集，给 JavaScript 添加了类型，可以编译成 plain JavaScript。最近开始学习Angular2，Angular2 支持 TypeScript 来编写，也是社区推荐的方式。
+基本类型TypeScript 为你添加了你期望 JavaScript 拥有的基本数据类型：numbers、strings、structures、">
+  
+    <link rel="alternative" href="/atom.xml" title="Coder Sir" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <header class="sidebar" role="header">
+    
+      <div class="sidebar__profile">
+	<a class="sidebar__profile-link" href="/">
+		<figure>
+			<img class="sidebar__profile-img" src="/image/site/gravatar.png" alt="">
+		</figure>
+	</a>
+	<h1 class="sidebar__profile-name">Codersir</h1>
+	<div class="sidebar__profile-bio">
+		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insterested in JavaScript, AngularJS, ReactJS and NodeJS.</p>
+	</div>
+</div>
+<nav class="sidebar__profile-nav" role="nav">
+	<ul>
+	
+		<li>
+			<a href="/archives">Archives</a>
+		</li>
+	
+		<li>
+			<a href="/about">About</a>
+		</li>
+	
+		<li>
+			<a href="/tags">Tags</a>
+		</li>
+	 
+	</ul>
+</nav>
+<aside class="sidebar__profile-social" role="social">
+	
+		
+			
+			<a class="social-github" target="_blank" href="http://github.com/codersir">
+				<span class="fa fa-github"></span>
+			</a>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+			<a class="social-instagram" target="_blank" href="http://instagram.com/codersir">
+				<span class="fa fa-instagram"></span>
+			</a>
+			
+		
+			
+			<a class="social-rss" target="_blank" href="/atom.xml">
+				<span class="fa fa-rss"></span>
+			</a>
+			
+		 
+	
+</aside>
+    
+  </header>
+  <main class="main" role="main">
+    <article id="post-learn-typescript" class="article article--type-post" itemscope itemprop="blogPost">
+  <div class="article__inner">
+    
+    
+      <header class="article__header">
+        
+  
+    <h1 class="article__title" itemprop="name">
+      TypeScript 入门教程
+    </h1>
+  
+
+      </header>
+      <div class="article__meta">
+        <a href="https://github.com/codersir/codersir.github.io/tree/master/source/_posts/learn-typescript.md" class="article__meta-edit">
+	<i class="fa fa-github"></i> Edit this page on GitHub
+</a>
+
+        
+	<time class="article__meta-date" datetime="2016-01-12T04:58:51.000Z" itemprop="datePublished">Jan 1, 2016</time>
+
+      </div>
+    
+    <div class="article__entry" itemprop="articleBody">
+      
+        <p>TypeScript 是微软出的一个 JavaScript 超集，给 JavaScript 添加了类型，可以编译成 plain JavaScript。最近开始学习Angular2，Angular2 支持 TypeScript 来编写，也是社区推荐的方式。</p>
+<h3 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h3><p>TypeScript 为你添加了你期望 JavaScript 拥有的基本数据类型：numbers、strings、structures、boolean、array、enum 等。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> isDone: <span class="built_in">boolean</span> = <span class="literal">false</span>;    <span class="comment">//boolean</span></span><br><span class="line"><span class="keyword">var</span> height: <span class="built_in">number</span> = <span class="number">6</span>;         <span class="comment">//number</span></span><br><span class="line"><span class="keyword">var</span> name:<span class="built_in">string</span> = <span class="string">'xuhong'</span>;     <span class="comment">//string</span></span><br><span class="line"><span class="keyword">var</span> list:<span class="built_in">number</span>[] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];    <span class="comment">//array </span></span><br><span class="line"><span class="keyword">var</span> list:<span class="built_in">Array</span>&lt;<span class="built_in">number</span>&gt; = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]<span class="comment">//generic array type</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">enum</span> Color &#123;Red:<span class="number">1</span>, Green, Blue&#125;</span><br><span class="line"><span class="keyword">var</span> c: Color = Color.Red;       <span class="comment">//enum</span></span><br><span class="line"><span class="keyword">var</span> colorName:<span class="built_in">string</span> = Color[<span class="number">2</span>] <span class="comment">//get enum value use number</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> notSure:<span class="built_in">any</span> = <span class="number">4</span>;            <span class="comment">//any</span></span><br><span class="line">notSure = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">warning</span>:<span class="title">void</span></span>&#123;          <span class="comment">//no return value's function's return type is void</span></span><br><span class="line">    <span class="built_in">console</span>.warning(<span class="string">'warning message'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Interfaces"><a href="#Interfaces" class="headerlink" title="Interfaces"></a>Interfaces</h3><p>TypeScript 的一个主要原则是采用鸭式辩形或者说是构造子类来进行类型检查。在 TypeScript 中，接口就是充当这样的角色来命名这些类型，同时也是你项目内部代码以及和外部代码进行协作的有效方式。</p>
+<p>当不使用接口时，我们这样写代码：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function sayHello(person: &#123;<span class="built_in">name</span>: <span class="built_in">string</span>&#125;) &#123;</span><br><span class="line">    console.<span class="built_in">log</span>(<span class="string">"hello "</span> + person.<span class="built_in">name</span>)</span><br><span class="line">&#125;</span><br><span class="line">var <span class="keyword">me</span> = &#123;<span class="built_in">name</span>: 'xuhong', age: <span class="number">24</span>&#125;</span><br><span class="line">sayHello(<span class="keyword">me</span>)</span><br></pre></td></tr></table></figure>
+<p>sayHello 函数接受一个参数，该参数必须是个对象并且有一个名为 <code>name</code> 的属性。虽然传入的对象还有其他的属性，但是编译器只会检查必须的属性以及它的类型。下面用接口重新写这个函数：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> personName &#123;</span><br><span class="line">    name: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHello</span>(<span class="params">person: personName</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"hello "</span> + person.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> me = &#123;name: <span class="string">'xuhong'</span>, age: <span class="number">24</span>&#125;</span><br><span class="line">sayHello(me)</span><br></pre></td></tr></table></figure>
+<p>现在我们可以使用接口 <code>personName</code> 来描述参数的要求。注意我们不需要像其他的语言一样写明我们传进 <code>sayHello</code> 的对象实现了这个接口，只要这个对象满足接口列出的所有要求就够了。<br>另外，并不是所有的参数都是必须的，接口也支持可选参数，在属性名后面添加一个 ? 表明这个属性是可选的。</p>
+<h4 id="函数类型"><a href="#函数类型" class="headerlink" title="函数类型"></a>函数类型</h4><p>接口可以描述许多 JavaScript 对象的形状。除了可以描述拥有属性的对象，接口也可以描述函数类型。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">SearchFunc</span> &#123;</span></span><br><span class="line">    (<span class="string">source:</span> string, <span class="string">subString:</span> string): <span class="keyword">boolean</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var <span class="string">mySearch:</span> SearchFunc</span><br><span class="line">mySearch = functiuon(<span class="string">src:</span> string, <span class="string">sub:</span> string)&#123;</span><br><span class="line">    <span class="keyword">return</span> src.search(sub) == <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="数组类型"><a href="#数组类型" class="headerlink" title="数组类型"></a>数组类型</h4><p>以及描述数组类型</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> StringArray &#123;</span><br><span class="line">    [index: <span class="built_in">number</span>]: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myArr: stringArray</span><br><span class="line">myArr = [<span class="string">'abc'</span>, <span class="string">'def'</span>]</span><br></pre></td></tr></table></figure>
+<p>TypeScript 支持两种索引类型：数字和字符串。而且可以同时支持两种索引，但是要求数字索引返回的值是字符串索引返回的值的子类。它也要求所有的属性匹配它们的返回值类型，下面的例子会被类型检查器报错，因为length属性的类型和索引的类型不匹配</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Dictionary &#123;</span><br><span class="line">    [index: <span class="built_in">string</span>]: <span class="built_in">string</span>;</span><br><span class="line">    length: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="类类型"><a href="#类类型" class="headerlink" title="类类型"></a>类类型</h4><p>当类实现接口时，只有类的实例部分会被检查，构造器部分是静态部分，不会被检查。</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> ClockInterface <span class="comment">&#123;</span><br><span class="line">    currentTime: Date;</span><br><span class="line">    setTime(d: date);</span><br><span class="line">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Clock impletements ClockInterface <span class="comment">&#123;</span><br><span class="line">    currentTime: Date;</span><br><span class="line">    setTime(d: date) &#123;</span><br><span class="line">        this.currentTime = d</span><br><span class="line">    &#125;</span></span><br><span class="line">    <span class="function"><span class="keyword">constructor</span><span class="params">(h: number, m: number)</span> <span class="comment">&#123;&#125;</span></span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="扩展接口"><a href="#扩展接口" class="headerlink" title="扩展接口"></a>扩展接口</h4><p>像类一样，接口也可以彼此扩展对方：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Shape &#123;</span><br><span class="line">    color: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> Square <span class="keyword">extends</span> Shape &#123;</span><br><span class="line">    sideLength: <span class="built_in">number</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> square = &lt;Square&gt;&#123;&#125;;</span><br><span class="line">square.color = <span class="string">'blue'</span>;</span><br><span class="line">square.sideLength = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="组合类型"><a href="#组合类型" class="headerlink" title="组合类型"></a>组合类型</h4><p>接口可以描述 JavaScript 中许多的类型，有时候你可能会遇到一个对象充当上述几种类型的组合。</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">interface Counter &#123;</span><br><span class="line">    (start: number): string<span class="comment">;</span></span><br><span class="line"><span class="symbol">    interval:</span> number<span class="comment">;</span></span><br><span class="line">    reset(): void<span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var c: Counter<span class="comment">;</span></span><br><span class="line">c(<span class="number">10</span>)<span class="comment">;</span></span><br><span class="line">c.reset()<span class="comment">;</span></span><br><span class="line">c.interval = <span class="number">5</span>.<span class="number">0</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h3><p>没有类以前，JavaScript 的继承主要通过原型来实现，ES6 给 JavaScript 添加了类以后，我们也可以采用基于类的面向对象方式来实现继承了。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> name: string;</span><br><span class="line">    constructor(theName:string)&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = theName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rhino</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    constructor()&#123; <span class="keyword">super</span>(<span class="symbol">'Rhin</span>o')</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> animal = <span class="keyword">new</span> <span class="type">Animal</span>(<span class="symbol">'Goa</span>t');</span><br><span class="line"><span class="keyword">var</span> rhino = <span class="keyword">new</span> <span class="type">Rhino</span>();</span><br></pre></td></tr></table></figure>
+<p>TypeScript 给类添加了 公开/私有（public/priviate）属性声明，默认所有的属性都是公开的。另外，<code>priviate</code> 和 <code>public</code> 关键字用在初始化函数参数的属性声明时，可以作为创建并初始化类成员的便捷方式。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">Animal</span> &#123;</span><br><span class="line">    constructor(<span class="keyword">private</span> name: <span class="keyword">string</span>) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>TypeScript 支持 getters/setters 拦截对象成员的存取。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> passcode = <span class="string">"secret passcode"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Employee</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> _fullName: <span class="keyword">string</span>;</span><br><span class="line">    <span class="function"><span class="keyword">get</span> <span class="title">fullName</span>(<span class="params"></span>): <span class="keyword">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>._fullName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">set</span> <span class="title">fullName</span>(<span class="params">newName: <span class="keyword">string</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (passcode &amp;&amp; passcode == <span class="string">"secret passcode"</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>._fullName = newName;</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            alert(<span class="string">"Error: Unauthorized update of employee!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> employee = <span class="keyword">new</span> Employee();</span><br><span class="line">employee.fullName = <span class="string">"Bob Smith"</span>;</span><br><span class="line"><span class="keyword">if</span> (employee.fullName) &#123;</span><br><span class="line">    alert(employee.fullName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TypeScript 支持静态属性声明，所有的静态属性只在类的内部可见，类的实例无法访问静态属性。在类的内部，通过在静态属性名前添加类名前缀来访问该属性(className.staticPropertity)。<br>另外，因为类创建类型，所以你也可以在某些地方用它们替代接口。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> &#123;</span></span><br><span class="line"><span class="symbol">    x:</span> number;</span><br><span class="line"><span class="symbol">    y:</span> number;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Point3d</span> <span class="keyword">extends</span> <span class="title">Point</span> &#123;</span></span><br><span class="line"><span class="symbol">    z:</span> number;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var <span class="string">point3d:</span> Point3d = &#123;<span class="string">x:</span><span class="number">1</span>, <span class="string">y:</span><span class="number">2</span>, <span class="string">z:</span><span class="number">3</span>&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h3><h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>和 JavaScript 一样，函数可以被定义为命名函数和匿名函数。在 JavaScript 中，这两种命名方式如下：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// <span class="keyword">named</span> <span class="function"><span class="keyword">function</span></span></span><br><span class="line"><span class="function"><span class="keyword">function</span></span> add(x, y)&#123;</span><br><span class="line">    <span class="keyword">return</span> x+y</span><br><span class="line">&#125;</span><br><span class="line">// Anonymous <span class="function"><span class="keyword">function</span></span></span><br><span class="line">var myAdd = <span class="function"><span class="keyword">function</span><span class="params">(x, y)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x+y</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="函数类型-1"><a href="#函数类型-1" class="headerlink" title="函数类型"></a>函数类型</h4><p>在 TypeScript 中，我们给上面的函数加上类型：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x:<span class="built_in">number</span>, y:<span class="built_in">number</span></span>): <span class="title">number</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x+y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myAdd: (x:<span class="built_in">number</span>, y:<span class="built_in">number</span>)=&gt;<span class="built_in">number</span>  = <span class="function"><span class="keyword">function</span>(<span class="params">x: <span class="built_in">number</span>, y: <span class="built_in">number</span></span>)</span>&#123; <span class="keyword">return</span> x+y &#125;</span><br><span class="line"><span class="comment">// 上面的写法太冗余了，TypeScript 可以通过‘上下文类型‘推断出函数的类型：</span></span><br><span class="line"><span class="keyword">var</span> myAdd = <span class="function"><span class="keyword">function</span>(<span class="params">x:<span class="built_in">number</span>, y:<span class="built_in">number</span></span>): <span class="title">number</span> </span>&#123; <span class="keyword">return</span> x+y &#125;</span><br><span class="line"><span class="keyword">var</span> myAdd: (baseValue:<span class="built_in">number</span>, increment:<span class="built_in">number</span>)=&gt;<span class="built_in">number</span> = <span class="function"><span class="keyword">function</span>(<span class="params">x,y</span>)</span>&#123; <span class="keyword">return</span> x+y &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="可选参数和默认参数"><a href="#可选参数和默认参数" class="headerlink" title="可选参数和默认参数"></a>可选参数和默认参数</h4><p>和 JavaScript 不一样的是，TypeScript 默认所有参数都是必须的。但是我们可以在参数后面添加 ‘?’ 来表示该参数是可选的。</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title">buildName</span>(firstName: string, middleName?: string, lastName = "xuhong)&#123;</span><br><span class="line">    if(middleName)&#123; <span class="keyword">return</span> <span class="type">firstName</span> + <span class="string">" "</span> + middleName + <span class="string">" "</span> + lastName &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123; <span class="keyword">return</span> firstName + <span class="string">" "</span> + lastName &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="剩余参数"><a href="#剩余参数" class="headerlink" title="剩余参数"></a>剩余参数</h4><p>剩余参数是一个参数数组，让你可以一次传入任意数量的参数：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//restOfName is an Array</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">buildName</span><span class="params">(firstName: string, <span class="rest_arg">...restOfName</span>: string[])</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> firstName + <span class="string">" "</span> + restOfName.join(<span class="string">" "</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myname = buildName(<span class="string">"chen"</span>,<span class="string">"xuhong"</span>,<span class="string">"codersir"</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="重载"><a href="#重载" class="headerlink" title="重载"></a>重载</h4><p>重载我们都很熟悉，就是根据传入的参数的不同进行不同的操作或返回不同的值。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pickCard</span>(<span class="params">x: &#123;suit: <span class="built_in">string</span>; card: <span class="built_in">number</span>; &#125;[]</span>): <span class="title">number</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pickCard</span>(<span class="params">x: <span class="built_in">number</span></span>): </span>&#123;suit: <span class="built_in">string</span>; card: <span class="built_in">number</span>; &#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pickCard</span>(<span class="params">x</span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> x == <span class="string">"object"</span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> pickedCard = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * x.length);</span><br><span class="line">        <span class="keyword">return</span> pickedCard;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> x == <span class="string">"number"</span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> pickedSuit = <span class="built_in">Math</span>.floor(x / <span class="number">13</span>);</span><br><span class="line">        <span class="keyword">return</span> &#123; suit: suits[pickedSuit], card: x % <span class="number">13</span> &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><p>软件工程的一个重要部分就是开发不仅具有良好设计和一致的 API，而且还可以复用的组件。在 C# 和 Java 中，泛型就是实现可复用组件的重要工具，泛型使组件可以支持一系列的类型而不仅仅是某一种类型。<br>Angular2 的 Component 就是通过泛型实现复用。</p>
+<figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">identify</span>&lt;<span class="title">T</span>&gt;(<span class="params">arg: T</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> arg;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">var</span> output = identity&lt;<span class="built_in">string</span>&gt;(<span class="string">"myString"</span>)</span><br><span class="line"><span class="built_in">var</span> output = identity(<span class="string">"myString"</span>)           <span class="comment">//type 参数可以省略，编译器可以根据传入的参数推断类型</span></span><br></pre></td></tr></table></figure>
+<h4 id="接口泛型"><a href="#接口泛型" class="headerlink" title="接口泛型"></a>接口泛型</h4><p>接口泛型可以使所有实现该接口的对象元素保持同一种类型：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">interface GenericIdentityFn&lt;<span class="literal">T</span>&gt; &#123;</span><br><span class="line">    (arg: <span class="literal">T</span>): <span class="literal">T</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> identity&lt;<span class="literal">T</span>&gt;(arg: <span class="literal">T</span>): <span class="literal">T</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> arg;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var myIdentity: GenericIdentityFn&lt;number&gt; = identity;</span><br></pre></td></tr></table></figure>
+<h4 id="类泛型"><a href="#类泛型" class="headerlink" title="类泛型"></a>类泛型</h4><p>和接口泛型一样，类泛型可以确保所有的成员都是同一种类型。但是请注意，泛型只和类的实例部分相关，类的静态部分可以是其他的类型。</p>
+<h4 id="约束泛型"><a href="#约束泛型" class="headerlink" title="约束泛型"></a>约束泛型</h4><p>有时候，我们不仅仅要求组件可以支持所有的类型，还会有其他的限制，比如要求至少有一个 length 属性：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Lengthwise &#123;</span><br><span class="line">    length: <span class="keyword">number</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span></span> identity&lt;T <span class="keyword">extends</span> Lengthwise&gt;(arg: T): T &#123;</span><br><span class="line">    console.<span class="built_in">log</span>(arg.length)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="混合（mixin-）"><a href="#混合（mixin-）" class="headerlink" title="混合（mixin ）"></a>混合（mixin ）</h3><p>TypeScript 的 mixin 并不够优雅。在 TypeScript 中，mixin 使用关键字 <code>implements</code> 而不是 <code>extends</code>，这意味着类被当成接口来使用，所以只会检查被混合类成员的类型而不是实现，也就是说我们必须在混合后的类中提供类成员的实现。然而这正是我们使用 mixin 想要避免的。</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Disposable</span> &#123;</span></span><br><span class="line">    isDisposed: boolean;</span><br><span class="line">    dispose() &#123;</span><br><span class="line">        <span class="keyword">this</span>.isDisposed = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Activatable</span> &#123;</span></span><br><span class="line">    isActive: boolean;</span><br><span class="line">    activate() &#123;</span><br><span class="line">        <span class="keyword">this</span>.isActive = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">smartObj</span> <span class="title">implements</span> <span class="title">Disposable</span>, <span class="title">Activatable</span> &#123;</span></span><br><span class="line">    constructor() &#123;</span><br><span class="line">        setInterval(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="keyword">this</span>.isActive + <span class="string">":"</span> + <span class="keyword">this</span>.isDisposed), <span class="number">500</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    interact() &#123;</span><br><span class="line">        <span class="keyword">this</span>.activate();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="regexp">//</span>这里要再写一遍</span><br><span class="line">    isDisposed: boolean = <span class="literal">false</span>;</span><br><span class="line">    dispose: <span class="function"><span class="params">()</span> =&gt;</span> void;</span><br><span class="line">    isActive: boolean = <span class="literal">false</span>;</span><br><span class="line">    activate: <span class="function"><span class="params">()</span> =&gt;</span> void;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="声明合并"><a href="#声明合并" class="headerlink" title="声明合并"></a>声明合并</h3><p>在 TypeScript 中，声明无非三种：命名空间/模块，类型，值。</p>
+<h4 id="合并接口"><a href="#合并接口" class="headerlink" title="合并接口"></a>合并接口</h4><p>同名接口合并其成员：</p>
+<ul>
+<li>非函数成员必须唯一。</li>
+<li>函数成员视为重载。</li>
+</ul>
+<h4 id="合并模块"><a href="#合并模块" class="headerlink" title="合并模块"></a>合并模块</h4><p>声明模块会同时创建命名空间和值：</p>
+<ul>
+<li>命名空间的合并： 每个模块中  <code>export</code> 的类型定义自行合并，组成一个新的命名空间</li>
+<li>值的合并：如果模块已经有同名的值，合并时会把第二个模块中 <code>export</code> 的值添加到第一个模块中</li>
+</ul>
+
+        <br>
+        <p>--EOF--</p>
+        <p>
+          <small>于 
+            
+	<time class="article__meta-date" datetime="2016-01-12T04:58:51.000Z" itemprop="datePublished">Jan 1, 2016 12:58:51</time>
+ 发表
+            
+            
+            ，并被添加标签「
+             
+	<a class="article_meta-tag" title="3篇文章" href="http://codersir.github.com/tags/angular2/">angular2</a>
+ 
+	<a class="article_meta-tag" title="2篇文章" href="http://codersir.github.com/tags/typescript/">typescript</a>
+
+            」
+            
+            
+             
+              ，更新于
+              
+	<time class="article__meta-updated" datetime="2016-05-29T18:17:32.000Z" itemprop="datePublished">May 5, 2016 02:17:32</time>
+
+            。
+          </small>
+      
+    </div>
+  </div>
+  
+    <section id="comments">
+      <h1 class="title" href="http://codersir.github.com/2016/01/12/learn-typescript/#disqus_thread">Comments</h1>
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </section>
+  
+  
+    
+<nav class="article__nav">
+  
+    <a href="/2016/01/25/dive-deep-in-redux/" class="article__nav-newer article__nav-link-wrap">
+      <strong class="article__nav-caption">Newer</strong>
+      <div class="article__nav-title">
+        
+          深入学习 redux
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/01/08/oauth2/" class="article__nav-older article__nav-link-wrap">
+      <strong class="article__nav-caption">Older</strong>
+      <div class="article__nav-title">oauth2</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<script>
+  var disqus_shortname = 'codsirblog';
+  var disqus_loaded = false;
+  var body = document.body;
+  var html = document.documentElement;
+  var clientHeight = html.clientHeight
+  var pageHeight = Math.max(body.scrollHeight,body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight)
+
+  
+  var disqus_url = 'http://codersir.github.com/2016/01/12/learn-typescript/';
+  
+
+  if(clientHeight == pageHeight){
+    loadDisqus()
+    disqus_loaded = true
+  }
+  
+  document.addEventListener('scroll', function(e){
+    if(disqus_loaded){
+      return
+    }else{
+      var scrollTop = body.scrollTop;
+      if(scrollTop + clientHeight + 100 > pageHeight){
+        loadDisqus()
+        disqus_loaded = true
+      }
+    }
+  })
+  
+  function loadDisqus(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }
+</script>
+
+
+  </main>
+  <script src="/js/script.js"></script>
+</body>
+</html>

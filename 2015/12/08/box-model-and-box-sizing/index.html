@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>盒模型以及 box-sizing | Coder Sir</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前两天一个准备入前端坑的朋友问我：标准盒模型到底是什么？我不假思索的说:
+
+盒模型有两种，一种是 w3c 标准盒模型，一种是 IE 盒模型。标准盒模型就是 width = content_width + padding_width + border_width。
+
+朋友立马打断我说道：
+
+不对不对，你又把我搞晕了，这不是 IE 盒模型么？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="盒模型以及 box-sizing">
+<meta property="og:url" content="http://codersir.github.com/2015/12/08/box-model-and-box-sizing/index.html">
+<meta property="og:site_name" content="Coder Sir">
+<meta property="og:description" content="前两天一个准备入前端坑的朋友问我：标准盒模型到底是什么？我不假思索的说:
+
+盒模型有两种，一种是 w3c 标准盒模型，一种是 IE 盒模型。标准盒模型就是 width = content_width + padding_width + border_width。
+
+朋友立马打断我说道：
+
+不对不对，你又把我搞晕了，这不是 IE 盒模型么？">
+<meta property="og:image" content="http://codersir.github.com/image/blog/box-model.png">
+<meta property="og:updated_time" content="2016-05-29T18:17:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="盒模型以及 box-sizing">
+<meta name="twitter:description" content="前两天一个准备入前端坑的朋友问我：标准盒模型到底是什么？我不假思索的说:
+
+盒模型有两种，一种是 w3c 标准盒模型，一种是 IE 盒模型。标准盒模型就是 width = content_width + padding_width + border_width。
+
+朋友立马打断我说道：
+
+不对不对，你又把我搞晕了，这不是 IE 盒模型么？">
+<meta name="twitter:image" content="http://codersir.github.com/image/blog/box-model.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Coder Sir" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <header class="sidebar" role="header">
+    
+      <div class="sidebar__profile">
+	<a class="sidebar__profile-link" href="/">
+		<figure>
+			<img class="sidebar__profile-img" src="/image/site/gravatar.png" alt="">
+		</figure>
+	</a>
+	<h1 class="sidebar__profile-name">Codersir</h1>
+	<div class="sidebar__profile-bio">
+		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insterested in JavaScript, AngularJS, ReactJS and NodeJS.</p>
+	</div>
+</div>
+<nav class="sidebar__profile-nav" role="nav">
+	<ul>
+	
+		<li>
+			<a href="/archives">Archives</a>
+		</li>
+	
+		<li>
+			<a href="/about">About</a>
+		</li>
+	
+		<li>
+			<a href="/tags">Tags</a>
+		</li>
+	 
+	</ul>
+</nav>
+<aside class="sidebar__profile-social" role="social">
+	
+		
+			
+			<a class="social-github" target="_blank" href="http://github.com/codersir">
+				<span class="fa fa-github"></span>
+			</a>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+			<a class="social-instagram" target="_blank" href="http://instagram.com/codersir">
+				<span class="fa fa-instagram"></span>
+			</a>
+			
+		
+			
+			<a class="social-rss" target="_blank" href="/atom.xml">
+				<span class="fa fa-rss"></span>
+			</a>
+			
+		 
+	
+</aside>
+    
+  </header>
+  <main class="main" role="main">
+    <article id="post-box-model-and-box-sizing" class="article article--type-post" itemscope itemprop="blogPost">
+  <div class="article__inner">
+    
+    
+      <header class="article__header">
+        
+  
+    <h1 class="article__title" itemprop="name">
+      盒模型以及 box-sizing
+    </h1>
+  
+
+      </header>
+      <div class="article__meta">
+        <a href="https://github.com/codersir/codersir.github.io/tree/master/source/_posts/box-model-and-box-sizing.md" class="article__meta-edit">
+	<i class="fa fa-github"></i> Edit this page on GitHub
+</a>
+
+        
+	<time class="article__meta-date" datetime="2015-12-08T05:14:27.000Z" itemprop="datePublished">Dec 12, 2015</time>
+
+      </div>
+    
+    <div class="article__entry" itemprop="articleBody">
+      
+        <p>前两天一个准备入前端坑的朋友问我：标准盒模型到底是什么？我不假思索的说:</p>
+<blockquote>
+<p>盒模型有两种，一种是 w3c 标准盒模型，一种是 IE 盒模型。标准盒模型就是 <code>width = content_width + padding_width + border_width</code>。</p>
+</blockquote>
+<p>朋友立马打断我说道：</p>
+<blockquote>
+<p>不对不对，你又把我搞晕了，这不是 IE 盒模型么？</p>
+</blockquote>
+<a id="more"></a>
+<p>我感觉到有点不对劲了，赶紧 Google 了一下，才发现我真的记反了。这让我大吃一惊，这些基本概念我明明都很清楚的，怎么工作一年后居然把这个都弄混了。然后我突然想起了另一个属性：<code>box-sizing:border-box</code>，我说的盒模型计算公式就是 border-box 啊。自己一直用的 css reset 把 box-sizing 默认设置成 border-box，用的久了慢慢的就忘了它的存在，心想着自己在 chrome 下用的应该是标准的盒模型，就默认把 border-box 当成标准盒模型了。</p>
+<p>先来回顾一下标准盒模型和 IE 盒模型，一图胜千言。</p>
+<p><img src="/image/blog/box-model.png" alt="盒模型"></p>
+<p>所以标准盒模型是不包括 padding 和 border 的，也就是 <code>width=content_width</code>。</p>
+<p>那么为什么所有的 reset CSS 的 box-model 都默认是 border-box 呢？因为 border-box 的计算方式<strong>更符合我们的心理预期</strong>，同时也<strong>更方便计算</strong>。设想下面这种情况，我们希望内容宽度100%，同时还有 1em 的边框。</p>
+<ul>
+<li>如果是 content-box（内容盒模型），则会出现横向滚动条，这显然不是我们想要的</li>
+</ul>
+<p></p><p data-height="268" data-theme-id="0" data-slug-hash="zrxEVY" data-default-tab="result" data-user="xuhong" class="codepen">See the Pen <a href="http://codepen.io/xuhong/pen/zrxEVY/" target="_blank" rel="external">content-box</a> by 旭鸿 (<a href="http://codepen.io/xuhong" target="_blank" rel="external">@xuhong</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p><p></p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+<ul>
+<li>border-box（边框盒模型）才是我们预期的展现方式</li>
+</ul>
+<p></p><p data-height="268" data-theme-id="0" data-slug-hash="gPbGyG" data-default-tab="result" data-user="xuhong" class="codepen">See the Pen <a href="http://codepen.io/xuhong/pen/gPbGyG/" target="_blank" rel="external">border-box</a> by 旭鸿 (<a href="http://codepen.io/xuhong" target="_blank" rel="external">@xuhong</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p><p></p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+<p>通常，最常见的 CSS reset 的 box-sizing 是下面这样的：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">*,</span><br><span class="line">*<span class="selector-pseudo">:before</span>,</span><br><span class="line">*<span class="selector-pseudo">:after</span>&#123;</span><br><span class="line">	<span class="attribute">-webkit-border-sizing</span>: border-box;</span><br><span class="line">	<span class="attribute">-moz-border-sizing</span>: border-box;</span><br><span class="line">	<span class="attribute">border-sizing</span>: border-box;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是 CSS-Tricks 提供了<a href="https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/" target="_blank" rel="external">一种更好的 box-sizing reset</a>，添加了继承，方便覆盖效率更高，同时去掉了浏览器前缀（国外 IE7 及以下已经不用考虑了）：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">html</span> &#123;</span><br><span class="line">  <span class="attribute">box-sizing</span>: border-box;</span><br><span class="line">&#125;</span><br><span class="line">*, *<span class="selector-pseudo">:before</span>, *<span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">  <span class="attribute">box-sizing</span>: inherit;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一些资料：</p>
+<p>-<a href="https://en.wikipedia.org/wiki/Internet_Explorer_box_model_bug#Background" target="_blank" rel="external">wikipedia: Internet Explorer box model bug</a><br>-<a href="http://caniuse.com/#feat=css3-boxsizing" target="_blank" rel="external">Can i use box-sizing</a><br>-<a href="https://css-tricks.com/box-sizing/" target="_blank" rel="external">CSS-Tricks Box Sizing</a><br>-<a href="https://css-tricks.com/international-box-sizing-awareness-day/" target="_blank" rel="external">International box-sizing Awareness Day</a></p>
+
+        <br>
+        <p>--EOF--</p>
+        <p>
+          <small>于 
+            
+	<time class="article__meta-date" datetime="2015-12-08T05:14:27.000Z" itemprop="datePublished">Dec 12, 2015 13:14:27</time>
+ 发表
+            
+            
+            ，并被添加标签「
+             
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.com/tags/css/">css</a>
+
+            」
+            
+            
+             
+              ，更新于
+              
+	<time class="article__meta-updated" datetime="2016-05-29T18:17:32.000Z" itemprop="datePublished">May 5, 2016 02:17:32</time>
+
+            。
+          </small>
+      
+    </div>
+  </div>
+  
+    <section id="comments">
+      <h1 class="title" href="http://codersir.github.com/2015/12/08/box-model-and-box-sizing/#disqus_thread">Comments</h1>
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </section>
+  
+  
+    
+<nav class="article__nav">
+  
+    <a href="/2016/01/08/oauth2/" class="article__nav-newer article__nav-link-wrap">
+      <strong class="article__nav-caption">Newer</strong>
+      <div class="article__nav-title">
+        
+          oauth2
+        
+      </div>
+    </a>
+  
+  
+    <span class="article__nav-older article__nav--disable article__nav-link-wrap">
+      <strong class="article__nav-caption">Older</strong>
+      <div class="article__nav-title">No more older post</div>
+    </span>
+  
+</nav>
+
+  
+</article>
+
+
+<script>
+  var disqus_shortname = 'codsirblog';
+  var disqus_loaded = false;
+  var body = document.body;
+  var html = document.documentElement;
+  var clientHeight = html.clientHeight
+  var pageHeight = Math.max(body.scrollHeight,body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight)
+
+  
+  var disqus_url = 'http://codersir.github.com/2015/12/08/box-model-and-box-sizing/';
+  
+
+  if(clientHeight == pageHeight){
+    loadDisqus()
+    disqus_loaded = true
+  }
+  
+  document.addEventListener('scroll', function(e){
+    if(disqus_loaded){
+      return
+    }else{
+      var scrollTop = body.scrollTop;
+      if(scrollTop + clientHeight + 100 > pageHeight){
+        loadDisqus()
+        disqus_loaded = true
+      }
+    }
+  })
+  
+  function loadDisqus(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }
+</script>
+
+
+  </main>
+  <script src="/js/script.js"></script>
+</body>
+</html>

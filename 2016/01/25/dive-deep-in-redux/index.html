@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>深入学习 redux | Coder Sir</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="redux 是 react 的一个状态管理方案，它的名称来自 array.reduce，要掌握它的要义，首先要知道数组 reduce 方法的用法。
+1array.reduce(callback[, initialValue])
+reduce 函数接受两个参数，一个回调函数和一个可选的初始值。回调函数接受四个可选参数：
+
+previousValue: 上次调用回调函数的返回值，或者初始值，如果有的话">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入学习 redux">
+<meta property="og:url" content="http://codersir.github.com/2016/01/25/dive-deep-in-redux/index.html">
+<meta property="og:site_name" content="Coder Sir">
+<meta property="og:description" content="redux 是 react 的一个状态管理方案，它的名称来自 array.reduce，要掌握它的要义，首先要知道数组 reduce 方法的用法。
+1array.reduce(callback[, initialValue])
+reduce 函数接受两个参数，一个回调函数和一个可选的初始值。回调函数接受四个可选参数：
+
+previousValue: 上次调用回调函数的返回值，或者初始值，如果有的话">
+<meta property="og:image" content="http://codersir.github.com/image/blog/redux-flow.png">
+<meta property="og:updated_time" content="2016-05-29T18:17:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入学习 redux">
+<meta name="twitter:description" content="redux 是 react 的一个状态管理方案，它的名称来自 array.reduce，要掌握它的要义，首先要知道数组 reduce 方法的用法。
+1array.reduce(callback[, initialValue])
+reduce 函数接受两个参数，一个回调函数和一个可选的初始值。回调函数接受四个可选参数：
+
+previousValue: 上次调用回调函数的返回值，或者初始值，如果有的话">
+<meta name="twitter:image" content="http://codersir.github.com/image/blog/redux-flow.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Coder Sir" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <header class="sidebar" role="header">
+    
+      <div class="sidebar__profile">
+	<a class="sidebar__profile-link" href="/">
+		<figure>
+			<img class="sidebar__profile-img" src="/image/site/gravatar.png" alt="">
+		</figure>
+	</a>
+	<h1 class="sidebar__profile-name">Codersir</h1>
+	<div class="sidebar__profile-bio">
+		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insterested in JavaScript, AngularJS, ReactJS and NodeJS.</p>
+	</div>
+</div>
+<nav class="sidebar__profile-nav" role="nav">
+	<ul>
+	
+		<li>
+			<a href="/archives">Archives</a>
+		</li>
+	
+		<li>
+			<a href="/about">About</a>
+		</li>
+	
+		<li>
+			<a href="/tags">Tags</a>
+		</li>
+	 
+	</ul>
+</nav>
+<aside class="sidebar__profile-social" role="social">
+	
+		
+			
+			<a class="social-github" target="_blank" href="http://github.com/codersir">
+				<span class="fa fa-github"></span>
+			</a>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+			<a class="social-instagram" target="_blank" href="http://instagram.com/codersir">
+				<span class="fa fa-instagram"></span>
+			</a>
+			
+		
+			
+			<a class="social-rss" target="_blank" href="/atom.xml">
+				<span class="fa fa-rss"></span>
+			</a>
+			
+		 
+	
+</aside>
+    
+  </header>
+  <main class="main" role="main">
+    <article id="post-dive-deep-in-redux" class="article article--type-post" itemscope itemprop="blogPost">
+  <div class="article__inner">
+    
+    
+      <header class="article__header">
+        
+  
+    <h1 class="article__title" itemprop="name">
+      深入学习 redux
+    </h1>
+  
+
+      </header>
+      <div class="article__meta">
+        <a href="https://github.com/codersir/codersir.github.io/tree/master/source/_posts/dive-deep-in-redux.md" class="article__meta-edit">
+	<i class="fa fa-github"></i> Edit this page on GitHub
+</a>
+
+        
+	<time class="article__meta-date" datetime="2016-01-25T08:33:25.000Z" itemprop="datePublished">Jan 1, 2016</time>
+
+      </div>
+    
+    <div class="article__entry" itemprop="articleBody">
+      
+        <p>redux 是 react 的一个状态管理方案，它的名称来自 <code>array.reduce</code>，要掌握它的要义，首先要知道数组 <code>reduce</code> 方法的用法。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">array</span><span class="selector-class">.reduce</span>(<span class="selector-tag">callback</span><span class="selector-attr">[, initialValue]</span>)</span><br></pre></td></tr></table></figure>
+<p><code>reduce</code> 函数接受两个参数，一个回调函数和一个可选的初始值。回调函数接受四个可选参数：</p>
+<ul>
+<li>previousValue: 上次调用回调函数的返回值，或者初始值，如果有的话。</li>
+<li>currentValue: 当前被传入回调函数的值</li>
+<li>currentIndex: 当前值在数组中的索引</li>
+<li>array: 调用 <code>reduce</code> 方法的数组</li>
+</ul>
+<p>redux 中有3个概念，分别是：</p>
+<ul>
+<li>action</li>
+<li>reducer</li>
+<li>store</li>
+</ul>
+<p>它们之间的转换流程图如下：<br><img src="/image/blog/redux-flow.png" alt="redux-flow"></p>
+<h3 id="什么是-action"><a href="#什么是-action" class="headerlink" title="什么是 action"></a>什么是 action</h3><p>action 是简单的 JavaScript 对象，包含一个值唯一的 <code>type</code> 属性用<strong>来描述状态的变化</strong>。比如添加评论的 action:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attribute">type</span>: <span class="string">'ADD_COMMENT'</span>,</span><br><span class="line">    content: <span class="string">'add a comment'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通常我们会写个 action creator 用来帮助创建 action，简化输入：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">addComment</span>(text)&#123;</span><br><span class="line">    <span class="selector-tag">return</span> &#123;</span><br><span class="line">        <span class="attribute">type</span>: <span class="string">'ADD_COMMENT'</span>,</span><br><span class="line">        <span class="attribute">content</span>: text,</span><br><span class="line">        <span class="attribute">create_at</span>: Date.now()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果 action creator 需要读取当前状态或者调用 API，或者进行其他有副作用的操作，比如路由过渡，那么它应该返回 <code>async action</code> 而不是 <code>action</code>。</p>
+<p>async action（异步操作）是准备传递给 <code>dispatch()</code> 函数但却还没准备好被 <code>reducer</code> 调用的 <code>action</code>，它们会在传递给 <code>dispatch()</code> 函数前被 <code>middleware(中间件)</code> 转化为 <code>action</code>。</p>
+<p>action 的结构并没有什么限制，只要是 JavaScript 对象并且包含 <code>type</code> 字段即可。当然，为了团队协作和编码风格的统一，有个规范总是好的，可以参照 <a href="https://github.com/acdlite/flux-actions" target="_blank" rel="external">flux-aciton</a> 和 <a href="https://github.com/acdlite/redux-actions" target="_blank" rel="external">redux-action</a>。</p>
+<h3 id="reducer-怎么工作"><a href="#reducer-怎么工作" class="headerlink" title="reducer 怎么工作"></a>reducer 怎么工作</h3><p>reducer 就对应这个名称来源，是 redux 中最重要的概念。和 <code>arr.reduce</code> 方法类似，它的用法是传入当前状态和要进行的操作，返回下一个状态：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">previousState</span>, action) =&gt; newState</span><br></pre></td></tr></table></figure>
+<p><strong>reducer 根据 action 的描述来改变 state</strong>。<strong>reducer 必须是纯函数</strong>,也就是说：</p>
+<ul>
+<li>返回值和传入的值结构一致</li>
+<li>没有副作用</li>
+</ul>
+<p>所以下列事情不应该在 <code>reducer</code>中进行：</p>
+<ul>
+<li>改变传入的参数值</li>
+<li>进行有副作用的操作，比如调用API和路由过渡</li>
+<li>调用非纯函数，比如 <code>Date.now()</code> 和 <code>Math.random()</code></li>
+</ul>
+<h3 id="store-是什么"><a href="#store-是什么" class="headerlink" title="store 是什么"></a>store 是什么</h3><p><strong>store 用来存储应用的状态</strong>。在 redux 中，store 是状态的中心，提供以下 API：</p>
+<ul>
+<li>通过 <code>store.dispatch(action)</code> 分发 action</li>
+<li>通过 <code>store.subscribe(callback)</code> 添加事件监听，触发时调用回调函数</li>
+<li>通过 <code>store.getState()</code> 读取应用状态</li>
+</ul>
+<p>一个应用只有一个 <code>store</code>，它包含该应用完整的状态树。</p>
+
+        <br>
+        <p>--EOF--</p>
+        <p>
+          <small>于 
+            
+	<time class="article__meta-date" datetime="2016-01-25T08:33:25.000Z" itemprop="datePublished">Jan 1, 2016 16:33:25</time>
+ 发表
+            
+            
+            ，并被添加标签「
+             
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.com/tags/react/">react</a>
+ 
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.com/tags/redux/">redux</a>
+
+            」
+            
+            
+             
+              ，更新于
+              
+	<time class="article__meta-updated" datetime="2016-05-29T18:17:32.000Z" itemprop="datePublished">May 5, 2016 02:17:32</time>
+
+            。
+          </small>
+      
+    </div>
+  </div>
+  
+    <section id="comments">
+      <h1 class="title" href="http://codersir.github.com/2016/01/25/dive-deep-in-redux/#disqus_thread">Comments</h1>
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </section>
+  
+  
+    
+<nav class="article__nav">
+  
+    <a href="/2016/01/31/what-is-decorator-in-javascript/" class="article__nav-newer article__nav-link-wrap">
+      <strong class="article__nav-caption">Newer</strong>
+      <div class="article__nav-title">
+        
+          JavaScript 中的装饰器是什么？
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/01/12/learn-typescript/" class="article__nav-older article__nav-link-wrap">
+      <strong class="article__nav-caption">Older</strong>
+      <div class="article__nav-title">TypeScript 入门教程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<script>
+  var disqus_shortname = 'codsirblog';
+  var disqus_loaded = false;
+  var body = document.body;
+  var html = document.documentElement;
+  var clientHeight = html.clientHeight
+  var pageHeight = Math.max(body.scrollHeight,body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight)
+
+  
+  var disqus_url = 'http://codersir.github.com/2016/01/25/dive-deep-in-redux/';
+  
+
+  if(clientHeight == pageHeight){
+    loadDisqus()
+    disqus_loaded = true
+  }
+  
+  document.addEventListener('scroll', function(e){
+    if(disqus_loaded){
+      return
+    }else{
+      var scrollTop = body.scrollTop;
+      if(scrollTop + clientHeight + 100 > pageHeight){
+        loadDisqus()
+        disqus_loaded = true
+      }
+    }
+  })
+  
+  function loadDisqus(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }
+</script>
+
+
+  </main>
+  <script src="/js/script.js"></script>
+</body>
+</html>

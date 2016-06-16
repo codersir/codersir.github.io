@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>再探 JavaScript 中的 this | Coder Sir</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JavaScript 中的 this
+动态作用域this 指的是 函数调用时的上下文。
+1234567891011var obj = &amp;#123;    a: 1,    foo: function foo()&amp;#123;        console.log(this.a)    &amp;#125;&amp;#125;function doFoo(fn)&amp;#123;    fn()&amp;#125;var a =">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再探 JavaScript 中的 this">
+<meta property="og:url" content="http://codersir.github.com/2016/04/10/learn-javascript-this-again/index.html">
+<meta property="og:site_name" content="Coder Sir">
+<meta property="og:description" content="JavaScript 中的 this
+动态作用域this 指的是 函数调用时的上下文。
+1234567891011var obj = &amp;#123;    a: 1,    foo: function foo()&amp;#123;        console.log(this.a)    &amp;#125;&amp;#125;function doFoo(fn)&amp;#123;    fn()&amp;#125;var a =">
+<meta property="og:updated_time" content="2016-05-29T18:17:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="再探 JavaScript 中的 this">
+<meta name="twitter:description" content="JavaScript 中的 this
+动态作用域this 指的是 函数调用时的上下文。
+1234567891011var obj = &amp;#123;    a: 1,    foo: function foo()&amp;#123;        console.log(this.a)    &amp;#125;&amp;#125;function doFoo(fn)&amp;#123;    fn()&amp;#125;var a =">
+  
+    <link rel="alternative" href="/atom.xml" title="Coder Sir" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <header class="sidebar" role="header">
+    
+      <div class="sidebar__profile">
+	<a class="sidebar__profile-link" href="/">
+		<figure>
+			<img class="sidebar__profile-img" src="/image/site/gravatar.png" alt="">
+		</figure>
+	</a>
+	<h1 class="sidebar__profile-name">Codersir</h1>
+	<div class="sidebar__profile-bio">
+		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insterested in JavaScript, AngularJS, ReactJS and NodeJS.</p>
+	</div>
+</div>
+<nav class="sidebar__profile-nav" role="nav">
+	<ul>
+	
+		<li>
+			<a href="/archives">Archives</a>
+		</li>
+	
+		<li>
+			<a href="/about">About</a>
+		</li>
+	
+		<li>
+			<a href="/tags">Tags</a>
+		</li>
+	 
+	</ul>
+</nav>
+<aside class="sidebar__profile-social" role="social">
+	
+		
+			
+			<a class="social-github" target="_blank" href="http://github.com/codersir">
+				<span class="fa fa-github"></span>
+			</a>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+			<a class="social-instagram" target="_blank" href="http://instagram.com/codersir">
+				<span class="fa fa-instagram"></span>
+			</a>
+			
+		
+			
+			<a class="social-rss" target="_blank" href="/atom.xml">
+				<span class="fa fa-rss"></span>
+			</a>
+			
+		 
+	
+</aside>
+    
+  </header>
+  <main class="main" role="main">
+    <article id="post-learn-javascript-this-again" class="article article--type-post" itemscope itemprop="blogPost">
+  <div class="article__inner">
+    
+    
+      <header class="article__header">
+        
+  
+    <h1 class="article__title" itemprop="name">
+      再探 JavaScript 中的 this
+    </h1>
+  
+
+      </header>
+      <div class="article__meta">
+        <a href="https://github.com/codersir/codersir.github.io/tree/master/source/_posts/learn-javascript-this-again.md" class="article__meta-edit">
+	<i class="fa fa-github"></i> Edit this page on GitHub
+</a>
+
+        
+	<time class="article__meta-date" datetime="2016-04-10T04:55:20.000Z" itemprop="datePublished">Apr 4, 2016</time>
+
+      </div>
+    
+    <div class="article__entry" itemprop="articleBody">
+      
+        <p>JavaScript 中的 <code>this</code></p>
+<p>动态作用域<br>this 指的是 函数<strong>调用时</strong>的上下文。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">var</span> obj = &#123;</span><br><span class="line">    <span class="selector-tag">a</span>: <span class="number">1</span>,</span><br><span class="line">    foo: function foo()&#123;</span><br><span class="line">        console.log(this.a)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">function doFoo(fn)&#123;</span><br><span class="line">    fn()</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">var</span> <span class="selector-tag">a</span> = <span class="number">2</span></span><br><span class="line"><span class="function"><span class="title">doFoo</span><span class="params">(obj.foo)</span></span>  <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
+<p>箭头函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> count = <span class="number">9</span></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    count: <span class="number">0</span>,</span><br><span class="line">    plus: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        setTimeout(() =&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.count++;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.count)</span><br><span class="line">        &#125;,<span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.plus()  <span class="comment">//1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> count = <span class="number">9</span></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    count: <span class="number">0</span>,</span><br><span class="line">    plus: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.count++;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.count)</span><br><span class="line">        &#125;,<span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.plus()  <span class="comment">//10</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>bind(this)</p>
+<p>call(…) 和 apply(…)</p>
+
+        <br>
+        <p>--EOF--</p>
+        <p>
+          <small>于 
+            
+	<time class="article__meta-date" datetime="2016-04-10T04:55:20.000Z" itemprop="datePublished">Apr 4, 2016 12:55:20</time>
+ 发表
+            
+            
+            
+             
+              ，更新于
+              
+	<time class="article__meta-updated" datetime="2016-05-29T18:17:32.000Z" itemprop="datePublished">May 5, 2016 02:17:32</time>
+
+            。
+          </small>
+      
+    </div>
+  </div>
+  
+    <section id="comments">
+      <h1 class="title" href="http://codersir.github.com/2016/04/10/learn-javascript-this-again/#disqus_thread">Comments</h1>
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </section>
+  
+  
+    
+<nav class="article__nav">
+  
+    <a href="/2016/04/10/learn-javascript-scope-again/" class="article__nav-newer article__nav-link-wrap">
+      <strong class="article__nav-caption">Newer</strong>
+      <div class="article__nav-title">
+        
+          再探 JavaScript 中的作用域
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/13/dive-into-zone/" class="article__nav-older article__nav-link-wrap">
+      <strong class="article__nav-caption">Older</strong>
+      <div class="article__nav-title">理解 Zone 的实现机制</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<script>
+  var disqus_shortname = 'codsirblog';
+  var disqus_loaded = false;
+  var body = document.body;
+  var html = document.documentElement;
+  var clientHeight = html.clientHeight
+  var pageHeight = Math.max(body.scrollHeight,body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight)
+
+  
+  var disqus_url = 'http://codersir.github.com/2016/04/10/learn-javascript-this-again/';
+  
+
+  if(clientHeight == pageHeight){
+    loadDisqus()
+    disqus_loaded = true
+  }
+  
+  document.addEventListener('scroll', function(e){
+    if(disqus_loaded){
+      return
+    }else{
+      var scrollTop = body.scrollTop;
+      if(scrollTop + clientHeight + 100 > pageHeight){
+        loadDisqus()
+        disqus_loaded = true
+      }
+    }
+  })
+  
+  function loadDisqus(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }
+</script>
+
+
+  </main>
+  <script src="/js/script.js"></script>
+</body>
+</html>
