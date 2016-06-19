@@ -29,14 +29,17 @@ tags:
 
 上面这些情况都会产生 `watcher`，那么问题来了，\** 怎么减少 `watcher` \** 呢?
 
-1.	使用单次绑定语法 `{ {::} }` AngularJS 从1.3版本开始支持单向绑定语法 `::` ，它可以明确的告诉 AngularJS 哪些绑定获取到数据以后就不用关注了，这可以极大的减少 `watcher` 的数量，尤其是在 `ng-repeat` 内使用。
-2.	避免在 `ng-repeat` 中使用 `filter` 可以先把数据过滤后再传给 `ng-repeat`，这样就能避免因为过滤器产生的 `watcher` 了。
-3.	尽可能的使用 `ng-if` 而不是 `ng-show``ng-if` 可以从 Dom 中移除元素，触发 `element.$destory()`，删除 `ng-if` 内的元素的 `watcher`。`ng-show` 仍然会 render 元素，只是设置样式为 `display:none`。 但是如果元素需要经常变动隐藏还是显示，那么使用 `ng-show` 可能会更好，`ng-show` 会缓存 Dom，不需要重复解析。
+1.	使用单次绑定语法 `{ {::} }`
+AngularJS 从1.3版本开始支持单向绑定语法 `::` ，它可以明确的告诉 AngularJS 哪些绑定获取到数据以后就不用关注了，这可以极大的减少 `watcher` 的数量，尤其是在 `ng-repeat` 内使用。
+2.	避免在 `ng-repeat` 中使用 `filter`
+可以先把数据过滤后再传给 `ng-repeat`，这样就能避免因为过滤器产生的 `watcher` 了。
+3.	尽可能的使用 `ng-if` 而不是 `ng-show``ng-if`
+可以从 Dom 中移除元素，触发 `element.$destory()`，删除 `ng-if` 内的元素的 `watcher`。`ng-show` 仍然会 render 元素，只是设置样式为 `display:none`。 但是如果元素需要经常变动隐藏还是显示，那么使用 `ng-show` 可能会更好，`ng-show` 会缓存 Dom，不需要重复解析。
 4.	使用 `$watchCollection` 替代 `$watch`
 
 ### 2. 减少 `digest` 次数和范围
 
-减少 `watcher` 是从根本上解决问题，如果 `watcher` 的优化已经做到极致了，那么这时候就应该换一种思路了。导致 AngularJS App 变慢的原因是 `watcher` 太多导致 `digest` 变慢，`watcher` 已经无法优化了，那么就应该考虑化优 `digest` 的效率了。
+减少 `watcher` 是从根本上解决问题，如果 `watcher` 的优化已经做到极致了，那么这时候就应该换一种思路了。导致 AngularJS App 变慢的原因是 `watcher` 太多导致 `digest` 变慢，`watcher` 已经无法优化了，那么就应该考虑从 `digest` 的下手了。
 
 同样，首先要知道的是，什么情况下会触发 AngularJS 脏检查？
 
@@ -46,35 +49,38 @@ tags:
 -	使用 `$timeout` 和 `$interval`
 -	你手动调用 `$scope.$apply` 或 `$scope.$digest`
 
-优化主要从两个方向进行，减少脏检查的次数和缩小脏检查的范围。
+优化主要从两个方向进行，**减少脏检查的次数** 和 **缩小脏检查的范围**。
 
-1.	尽量使用 `$scope.$digest` 替代 `$scope.$apply``$scope.$digest` 从当前 scope 向下进行脏检查，而 `$scope.$apply` 会触发整个应用自顶向下进行脏检查，所以，使用 `$scope.$digest` 一般能大大的缩小脏检查的范围。
+1.	尽量使用 `$scope.$digest` 替代 `$scope.$apply`
+`$scope.$digest` 从当前 scope 向下进行脏检查，而 `$scope.$apply` 会触发整个应用自顶向下进行脏检查，所以，使用 `$scope.$digest` 一般能大大的缩小脏检查的范围。
 
-2.	使用 `$applyAsync` 合并 http 请求 通常在 App 启动的时候，会同时发起好几个 http 请求，来获取用户权限或账户信息之类的信息，每次接口返回值的时候，都会触发 AngularJS 的脏检查。这时候，如果可以等到这几个接口都返回以后，再触发脏检查，就能将脏检查的数量由几次减小到1次了。`$httpProvider` 的 [useApplyAsync](https://code.angularjs.org/1.3.8/docs/api/ng/provider/$httpProvider#useApplyAsync) 方法就是来解决这个问题，它通过 [ $rootScope.$applyAsync](https://code.angularjs.org/1.3.8/docs/api/ng/type/$rootScope.Scope#$applyAsync) 把大约同一时间（10ms左右）收到的返回值组合到一起处理。`applyAsync`的实现机制其实就是事件循环，通过 `setTimeout(fn,0)` 来延迟执行函数，可以参考我写的[《深入学习 Zone》](/zone)了解更多。
-
+2.	使用 `$applyAsync` 合并 http 请求
+通常在 App 启动的时候，会同时发起好几个 http 请求，来获取用户权限或账户信息之类的信息，每次接口返回值的时候，都会触发 AngularJS 的脏检查。这时候，如果可以等到这几个接口都返回以后，再触发脏检查，就能将脏检查的数量由几次减小到1次了。`$httpProvider` 的 [useApplyAsync](https://code.angularjs.org/1.3.8/docs/api/ng/provider/$httpProvider#useApplyAsync) 方法就是来解决这个问题，它通过 [ $rootScope.$applyAsync](https://code.angularjs.org/1.3.8/docs/api/ng/type/$rootScope.Scope#$applyAsync) 把大约同一时间（10ms左右）收到的返回值组合到一起处理。`applyAsync`的实现机制其实就是事件循环，通过 `setTimeout(fn,0)` 来延迟执行函数，可以参考我写的[《深入学习 Zone》](/2016/03/13/dive-into-zone/)了解更多。
 ```javascript
   app.config(function ($httpProvider) {
     $httpProvider.useApplyAsync(true)
   })
 ```
 
-1.	ng-model 防抖动（ Debounce ） 搜索框通常会监听用户的 keyup 事件来进行实时匹配推荐，如果每次用户按下按键都调用接口，会出现多次连续的调用接口，导致连续的触发 AngularJS 脏检查，这样很容易造成页面卡顿。这时，可以通过 `ng-model` 的 `debounce` 参数来限制脏检查的间隔，比如 `ng-model-options="{ debounce: 250 }`，限制每 250ms 内只进行一次脏检查。
+3.	ng-model 防抖动（ Debounce ）
+搜索框通常会监听用户的 keyup 事件来进行实时匹配推荐，如果每次用户按下按键都调用接口，会出现多次连续的调用接口，导致连续的触发 AngularJS 脏检查，这样很容易造成页面卡顿。这时，可以通过 `ng-model` 的 `debounce` 参数来限制脏检查的间隔，比如 `ng-model-options="{ debounce: 250 }`，限制每 250ms 内只进行一次脏检查。
 
-2.	使用 `$watchCollection` 替代 `$watch` 的第三个参数`$watch` 只会比较对象引用是否相同，如果新值和原始值指向同一个索引，那么 `$digest` 时就不会触发回调函数。如果要监视对象的每个属性，我们可以给 `$watch` 传入第三个参数 `true`，这样 AngularJS 就会对对象进行深比较（使用 `angular.equals`)，遍历对象的每个值判断是否发生了变化。但如果对象比较复杂，这样做就会带来很大的性能损耗。所以，AngularJS 提供了 `$watchCollection` 方法来解决这一问题。`$watchCollection` 在脏检查的时候对对象进行浅比较，只会比较对象的第一层属性。
+4.	使用 `$watchCollection` 替代 `$watch` 的第三个参数
+`$watch` 只会比较对象引用是否相同，如果新值和原始值指向同一个索引，那么 `$digest` 时就不会触发回调函数。如果要监视对象的每个属性，我们可以给 `$watch` 传入第三个参数 `true`，这样 AngularJS 就会对对象进行深比较（使用 `angular.equals`)，遍历对象的每个值判断是否发生了变化。但如果对象比较复杂，这样做就会带来很大的性能损耗。所以，AngularJS 提供了 `$watchCollection` 方法来解决这一问题。`$watchCollection` 在脏检查的时候对对象进行浅比较，只会比较对象的第一层属性。
 
-3.	尽量把 DOM 操作移到指令中 比如 `ng-show` 和 `ng-hide`，我们经常通过这些指令来控制元素的显示和隐藏，但这些指令的表达式值都会被 AngularJS 监听，导致 `watcher` 增加，而且这些值的变化通常也会引发 AngularJS 的 digest。我们应该尽可能的把这些逻辑移到指令的 `link` 函数中。
+5.	尽量把 DOM 操作移到指令中
+比如 `ng-show` 和 `ng-hide`，我们经常通过这些指令来控制元素的显示和隐藏，但这些指令的表达式值都会被 AngularJS 监听，导致 `watcher` 增加，而且这些值的变化通常也会引发 AngularJS 的 digest。我们应该尽可能的把这些逻辑移到指令的 `link` 函数中。当然，这一点最后考虑。
 
 ### 3. 其他建议
 
 1.	使用 `track by` 提高 `ng-repeat`性能
 
 2.	禁用 debug 信息 我们看到使用 AngularJS 指令的元素上被添加了许多类，比如 `ng-binding`、`ng-scope`等，这些类除了调试没有任何作用，
-
 ```
 $compileProvider.debugInfoEnabled(false)
 ```
 
-1.	耗时的计算考虑移到 web workers 执行
+3.	耗时的计算考虑移到 web workers 执行
 
 ### 工具
 

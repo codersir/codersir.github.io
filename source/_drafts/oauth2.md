@@ -6,9 +6,43 @@ tags: oauth2
 ### 授权类型
 OAuth2 允许采用不同的授权类型(grant_type) 获取 access_token
 - Authorization Code
+这是最常见也是最安全的授权方式，这种方式为 confidential 客户端设计，通过这种方式可以同时获得 access_token 和 refresh_token
+```
+     +----------+
+     | Resource |
+     |   Owner  |
+     |          |
+     +----------+
+          ^
+          |
+         (B)
+     +----|-----+          Client Identifier      +---------------+
+     |         -+----(A)-- & Redirection URI ---->|               |
+     |  User-   |                                 | Authorization |
+     |  Agent  -+----(B)-- User authenticates --->|     Server    |
+     |          |                                 |               |
+     |         -+----(C)-- Authorization Code ---<|               |
+     +-|----|---+                                 +---------------+
+       |    |                                         ^      v
+      (A)  (C)                                        |      |
+       |    |                                         |      |
+       ^    v                                         |      |
+     +---------+                                      |      |
+     |         |>---(D)-- Authorization Code ---------'      |
+     |  Client |          & Redirection URI                  |
+     |         |                                             |
+     |         |<---(E)----- Access Token -------------------'
+     +---------+       (w/ Optional Refresh Token)
+```
+
 - Implicit
+
+
 - Resource Owner Password Credentials
+
+
 - Client Credentials
+
 
 ### 请求认证
 
