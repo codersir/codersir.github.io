@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Koa 是怎么让你爽的？ | Coder Sir</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="经常在网路上看到别人夸 Koa 写的爽，有的甚至产生了「优越感」，但写的都是种种爽的体位，却没有看到有谁详细解释为什么可以采用这些体位，以及为什么这些体位爽。其实，只要看一下 Koa 的源码，就可以知道这些原因。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Koa 是怎么让你爽的？">
+<meta property="og:url" content="http://codersir.github.io/2016/06/17/dive-into-koa/index.html">
+<meta property="og:site_name" content="Coder Sir">
+<meta property="og:description" content="经常在网路上看到别人夸 Koa 写的爽，有的甚至产生了「优越感」，但写的都是种种爽的体位，却没有看到有谁详细解释为什么可以采用这些体位，以及为什么这些体位爽。其实，只要看一下 Koa 的源码，就可以知道这些原因。">
+<meta property="og:image" content="https://github.com/koajs/koa/blob/master/docs/middleware.gif?raw=true">
+<meta property="og:updated_time" content="2016-06-18T18:28:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Koa 是怎么让你爽的？">
+<meta name="twitter:description" content="经常在网路上看到别人夸 Koa 写的爽，有的甚至产生了「优越感」，但写的都是种种爽的体位，却没有看到有谁详细解释为什么可以采用这些体位，以及为什么这些体位爽。其实，只要看一下 Koa 的源码，就可以知道这些原因。">
+<meta name="twitter:image" content="https://github.com/koajs/koa/blob/master/docs/middleware.gif?raw=true">
+  
+    <link rel="alternative" href="/atom.xml" title="Coder Sir" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <header class="sidebar" role="header">
+    
+      <div class="sidebar__profile">
+	<a class="sidebar__profile-link" href="/">
+		<figure>
+			<img class="sidebar__profile-img" src="/image/site/gravatar.png" alt="">
+		</figure>
+	</a>
+	<h1 class="sidebar__profile-name">Codersir</h1>
+	<div class="sidebar__profile-bio">
+		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insterested in JavaScript, AngularJS, ReactJS and NodeJS.</p>
+	</div>
+</div>
+<nav class="sidebar__profile-nav" role="nav">
+	<ul>
+	
+		<li>
+			<a href="/archives">Archives</a>
+		</li>
+	
+		<li>
+			<a href="/about">About</a>
+		</li>
+	
+		<li>
+			<a href="/tags">Tags</a>
+		</li>
+	 
+	</ul>
+</nav>
+<aside class="sidebar__profile-social" role="social">
+	
+		
+			
+			<a class="social-github" target="_blank" href="http://github.com/codersir">
+				<span class="fa fa-github"></span>
+			</a>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+			<a class="social-instagram" target="_blank" href="http://instagram.com/codersir">
+				<span class="fa fa-instagram"></span>
+			</a>
+			
+		
+			
+			<a class="social-rss" target="_blank" href="/atom.xml">
+				<span class="fa fa-rss"></span>
+			</a>
+			
+		 
+	
+</aside>
+    
+  </header>
+  <main class="main" role="main">
+    <article id="post-dive-into-koa" class="article article--type-post" itemscope itemprop="blogPost">
+  <div class="article__inner">
+    
+    
+      <header class="article__header">
+        
+  
+    <h1 class="article__title" itemprop="name">
+      Koa 是怎么让你爽的？
+    </h1>
+  
+
+      </header>
+      <div class="article__meta">
+        <a href="https://github.com/codersir/codersir.github.io/tree/master/source/_posts/dive-into-koa.md" class="article__meta-edit">
+	<i class="fa fa-github"></i> Edit this page on GitHub
+</a>
+
+        
+	<time class="article__meta-date" datetime="2016-06-17T09:15:36.000Z" itemprop="datePublished">Jun 6, 2016</time>
+
+      </div>
+    
+    <div class="article__entry" itemprop="articleBody">
+      
+        <p>经常在网路上看到别人夸 Koa 写的爽，有的甚至产生了「优越感」，但写的都是种种爽的体位，却没有看到有谁详细解释为什么可以采用这些体位，以及为什么这些体位爽。其实，只要看一下 Koa 的源码，就可以知道这些原因。</p>
+<a id="more"></a>
+<p>当然，还是要有一些准备知识的，你需要知道 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator" target="_blank" rel="external">generator</a> 是什么？<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield" target="_blank" rel="external">yield</a> 和 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield*" target="_blank" rel="external">yield *</a> 是怎么工作的？这些都可以在 <a href="https://developer.mozilla.org/" target="_blank" rel="external">MDN</a> 上获取到，这里只分析 Koa 的实现，假设你已经掌握了以上必需的知识。</p>
+<blockquote>
+<p>以下代码分析基于 Koa V1.x。</p>
+</blockquote>
+<p>爽发生在中间件的写法上面。Koa 使用一个数组来维护所有的中间件（middleware），通过调用 <code>app.use</code> 把中间件添加到这个数组中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app.use = <span class="function"><span class="keyword">function</span>(<span class="params">mdw</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.middleware.push(mdw)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中中间件是 generator 函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mdw = <span class="function"><span class="keyword">function</span> *(<span class="params">next</span>)</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在请求过来的时候，http server 会调用 Koa 的 callback，然后请求通过 Koa 中间件，最后返回结果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">app.callback = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> fn = co.wrap(compose(<span class="keyword">this</span>.middleware))</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">    fn.call(...)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主要流程就是这样了，Koa 之所以支持那些很爽的写法，就是来自下面这段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">co.wrap(compose(<span class="keyword">this</span>.middleware))</span><br></pre></td></tr></table></figure>
+<p>那么这段代码究竟有什么黑魔法？且听我慢慢道来。</p>
+<p>第一步，组合中间件，调用 <code>compose</code> 函数并传入中间件数组作为参数，<code>compose</code> 的实现非常简单，源码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">compose</span>(<span class="params">middleware</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> *(<span class="params">next</span>)</span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (!next) next = noop();</span><br><span class="line">     <span class="keyword">var</span> i = middleware.length;</span><br><span class="line">     <span class="keyword">while</span> (i--) &#123;</span><br><span class="line">       next = middleware[i].call(<span class="keyword">this</span>, next);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">yield</span> *next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> *<span class="title">noop</span>(<span class="params"></span>)</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p><code>compose</code> 函数组合中间件的方式很巧妙，它递归地把后一个中间件调用返回的 generator 对象作为参数传给上一个中间件进行调用，<code>while</code> 循环结束后，<code>next</code> 值为第一个中间件传入第二个中间件调用后的 generator 对象为参数进行调用后返回的 generator 对象。是不是有点绕？那来点简单的代码解释一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">noop</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">log</span>(<span class="params">next</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">yield</span> next</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">3</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">gen</span>(<span class="params">next</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">compose</span>(<span class="params">next</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!next) &#123; next = noop() &#125;</span><br><span class="line">    next = gen(next)</span><br><span class="line">    next = log(next)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">yield</span> * next</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = compose()</span><br><span class="line"><span class="built_in">console</span>.log(a.next()) <span class="comment">// &#123;value: 1, done: false&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(a.next()) <span class="comment">// &#123;value: gen, done: false&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(a.next()) <span class="comment">// &#123;value: 3, done: false&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(a.next()) <span class="comment">// &#123;value: undefined, done: true&#125;</span></span><br></pre></td></tr></table></figure>
+<p>通过输出可以看出，在 Koa 中，我们通过调用 <code>yield next</code> 跳转出当前中间件，从 log 中间件跳到了 gen，然后又回到了 log。但是这里有个问题，我们希望输出的 2 并没有出现，所以并没有完全达到我们的期望。所以，接下来，该 co 登场了。</p>
+<p>注意，<code>compose</code> 函数并没有立即就组合中间件，而是返回一个 generator 函数 gen:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">gen = <span class="function"><span class="keyword">function</span> *(<span class="params">next</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!next) next = noop();</span><br><span class="line">  <span class="keyword">var</span> i = middleware.length;</span><br><span class="line">  <span class="keyword">while</span> (i--) &#123;</span><br><span class="line">    next = middleware[i].call(<span class="keyword">this</span>, next);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">yield</span> *next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二步，调用 <code>co.wrap()</code> 函数，传入上一步 <code>compose</code> 返回的 <code>gen</code> 函数作为参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fn = co.wrap(gen)</span><br></pre></td></tr></table></figure>
+<p>查看 co 的源码，<code>co.wrap()</code> 函数返回一个辅助函数 <code>createPromise</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn = <span class="function"><span class="keyword">function</span> <span class="title">createPromise</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> co.call(<span class="keyword">this</span>, gen.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>回到上面 Koa 的 callback 源码，http 请求过来的时候，fn 函数调用，此时执行 <code>gen</code> 函数，并将结果作为参数传给 <code>co</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">co.call(<span class="keyword">this</span>, gen.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>))</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<blockquote>
+<p> <strong>generator 函数在被调用的时候，函数体并不会立马执行，只是返回一个 generator 对象，调用 generator 对象的 next 方法的时候，才会执行函数体</strong>，并且在遇到 yield 的时候暂停执行。</p>
+</blockquote>
+<p>所以，这时候，中间件仍然没有组合，直到进入 co 中，<code>onFulfilled()</code> 函数内部调用 <code>gen.next()</code> 的时候，<code>compose</code> 函数返回的 generator 函数体才得以执行。这就是为什么进入 co 后立马调用 <code>onFulfilled()</code> 函数的原因。</p>
+<p>我们知道 Koa 中，中间件是 generator 函数，所以去掉其他条件判断，co 处理中间件的主要代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">co</span>(<span class="params">gen</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> ctx = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> args = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> gen === <span class="string">'function'</span>) gen = gen.apply(ctx, args);</span><br><span class="line">    <span class="keyword">if</span> (!gen || <span class="keyword">typeof</span> gen.next !== <span class="string">'function'</span>) <span class="keyword">return</span> resolve(gen);</span><br><span class="line"></span><br><span class="line">    onFulfilled();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">onFulfilled</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> ret;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        ret = gen.next(res);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        <span class="keyword">return</span> reject(e);</span><br><span class="line">      &#125;</span><br><span class="line">      next(ret);</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">onRejected</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> ret;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        ret = gen.throw(err);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        <span class="keyword">return</span> reject(e);</span><br><span class="line">      &#125;</span><br><span class="line">      next(ret);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">next</span>(<span class="params">ret</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (ret.done) <span class="keyword">return</span> resolve(ret.value);</span><br><span class="line">      <span class="keyword">var</span> value = toPromise.call(ctx, ret.value);</span><br><span class="line">      <span class="keyword">if</span> (value &amp;&amp; isPromise(value)) <span class="keyword">return</span> value.then(onFulfilled, onRejected);</span><br><span class="line">      <span class="keyword">return</span> onRejected(<span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'You may only yield a function, promise, generator, array, or object, '</span></span><br><span class="line">        + <span class="string">'but the following object was passed: "'</span> + <span class="built_in">String</span>(ret.value) + <span class="string">'"'</span>));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toPromise</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (isGeneratorFunction(obj) || isGenerator(obj)) <span class="keyword">return</span> co.call(<span class="keyword">this</span>, obj);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么，上面的那个 2 是怎样输出来的呢？实现其实很简单：</p>
+<p>co 反复调用内部的 next() 函数，判断上一次遍历器的返回值状态，如果它未结束并且是 GeneratorFunction 或是 Generator 对象，就再次把它作为参数传入 <code>co</code> 函数调用。</p>
+<p>借由这样的机制，Koa 就可以在 <code>yield next</code> 被调用的时候进入下一个中间件，再遇到 <code>yield next</code> 进入下下个或者遍历结束返回上一个，Koa 文档有一张 Gif 很形象的描述了 Koa 中间件这种机制：</p>
+<p><img src="https://github.com/koajs/koa/blob/master/docs/middleware.gif?raw=true" alt="co middleware"></p>
+
+        <br>
+        <p>--EOF--</p>
+        <p>
+          <small>于 
+            
+	<time class="article__meta-date" datetime="2016-06-17T09:15:36.000Z" itemprop="datePublished">Jun 6, 2016 17:15:36</time>
+ 发表
+            
+            
+            ，并被添加标签「
+             
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/nodejs/">nodejs</a>
+ 
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/koa/">koa</a>
+
+            」
+            
+            
+             
+              ，更新于
+              
+	<time class="article__meta-updated" datetime="2016-06-18T18:28:31.000Z" itemprop="datePublished">Jun 6, 2016 02:28:31</time>
+
+            。
+          </small>
+      
+    </div>
+  </div>
+  
+    <section id="comments">
+      <h1 class="title" href="http://codersir.github.io/2016/06/17/dive-into-koa/#disqus_thread">Comments</h1>
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </section>
+  
+  
+    
+<nav class="article__nav">
+  
+    <span class="article__nav-newer article__nav--disable article__nav-link-wrap">
+      <strong class="article__nav-caption">Newer</strong>
+      <div class="article__nav-title">No more newer post</div>
+    </span>
+  
+  
+    <a href="/2016/06/17/learn-promise-again/" class="article__nav-older article__nav-link-wrap">
+      <strong class="article__nav-caption">Older</strong>
+      <div class="article__nav-title">再探 Promise</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<script>
+  var disqus_shortname = 'codsirblog';
+  var disqus_loaded = false;
+  var body = document.body;
+  var html = document.documentElement;
+  var clientHeight = html.clientHeight
+  var pageHeight = Math.max(body.scrollHeight,body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight)
+
+  
+  var disqus_url = 'http://codersir.github.io/2016/06/17/dive-into-koa/';
+  
+
+  if(clientHeight == pageHeight){
+    loadDisqus()
+    disqus_loaded = true
+  }
+  
+  document.addEventListener('scroll', function(e){
+    if(disqus_loaded){
+      return
+    }else{
+      var scrollTop = body.scrollTop;
+      if(scrollTop + clientHeight + 100 > pageHeight){
+        loadDisqus()
+        disqus_loaded = true
+      }
+    }
+  })
+  
+  function loadDisqus(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }
+</script>
+
+
+  </main>
+  <script src="/js/script.js"></script>
+</body>
+</html>

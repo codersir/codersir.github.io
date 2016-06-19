@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>再探 Promise | Coder Sir</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Promise 对象用来处理异步操作,promise 永远都是异步的。Promise 有三种状态：
+
+pending 初始状态
+fullfilled 操作成功
+rejected 操作失败
+
+Promise 方法
+promise.all  method returns a promise that resolves when all of the promises in the iterable a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再探 Promise">
+<meta property="og:url" content="http://codersir.github.io/2016/06/17/learn-promise-again/index.html">
+<meta property="og:site_name" content="Coder Sir">
+<meta property="og:description" content="Promise 对象用来处理异步操作,promise 永远都是异步的。Promise 有三种状态：
+
+pending 初始状态
+fullfilled 操作成功
+rejected 操作失败
+
+Promise 方法
+promise.all  method returns a promise that resolves when all of the promises in the iterable a">
+<meta property="og:updated_time" content="2016-06-18T18:31:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="再探 Promise">
+<meta name="twitter:description" content="Promise 对象用来处理异步操作,promise 永远都是异步的。Promise 有三种状态：
+
+pending 初始状态
+fullfilled 操作成功
+rejected 操作失败
+
+Promise 方法
+promise.all  method returns a promise that resolves when all of the promises in the iterable a">
+  
+    <link rel="alternative" href="/atom.xml" title="Coder Sir" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <header class="sidebar" role="header">
+    
+      <div class="sidebar__profile">
+	<a class="sidebar__profile-link" href="/">
+		<figure>
+			<img class="sidebar__profile-img" src="/image/site/gravatar.png" alt="">
+		</figure>
+	</a>
+	<h1 class="sidebar__profile-name">Codersir</h1>
+	<div class="sidebar__profile-bio">
+		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insterested in JavaScript, AngularJS, ReactJS and NodeJS.</p>
+	</div>
+</div>
+<nav class="sidebar__profile-nav" role="nav">
+	<ul>
+	
+		<li>
+			<a href="/archives">Archives</a>
+		</li>
+	
+		<li>
+			<a href="/about">About</a>
+		</li>
+	
+		<li>
+			<a href="/tags">Tags</a>
+		</li>
+	 
+	</ul>
+</nav>
+<aside class="sidebar__profile-social" role="social">
+	
+		
+			
+			<a class="social-github" target="_blank" href="http://github.com/codersir">
+				<span class="fa fa-github"></span>
+			</a>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+			<a class="social-instagram" target="_blank" href="http://instagram.com/codersir">
+				<span class="fa fa-instagram"></span>
+			</a>
+			
+		
+			
+			<a class="social-rss" target="_blank" href="/atom.xml">
+				<span class="fa fa-rss"></span>
+			</a>
+			
+		 
+	
+</aside>
+    
+  </header>
+  <main class="main" role="main">
+    <article id="post-learn-promise-again" class="article article--type-post" itemscope itemprop="blogPost">
+  <div class="article__inner">
+    
+    
+      <header class="article__header">
+        
+  
+    <h1 class="article__title" itemprop="name">
+      再探 Promise
+    </h1>
+  
+
+      </header>
+      <div class="article__meta">
+        <a href="https://github.com/codersir/codersir.github.io/tree/master/source/_posts/learn-promise-again.md" class="article__meta-edit">
+	<i class="fa fa-github"></i> Edit this page on GitHub
+</a>
+
+        
+	<time class="article__meta-date" datetime="2016-06-17T09:15:19.000Z" itemprop="datePublished">Jun 6, 2016</time>
+
+      </div>
+    
+    <div class="article__entry" itemprop="articleBody">
+      
+        <p>Promise 对象用来处理异步操作,promise 永远都是异步的。Promise 有三种状态：</p>
+<ul>
+<li>pending 初始状态</li>
+<li>fullfilled 操作成功</li>
+<li>rejected 操作失败</li>
+</ul>
+<h2 id="Promise-方法"><a href="#Promise-方法" class="headerlink" title="Promise 方法"></a>Promise 方法</h2><ul>
+<li><code>promise.all</code>  method returns a promise that resolves when all of the promises in the iterable argument have resolved, or rejects with the reason of the first passed promise that rejects.</li>
+<li><code>promise.race</code> method returns a promise that resolves or rejects as soon as one of the promises in the iterable resolves or rejects, with the value or reason from that promise.</li>
+<li><code>promise.resolve(value)</code> returns a Promise.then object that is resolved with the given value</li>
+<li><code>promise.reject(reason)</code> returns a Promise object that is rejected with the given reason.</li>
+</ul>
+<h2 id="Promise-prototype-方法"><a href="#Promise-prototype-方法" class="headerlink" title="Promise prototype 方法"></a>Promise prototype 方法</h2><ul>
+<li>promise.prototype.catch(onRejected)</li>
+<li>promise.prototype.then(onFullfilled, onRejected)</li>
+</ul>
+<h2 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h2><ul>
+<li>Battery API</li>
+<li>fetch API</li>
+<li>ServiceWorker API</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// Do an async task async task and then...</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="comment">/* good condition */</span>) &#123;</span><br><span class="line">            resolve(<span class="string">'Success!'</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            reject(<span class="string">'Failure!'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">p.then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">/* do something with the result */</span></span><br><span class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">/* error :( */</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="promise-vs-callback"><a href="#promise-vs-callback" class="headerlink" title="promise vs callback"></a>promise vs callback</h2><ul>
+<li>流程控制更自然，就像写同步代码一样</li>
+<li>链式操作更简单，没有回调地狱</li>
+<li>组合异步操作更简单</li>
+<li>错误处理更优雅，可复用</li>
+<li>代码更干净，传入的都是参数，不像回调有些负责传入参数，callback 又负责传出结果</li>
+</ul>
+<h2 id="常见的错误使用-Promise-anti-promise-："><a href="#常见的错误使用-Promise-anti-promise-：" class="headerlink" title="常见的错误使用 Promise(anti-promise)："></a>常见的错误使用 Promise(anti-promise)：</h2><ul>
+<li>使用嵌套 promise =&gt; 使用 <code>promise.all</code> 替代。</li>
+<li>forEach/for/while 循环体内使用 promise =&gt; 使用 <code>promise.all</code> 替代。</li>
+<li>promise 链断裂 =&gt; 总是返回 <code>promise.then</code></li>
+<li>忘记添加 <code>catch()</code>  =&gt; 导致看不到任何错误提示，出错了定位不到</li>
+<li>使用有副作用的操作而不是 return =&gt; then 函数中，只能： 1. 返回一个promise 2.返回一个同步的值 3.抛出一个错误</li>
+<li>使用 deffered =&gt;</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://github.com/calvinmetcalf/lie" target="_blank" rel="external">lie</a>：一个很小的promise库，用简洁的代码实现了 promise A+ 标准，推荐阅读</li>
+<li><a href="https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html" target="_blank" rel="external">We have a problem with promises</a></li>
+</ul>
+
+        <br>
+        <p>--EOF--</p>
+        <p>
+          <small>于 
+            
+	<time class="article__meta-date" datetime="2016-06-17T09:15:19.000Z" itemprop="datePublished">Jun 6, 2016 17:15:19</time>
+ 发表
+            
+            
+            ，并被添加标签「
+             
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/JavaScript/">JavaScript</a>
+ 
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/promise/">promise</a>
+
+            」
+            
+            
+             
+              ，更新于
+              
+	<time class="article__meta-updated" datetime="2016-06-18T18:31:18.000Z" itemprop="datePublished">Jun 6, 2016 02:31:18</time>
+
+            。
+          </small>
+      
+    </div>
+  </div>
+  
+    <section id="comments">
+      <h1 class="title" href="http://codersir.github.io/2016/06/17/learn-promise-again/#disqus_thread">Comments</h1>
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </section>
+  
+  
+    
+<nav class="article__nav">
+  
+    <a href="/2016/06/17/dive-into-koa/" class="article__nav-newer article__nav-link-wrap">
+      <strong class="article__nav-caption">Newer</strong>
+      <div class="article__nav-title">
+        
+          Koa 是怎么让你爽的？
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/06/01/better-your-coding-style/" class="article__nav-older article__nav-link-wrap">
+      <strong class="article__nav-caption">Older</strong>
+      <div class="article__nav-title">优化你的代码风格</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<script>
+  var disqus_shortname = 'codsirblog';
+  var disqus_loaded = false;
+  var body = document.body;
+  var html = document.documentElement;
+  var clientHeight = html.clientHeight
+  var pageHeight = Math.max(body.scrollHeight,body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight)
+
+  
+  var disqus_url = 'http://codersir.github.io/2016/06/17/learn-promise-again/';
+  
+
+  if(clientHeight == pageHeight){
+    loadDisqus()
+    disqus_loaded = true
+  }
+  
+  document.addEventListener('scroll', function(e){
+    if(disqus_loaded){
+      return
+    }else{
+      var scrollTop = body.scrollTop;
+      if(scrollTop + clientHeight + 100 > pageHeight){
+        loadDisqus()
+        disqus_loaded = true
+      }
+    }
+  })
+  
+  function loadDisqus(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }
+</script>
+
+
+  </main>
+  <script src="/js/script.js"></script>
+</body>
+</html>

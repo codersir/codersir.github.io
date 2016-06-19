@@ -8,16 +8,16 @@
   <meta name="description" content="前两天因为想用国内的 JS CDN，访问到 staticfile（七牛提供的一个免费 CDN 服务），导致我的 Chrome 直接卡死了两次，页面关也关不掉，只能退出重启。后来换到 Chrome Canary 才勉强可以访问，用谷歌开发者工具一看，发现前端是用的 AngularJS ，大量的 ng-repeat，5万多 watcher，没有做任何性能优化，怎么可能不卡。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AngularJS 应用优化指南">
-<meta property="og:url" content="http://codersir.github.com/2016/05/10/AngularJS-app-performance-optimization-guide/index.html">
+<meta property="og:url" content="http://codersir.github.io/2016/05/10/AngularJS-app-performance-optimization-guide/index.html">
 <meta property="og:site_name" content="Coder Sir">
 <meta property="og:description" content="前两天因为想用国内的 JS CDN，访问到 staticfile（七牛提供的一个免费 CDN 服务），导致我的 Chrome 直接卡死了两次，页面关也关不掉，只能退出重启。后来换到 Chrome Canary 才勉强可以访问，用谷歌开发者工具一看，发现前端是用的 AngularJS ，大量的 ng-repeat，5万多 watcher，没有做任何性能优化，怎么可能不卡。">
-<meta property="og:image" content="http://codersir.github.com/image/ng-perf/batarang.jpg">
-<meta property="og:image" content="http://codersir.github.com/image/ng-perf/staticfile.png">
-<meta property="og:updated_time" content="2016-06-01T18:33:20.000Z">
+<meta property="og:image" content="http://codersir.github.io/image/ng-perf/batarang.jpg">
+<meta property="og:image" content="http://codersir.github.io/image/ng-perf/staticfile.png">
+<meta property="og:updated_time" content="2016-06-18T14:50:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AngularJS 应用优化指南">
 <meta name="twitter:description" content="前两天因为想用国内的 JS CDN，访问到 staticfile（七牛提供的一个免费 CDN 服务），导致我的 Chrome 直接卡死了两次，页面关也关不掉，只能退出重启。后来换到 Chrome Canary 才勉强可以访问，用谷歌开发者工具一看，发现前端是用的 AngularJS ，大量的 ng-repeat，5万多 watcher，没有做任何性能优化，怎么可能不卡。">
-<meta name="twitter:image" content="http://codersir.github.com/image/ng-perf/batarang.jpg">
+<meta name="twitter:image" content="http://codersir.github.io/image/ng-perf/batarang.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Coder Sir" type="application/atom+xml">
   
@@ -132,12 +132,12 @@
 </ul>
 <p>上面这些情况都会产生 <code>watcher</code>，那么问题来了，*<em> 怎么减少 <code>watcher</code> *</em> 呢?</p>
 <ol>
-<li>使用单次绑定语法 <code>{ {::} }</code> AngularJS 从1.3版本开始支持单向绑定语法 <code>::</code> ，它可以明确的告诉 AngularJS 哪些绑定获取到数据以后就不用关注了，这可以极大的减少 <code>watcher</code> 的数量，尤其是在 <code>ng-repeat</code> 内使用。</li>
-<li>避免在 <code>ng-repeat</code> 中使用 <code>filter</code> 可以先把数据过滤后再传给 <code>ng-repeat</code>，这样就能避免因为过滤器产生的 <code>watcher</code> 了。</li>
-<li>尽可能的使用 <code>ng-if</code> 而不是 <code>ng-show``ng-if</code> 可以从 Dom 中移除元素，触发 <code>element.$destory()</code>，删除 <code>ng-if</code> 内的元素的 <code>watcher</code>。<code>ng-show</code> 仍然会 render 元素，只是设置样式为 <code>display:none</code>。 但是如果元素需要经常变动隐藏还是显示，那么使用 <code>ng-show</code> 可能会更好，<code>ng-show</code> 会缓存 Dom，不需要重复解析。</li>
+<li>使用单次绑定语法 <code>{ {::} }</code><br>AngularJS 从1.3版本开始支持单向绑定语法 <code>::</code> ，它可以明确的告诉 AngularJS 哪些绑定获取到数据以后就不用关注了，这可以极大的减少 <code>watcher</code> 的数量，尤其是在 <code>ng-repeat</code> 内使用。</li>
+<li>避免在 <code>ng-repeat</code> 中使用 <code>filter</code><br>可以先把数据过滤后再传给 <code>ng-repeat</code>，这样就能避免因为过滤器产生的 <code>watcher</code> 了。</li>
+<li>尽可能的使用 <code>ng-if</code> 而不是 <code>ng-show``ng-if</code><br>可以从 Dom 中移除元素，触发 <code>element.$destory()</code>，删除 <code>ng-if</code> 内的元素的 <code>watcher</code>。<code>ng-show</code> 仍然会 render 元素，只是设置样式为 <code>display:none</code>。 但是如果元素需要经常变动隐藏还是显示，那么使用 <code>ng-show</code> 可能会更好，<code>ng-show</code> 会缓存 Dom，不需要重复解析。</li>
 <li>使用 <code>$watchCollection</code> 替代 <code>$watch</code></li>
 </ol>
-<h3 id="2-减少-digest-次数和范围"><a href="#2-减少-digest-次数和范围" class="headerlink" title="2. 减少 digest 次数和范围"></a>2. 减少 <code>digest</code> 次数和范围</h3><p>减少 <code>watcher</code> 是从根本上解决问题，如果 <code>watcher</code> 的优化已经做到极致了，那么这时候就应该换一种思路了。导致 AngularJS App 变慢的原因是 <code>watcher</code> 太多导致 <code>digest</code> 变慢，<code>watcher</code> 已经无法优化了，那么就应该考虑化优 <code>digest</code> 的效率了。</p>
+<h3 id="2-减少-digest-次数和范围"><a href="#2-减少-digest-次数和范围" class="headerlink" title="2. 减少 digest 次数和范围"></a>2. 减少 <code>digest</code> 次数和范围</h3><p>减少 <code>watcher</code> 是从根本上解决问题，如果 <code>watcher</code> 的优化已经做到极致了，那么这时候就应该换一种思路了。导致 AngularJS App 变慢的原因是 <code>watcher</code> 太多导致 <code>digest</code> 变慢，<code>watcher</code> 已经无法优化了，那么就应该考虑从 <code>digest</code> 的下手了。</p>
 <p>同样，首先要知道的是，什么情况下会触发 AngularJS 脏检查？</p>
 <ul>
 <li>用户行为（<code>ng-click</code>、<code>ng-change</code>、<code>ng-model</code>,etc)</li>
@@ -146,31 +146,28 @@
 <li>使用 <code>$timeout</code> 和 <code>$interval</code></li>
 <li>你手动调用 <code>$scope.$apply</code> 或 <code>$scope.$digest</code></li>
 </ul>
-<p>优化主要从两个方向进行，减少脏检查的次数和缩小脏检查的范围。</p>
+<p>优化主要从两个方向进行，<strong>减少脏检查的次数</strong> 和 <strong>缩小脏检查的范围</strong>。</p>
 <ol>
-<li><p>尽量使用 <code>$scope.$digest</code> 替代 <code>$scope.$apply``$scope.$digest</code> 从当前 scope 向下进行脏检查，而 <code>$scope.$apply</code> 会触发整个应用自顶向下进行脏检查，所以，使用 <code>$scope.$digest</code> 一般能大大的缩小脏检查的范围。</p>
+<li><p>尽量使用 <code>$scope.$digest</code> 替代 <code>$scope.$apply</code><br><code>$scope.$digest</code> 从当前 scope 向下进行脏检查，而 <code>$scope.$apply</code> 会触发整个应用自顶向下进行脏检查，所以，使用 <code>$scope.$digest</code> 一般能大大的缩小脏检查的范围。</p>
 </li>
-<li><p>使用 <code>$applyAsync</code> 合并 http 请求 通常在 App 启动的时候，会同时发起好几个 http 请求，来获取用户权限或账户信息之类的信息，每次接口返回值的时候，都会触发 AngularJS 的脏检查。这时候，如果可以等到这几个接口都返回以后，再触发脏检查，就能将脏检查的数量由几次减小到1次了。<code>$httpProvider</code> 的 <a href="https://code.angularjs.org/1.3.8/docs/api/ng/provider/$httpProvider#useApplyAsync" target="_blank" rel="external">useApplyAsync</a> 方法就是来解决这个问题，它通过 <a href="https://code.angularjs.org/1.3.8/docs/api/ng/type/$rootScope.Scope#$applyAsync" target="_blank" rel="external"> $rootScope.$applyAsync</a> 把大约同一时间（10ms左右）收到的返回值组合到一起处理。<code>applyAsync</code>的实现机制其实就是事件循环，通过 <code>setTimeout(fn,0)</code> 来延迟执行函数，可以参考我写的<a href="/zone">《深入学习 Zone》</a>了解更多。</p>
-</li>
-</ol>
+<li><p>使用 <code>$applyAsync</code> 合并 http 请求<br>通常在 App 启动的时候，会同时发起好几个 http 请求，来获取用户权限或账户信息之类的信息，每次接口返回值的时候，都会触发 AngularJS 的脏检查。这时候，如果可以等到这几个接口都返回以后，再触发脏检查，就能将脏检查的数量由几次减小到1次了。<code>$httpProvider</code> 的 <a href="https://code.angularjs.org/1.3.8/docs/api/ng/provider/$httpProvider#useApplyAsync" target="_blank" rel="external">useApplyAsync</a> 方法就是来解决这个问题，它通过 <a href="https://code.angularjs.org/1.3.8/docs/api/ng/type/$rootScope.Scope#$applyAsync" target="_blank" rel="external"> $rootScope.$applyAsync</a> 把大约同一时间（10ms左右）收到的返回值组合到一起处理。<code>applyAsync</code>的实现机制其实就是事件循环，通过 <code>setTimeout(fn,0)</code> 来延迟执行函数，可以参考我写的<a href="/2016/03/13/dive-into-zone/">《深入学习 Zone》</a>了解更多。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app.config(<span class="function"><span class="keyword">function</span> (<span class="params">$httpProvider</span>) </span>&#123;</span><br><span class="line">  $httpProvider.useApplyAsync(<span class="literal">true</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<ol>
-<li><p>ng-model 防抖动（ Debounce ） 搜索框通常会监听用户的 keyup 事件来进行实时匹配推荐，如果每次用户按下按键都调用接口，会出现多次连续的调用接口，导致连续的触发 AngularJS 脏检查，这样很容易造成页面卡顿。这时，可以通过 <code>ng-model</code> 的 <code>debounce</code> 参数来限制脏检查的间隔，比如 <code>ng-model-options=&quot;{ debounce: 250 }</code>，限制每 250ms 内只进行一次脏检查。</p>
 </li>
-<li><p>使用 <code>$watchCollection</code> 替代 <code>$watch</code> 的第三个参数<code>$watch</code> 只会比较对象引用是否相同，如果新值和原始值指向同一个索引，那么 <code>$digest</code> 时就不会触发回调函数。如果要监视对象的每个属性，我们可以给 <code>$watch</code> 传入第三个参数 <code>true</code>，这样 AngularJS 就会对对象进行深比较（使用 <code>angular.equals</code>)，遍历对象的每个值判断是否发生了变化。但如果对象比较复杂，这样做就会带来很大的性能损耗。所以，AngularJS 提供了 <code>$watchCollection</code> 方法来解决这一问题。<code>$watchCollection</code> 在脏检查的时候对对象进行浅比较，只会比较对象的第一层属性。</p>
+<li><p>ng-model 防抖动（ Debounce ）<br>搜索框通常会监听用户的 keyup 事件来进行实时匹配推荐，如果每次用户按下按键都调用接口，会出现多次连续的调用接口，导致连续的触发 AngularJS 脏检查，这样很容易造成页面卡顿。这时，可以通过 <code>ng-model</code> 的 <code>debounce</code> 参数来限制脏检查的间隔，比如 <code>ng-model-options=&quot;{ debounce: 250 }</code>，限制每 250ms 内只进行一次脏检查。</p>
 </li>
-<li><p>尽量把 DOM 操作移到指令中 比如 <code>ng-show</code> 和 <code>ng-hide</code>，我们经常通过这些指令来控制元素的显示和隐藏，但这些指令的表达式值都会被 AngularJS 监听，导致 <code>watcher</code> 增加，而且这些值的变化通常也会引发 AngularJS 的 digest。我们应该尽可能的把这些逻辑移到指令的 <code>link</code> 函数中。</p>
+<li><p>使用 <code>$watchCollection</code> 替代 <code>$watch</code> 的第三个参数<br><code>$watch</code> 只会比较对象引用是否相同，如果新值和原始值指向同一个索引，那么 <code>$digest</code> 时就不会触发回调函数。如果要监视对象的每个属性，我们可以给 <code>$watch</code> 传入第三个参数 <code>true</code>，这样 AngularJS 就会对对象进行深比较（使用 <code>angular.equals</code>)，遍历对象的每个值判断是否发生了变化。但如果对象比较复杂，这样做就会带来很大的性能损耗。所以，AngularJS 提供了 <code>$watchCollection</code> 方法来解决这一问题。<code>$watchCollection</code> 在脏检查的时候对对象进行浅比较，只会比较对象的第一层属性。</p>
+</li>
+<li><p>尽量把 DOM 操作移到指令中<br>比如 <code>ng-show</code> 和 <code>ng-hide</code>，我们经常通过这些指令来控制元素的显示和隐藏，但这些指令的表达式值都会被 AngularJS 监听，导致 <code>watcher</code> 增加，而且这些值的变化通常也会引发 AngularJS 的 digest。我们应该尽可能的把这些逻辑移到指令的 <code>link</code> 函数中。当然，这一点最后考虑。</p>
 </li>
 </ol>
 <h3 id="3-其他建议"><a href="#3-其他建议" class="headerlink" title="3. 其他建议"></a>3. 其他建议</h3><ol>
 <li><p>使用 <code>track by</code> 提高 <code>ng-repeat</code>性能</p>
 </li>
 <li><p>禁用 debug 信息 我们看到使用 AngularJS 指令的元素上被添加了许多类，比如 <code>ng-binding</code>、<code>ng-scope</code>等，这些类除了调试没有任何作用，</p>
-</li>
-</ol>
 <figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$compileProvider.debugInfoEnabled(<span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
-<ol>
-<li>耗时的计算考虑移到 web workers 执行</li>
+</li>
+<li><p>耗时的计算考虑移到 web workers 执行</p>
+</li>
 </ol>
 <h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><p>怎么测时间都花在哪了？如果我们担心某个函数会很耗时，可以简单的把<code>console.time()</code> 和 <code>console.timeEnd()</code> 放在代码的前后来测试代码的运行时间。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.time(<span class="string">'myTimer'</span>)</span><br><span class="line"><span class="comment">// your code here</span></span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'myTimer'</span>)</span><br></pre></td></tr></table></figure>
@@ -200,9 +197,9 @@
             
             ，并被添加标签「
              
-	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.com/tags/AngularJS/">AngularJS</a>
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/AngularJS/">AngularJS</a>
  
-	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.com/tags/perf/">perf</a>
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/perf/">perf</a>
 
             」
             
@@ -210,7 +207,7 @@
              
               ，更新于
               
-	<time class="article__meta-updated" datetime="2016-06-01T18:33:20.000Z" itemprop="datePublished">Jun 6, 2016 02:33:20</time>
+	<time class="article__meta-updated" datetime="2016-06-18T14:50:56.000Z" itemprop="datePublished">Jun 6, 2016 22:50:56</time>
 
             。
           </small>
@@ -219,7 +216,7 @@
   </div>
   
     <section id="comments">
-      <h1 class="title" href="http://codersir.github.com/2016/05/10/AngularJS-app-performance-optimization-guide/#disqus_thread">Comments</h1>
+      <h1 class="title" href="http://codersir.github.io/2016/05/10/AngularJS-app-performance-optimization-guide/#disqus_thread">Comments</h1>
       <div id="disqus_thread">
         <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
       </div>
@@ -259,7 +256,7 @@
   var pageHeight = Math.max(body.scrollHeight,body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight)
 
   
-  var disqus_url = 'http://codersir.github.com/2016/05/10/AngularJS-app-performance-optimization-guide/';
+  var disqus_url = 'http://codersir.github.io/2016/05/10/AngularJS-app-performance-optimization-guide/';
   
 
   if(clientHeight == pageHeight){

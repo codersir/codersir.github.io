@@ -4,9 +4,9 @@
   <subtitle>Yes! Coder sir.</subtitle>
   <link href="//atom.xml" rel="self"/>
   
-  <link href="http://codersir.github.com/"/>
-  <updated>2016-06-01T18:33:20.000Z</updated>
-  <id>http://codersir.github.com/</id>
+  <link href="http://codersir.github.io/"/>
+  <updated>2016-06-18T18:28:31.000Z</updated>
+  <id>http://codersir.github.io/</id>
   
   <author>
     <name>xuhong</name>
@@ -16,9 +16,139 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Koa 是怎么让你爽的？</title>
+    <link href="http://codersir.github.io/2016/06/17/dive-into-koa/"/>
+    <id>http://codersir.github.io/2016/06/17/dive-into-koa/</id>
+    <published>2016-06-17T09:15:36.000Z</published>
+    <updated>2016-06-18T18:28:31.000Z</updated>
+    
+    <content type="html">&lt;p&gt;经常在网路上看到别人夸 Koa 写的爽，有的甚至产生了「优越感」，但写的都是种种爽的体位，却没有看到有谁详细解释为什么可以采用这些体位，以及为什么这些体位爽。其实，只要看一下 Koa 的源码，就可以知道这些原因。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;当然，还是要有一些准备知识的，你需要知道 &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;generator&lt;/a&gt; 是什么？&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;yield&lt;/a&gt; 和 &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield*&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;yield *&lt;/a&gt; 是怎么工作的？这些都可以在 &lt;a href=&quot;https://developer.mozilla.org/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;MDN&lt;/a&gt; 上获取到，这里只分析 Koa 的实现，假设你已经掌握了以上必需的知识。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;以下代码分析基于 Koa V1.x。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;爽发生在中间件的写法上面。Koa 使用一个数组来维护所有的中间件（middleware），通过调用 &lt;code&gt;app.use&lt;/code&gt; 把中间件添加到这个数组中：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;app.use = &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;mdw&lt;/span&gt;)&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;.middleware.push(mdw)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;其中中间件是 generator 函数：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;mdw = &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; *(&lt;span class=&quot;params&quot;&gt;next&lt;/span&gt;)&lt;/span&gt;&amp;#123;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;然后在请求过来的时候，http server 会调用 Koa 的 callback，然后请求通过 Koa 中间件，最后返回结果：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;app.callback = &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;/span&gt;)&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; fn = co.wrap(compose(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;.middleware))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;req, res&lt;/span&gt;)&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    fn.call(...)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;主要流程就是这样了，Koa 之所以支持那些很爽的写法，就是来自下面这段代码：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;co.wrap(compose(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;.middleware))&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;那么这段代码究竟有什么黑魔法？且听我慢慢道来。&lt;/p&gt;
+&lt;p&gt;第一步，组合中间件，调用 &lt;code&gt;compose&lt;/code&gt; 函数并传入中间件数组作为参数，&lt;code&gt;compose&lt;/code&gt; 的实现非常简单，源码如下：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;compose&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;middleware&lt;/span&gt;)&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; *(&lt;span class=&quot;params&quot;&gt;next&lt;/span&gt;)&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (!next) next = noop();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; i = middleware.length;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     &lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; (i--) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;       next = middleware[i].call(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;, next);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;yield&lt;/span&gt; *next;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; *&lt;span class=&quot;title&quot;&gt;noop&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;/span&gt;)&lt;/span&gt;&amp;#123;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;&lt;code&gt;compose&lt;/code&gt; 函数组合中间件的方式很巧妙，它递归地把后一个中间件调用返回的 generator 对象作为参数传给上一个中间件进行调用，&lt;code&gt;while&lt;/code&gt; 循环结束后，&lt;code&gt;next&lt;/code&gt; 值为第一个中间件传入第二个中间件调用后的 generator 对象为参数进行调用后返回的 generator 对象。是不是有点绕？那来点简单的代码解释一下：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;* &lt;span class=&quot;title&quot;&gt;noop&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;/span&gt;) &lt;/span&gt;&amp;#123;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;* &lt;span class=&quot;title&quot;&gt;log&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;next&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;yield&lt;/span&gt; next&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;* &lt;span class=&quot;title&quot;&gt;gen&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;next&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;* &lt;span class=&quot;title&quot;&gt;compose&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;next&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (!next) &amp;#123; next = noop() &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    next = gen(next)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    next = log(next)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;yield&lt;/span&gt; * next&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; a = compose()&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;console&lt;/span&gt;.log(a.next()) &lt;span class=&quot;comment&quot;&gt;// &amp;#123;value: 1, done: false&amp;#125;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;console&lt;/span&gt;.log(a.next()) &lt;span class=&quot;comment&quot;&gt;// &amp;#123;value: gen, done: false&amp;#125;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;console&lt;/span&gt;.log(a.next()) &lt;span class=&quot;comment&quot;&gt;// &amp;#123;value: 3, done: false&amp;#125;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;console&lt;/span&gt;.log(a.next()) &lt;span class=&quot;comment&quot;&gt;// &amp;#123;value: undefined, done: true&amp;#125;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;通过输出可以看出，在 Koa 中，我们通过调用 &lt;code&gt;yield next&lt;/code&gt; 跳转出当前中间件，从 log 中间件跳到了 gen，然后又回到了 log。但是这里有个问题，我们希望输出的 2 并没有出现，所以并没有完全达到我们的期望。所以，接下来，该 co 登场了。&lt;/p&gt;
+&lt;p&gt;注意，&lt;code&gt;compose&lt;/code&gt; 函数并没有立即就组合中间件，而是返回一个 generator 函数 gen:&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;gen = &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; *(&lt;span class=&quot;params&quot;&gt;next&lt;/span&gt;)&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (!next) next = noop();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; i = middleware.length;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; (i--) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    next = middleware[i].call(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;, next);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;yield&lt;/span&gt; *next;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;第二步，调用 &lt;code&gt;co.wrap()&lt;/code&gt; 函数，传入上一步 &lt;code&gt;compose&lt;/code&gt; 返回的 &lt;code&gt;gen&lt;/code&gt; 函数作为参数：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;fn = co.wrap(gen)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;查看 co 的源码，&lt;code&gt;co.wrap()&lt;/code&gt; 函数返回一个辅助函数 &lt;code&gt;createPromise&lt;/code&gt;：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;fn = &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;createPromise&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;/span&gt;)&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; co.call(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;, gen.apply(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;, &lt;span class=&quot;built_in&quot;&gt;arguments&lt;/span&gt;))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;回到上面 Koa 的 callback 源码，http 请求过来的时候，fn 函数调用，此时执行 &lt;code&gt;gen&lt;/code&gt; 函数，并将结果作为参数传给 &lt;code&gt;co&lt;/code&gt;：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;co.call(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;, gen.apply(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;, &lt;span class=&quot;built_in&quot;&gt;arguments&lt;/span&gt;))&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;注意：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt; &lt;strong&gt;generator 函数在被调用的时候，函数体并不会立马执行，只是返回一个 generator 对象，调用 generator 对象的 next 方法的时候，才会执行函数体&lt;/strong&gt;，并且在遇到 yield 的时候暂停执行。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;所以，这时候，中间件仍然没有组合，直到进入 co 中，&lt;code&gt;onFulfilled()&lt;/code&gt; 函数内部调用 &lt;code&gt;gen.next()&lt;/code&gt; 的时候，&lt;code&gt;compose&lt;/code&gt; 函数返回的 generator 函数体才得以执行。这就是为什么进入 co 后立马调用 &lt;code&gt;onFulfilled()&lt;/code&gt; 函数的原因。&lt;/p&gt;
+&lt;p&gt;我们知道 Koa 中，中间件是 generator 函数，所以去掉其他条件判断，co 处理中间件的主要代码如下：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;30&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;31&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;32&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;33&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;34&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;35&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;36&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;37&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;38&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;39&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;40&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;41&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;42&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;43&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;44&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;45&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;46&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;co&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;gen&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; ctx = &lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; args = slice.call(&lt;span class=&quot;built_in&quot;&gt;arguments&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;Promise&lt;/span&gt;(&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;resolve, reject&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (&lt;span class=&quot;keyword&quot;&gt;typeof&lt;/span&gt; gen === &lt;span class=&quot;string&quot;&gt;&#39;function&#39;&lt;/span&gt;) gen = gen.apply(ctx, args);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (!gen || &lt;span class=&quot;keyword&quot;&gt;typeof&lt;/span&gt; gen.next !== &lt;span class=&quot;string&quot;&gt;&#39;function&#39;&lt;/span&gt;) &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; resolve(gen);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    onFulfilled();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;onFulfilled&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;res&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; ret;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;keyword&quot;&gt;try&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        ret = gen.next(res);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125; &lt;span class=&quot;keyword&quot;&gt;catch&lt;/span&gt; (e) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; reject(e);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      next(ret);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;null&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;onRejected&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;err&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; ret;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;keyword&quot;&gt;try&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        ret = gen.throw(err);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125; &lt;span class=&quot;keyword&quot;&gt;catch&lt;/span&gt; (e) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; reject(e);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      next(ret);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;next&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;ret&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (ret.done) &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; resolve(ret.value);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; value = toPromise.call(ctx, ret.value);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (value &amp;amp;&amp;amp; isPromise(value)) &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; value.then(onFulfilled, onRejected);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; onRejected(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;TypeError&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&#39;You may only yield a function, promise, generator, array, or object, &#39;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        + &lt;span class=&quot;string&quot;&gt;&#39;but the following object was passed: &quot;&#39;&lt;/span&gt; + &lt;span class=&quot;built_in&quot;&gt;String&lt;/span&gt;(ret.value) + &lt;span class=&quot;string&quot;&gt;&#39;&quot;&#39;&lt;/span&gt;));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;#125;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;toPromise&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;obj&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (isGeneratorFunction(obj) || isGenerator(obj)) &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; co.call(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;, obj);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; obj;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;那么，上面的那个 2 是怎样输出来的呢？实现其实很简单：&lt;/p&gt;
+&lt;p&gt;co 反复调用内部的 next() 函数，判断上一次遍历器的返回值状态，如果它未结束并且是 GeneratorFunction 或是 Generator 对象，就再次把它作为参数传入 &lt;code&gt;co&lt;/code&gt; 函数调用。&lt;/p&gt;
+&lt;p&gt;借由这样的机制，Koa 就可以在 &lt;code&gt;yield next&lt;/code&gt; 被调用的时候进入下一个中间件，再遇到 &lt;code&gt;yield next&lt;/code&gt; 进入下下个或者遍历结束返回上一个，Koa 文档有一张 Gif 很形象的描述了 Koa 中间件这种机制：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/koajs/koa/blob/master/docs/middleware.gif?raw=true&quot; alt=&quot;co middleware&quot;&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;经常在网路上看到别人夸 Koa 写的爽，有的甚至产生了「优越感」，但写的都是种种爽的体位，却没有看到有谁详细解释为什么可以采用这些体位，以及为什么这些体位爽。其实，只要看一下 Koa 的源码，就可以知道这些原因。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="nodejs" scheme="http://codersir.github.io/tags/nodejs/"/>
+    
+      <category term="koa" scheme="http://codersir.github.io/tags/koa/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>再探 Promise</title>
+    <link href="http://codersir.github.io/2016/06/17/learn-promise-again/"/>
+    <id>http://codersir.github.io/2016/06/17/learn-promise-again/</id>
+    <published>2016-06-17T09:15:19.000Z</published>
+    <updated>2016-06-18T18:31:18.000Z</updated>
+    
+    <content type="html">&lt;p&gt;Promise 对象用来处理异步操作,promise 永远都是异步的。Promise 有三种状态：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;pending 初始状态&lt;/li&gt;
+&lt;li&gt;fullfilled 操作成功&lt;/li&gt;
+&lt;li&gt;rejected 操作失败&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;Promise-方法&quot;&gt;&lt;a href=&quot;#Promise-方法&quot; class=&quot;headerlink&quot; title=&quot;Promise 方法&quot;&gt;&lt;/a&gt;Promise 方法&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;promise.all&lt;/code&gt;  method returns a promise that resolves when all of the promises in the iterable argument have resolved, or rejects with the reason of the first passed promise that rejects.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;promise.race&lt;/code&gt; method returns a promise that resolves or rejects as soon as one of the promises in the iterable resolves or rejects, with the value or reason from that promise.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;promise.resolve(value)&lt;/code&gt; returns a Promise.then object that is resolved with the given value&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;promise.reject(reason)&lt;/code&gt; returns a Promise object that is rejected with the given reason.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;Promise-prototype-方法&quot;&gt;&lt;a href=&quot;#Promise-prototype-方法&quot; class=&quot;headerlink&quot; title=&quot;Promise prototype 方法&quot;&gt;&lt;/a&gt;Promise prototype 方法&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;promise.prototype.catch(onRejected)&lt;/li&gt;
+&lt;li&gt;promise.prototype.then(onFullfilled, onRejected)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;使用案例&quot;&gt;&lt;a href=&quot;#使用案例&quot; class=&quot;headerlink&quot; title=&quot;使用案例&quot;&gt;&lt;/a&gt;使用案例&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Battery API&lt;/li&gt;
+&lt;li&gt;fetch API&lt;/li&gt;
+&lt;li&gt;ServiceWorker API&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; p = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;Promise&lt;/span&gt;(&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;resolve, reject&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;comment&quot;&gt;// Do an async task async task and then...&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt;(&lt;span class=&quot;comment&quot;&gt;/* good condition */&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            resolve(&lt;span class=&quot;string&quot;&gt;&#39;Success!&#39;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;else&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            reject(&lt;span class=&quot;string&quot;&gt;&#39;Failure!&#39;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;p.then(&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;comment&quot;&gt;/* do something with the result */&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;).catch(&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;comment&quot;&gt;/* error :( */&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;promise-vs-callback&quot;&gt;&lt;a href=&quot;#promise-vs-callback&quot; class=&quot;headerlink&quot; title=&quot;promise vs callback&quot;&gt;&lt;/a&gt;promise vs callback&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;流程控制更自然，就像写同步代码一样&lt;/li&gt;
+&lt;li&gt;链式操作更简单，没有回调地狱&lt;/li&gt;
+&lt;li&gt;组合异步操作更简单&lt;/li&gt;
+&lt;li&gt;错误处理更优雅，可复用&lt;/li&gt;
+&lt;li&gt;代码更干净，传入的都是参数，不像回调有些负责传入参数，callback 又负责传出结果&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;常见的错误使用-Promise-anti-promise-：&quot;&gt;&lt;a href=&quot;#常见的错误使用-Promise-anti-promise-：&quot; class=&quot;headerlink&quot; title=&quot;常见的错误使用 Promise(anti-promise)：&quot;&gt;&lt;/a&gt;常见的错误使用 Promise(anti-promise)：&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;使用嵌套 promise =&amp;gt; 使用 &lt;code&gt;promise.all&lt;/code&gt; 替代。&lt;/li&gt;
+&lt;li&gt;forEach/for/while 循环体内使用 promise =&amp;gt; 使用 &lt;code&gt;promise.all&lt;/code&gt; 替代。&lt;/li&gt;
+&lt;li&gt;promise 链断裂 =&amp;gt; 总是返回 &lt;code&gt;promise.then&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;忘记添加 &lt;code&gt;catch()&lt;/code&gt;  =&amp;gt; 导致看不到任何错误提示，出错了定位不到&lt;/li&gt;
+&lt;li&gt;使用有副作用的操作而不是 return =&amp;gt; then 函数中，只能： 1. 返回一个promise 2.返回一个同步的值 3.抛出一个错误&lt;/li&gt;
+&lt;li&gt;使用 deffered =&amp;gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;参考资料&quot;&gt;&lt;a href=&quot;#参考资料&quot; class=&quot;headerlink&quot; title=&quot;参考资料&quot;&gt;&lt;/a&gt;参考资料&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/calvinmetcalf/lie&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;lie&lt;/a&gt;：一个很小的promise库，用简洁的代码实现了 promise A+ 标准，推荐阅读&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;We have a problem with promises&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Promise 对象用来处理异步操作,promise 永远都是异步的。Promise 有三种状态：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;pending 初始状态&lt;/li&gt;
+&lt;li&gt;fullfilled 操作成功&lt;/li&gt;
+&lt;li&gt;rejected 操作失败&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h
+    
+    </summary>
+    
+    
+      <category term="JavaScript" scheme="http://codersir.github.io/tags/JavaScript/"/>
+    
+      <category term="promise" scheme="http://codersir.github.io/tags/promise/"/>
+    
+  </entry>
+  
+  <entry>
     <title>优化你的代码风格</title>
-    <link href="http://codersir.github.com/2016/06/01/better-your-coding-style/"/>
-    <id>http://codersir.github.com/2016/06/01/better-your-coding-style/</id>
+    <link href="http://codersir.github.io/2016/06/01/better-your-coding-style/"/>
+    <id>http://codersir.github.io/2016/06/01/better-your-coding-style/</id>
     <published>2016-06-01T08:11:02.000Z</published>
     <updated>2016-06-01T18:33:20.000Z</updated>
     
@@ -52,10 +182,10 @@
   
   <entry>
     <title>AngularJS 应用优化指南</title>
-    <link href="http://codersir.github.com/2016/05/10/AngularJS-app-performance-optimization-guide/"/>
-    <id>http://codersir.github.com/2016/05/10/AngularJS-app-performance-optimization-guide/</id>
+    <link href="http://codersir.github.io/2016/05/10/AngularJS-app-performance-optimization-guide/"/>
+    <id>http://codersir.github.io/2016/05/10/AngularJS-app-performance-optimization-guide/</id>
     <published>2016-05-10T08:15:33.000Z</published>
-    <updated>2016-06-01T18:33:20.000Z</updated>
+    <updated>2016-06-18T14:50:56.000Z</updated>
     
     <content type="html">&lt;p&gt;&lt;img src=&quot;/image/ng-perf/batarang.jpg&quot; alt=&quot;Batarang&quot;&gt;&lt;/p&gt;
 &lt;p&gt;前两天因为想用国内的 JS CDN，访问到 &lt;a href=&quot;http://www.staticfile.org/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;staticfile&lt;/a&gt;（七牛提供的一个免费 CDN 服务），导致我的 Chrome 直接卡死了两次，页面关也关不掉，只能退出重启。后来换到 Chrome Canary 才勉强可以访问，用谷歌开发者工具一看，发现前端是用的 AngularJS ，大量的 &lt;code&gt;ng-repeat&lt;/code&gt;，5万多 &lt;code&gt;watcher&lt;/code&gt;，没有做任何性能优化，怎么可能不卡。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
@@ -73,12 +203,12 @@
 &lt;/ul&gt;
 &lt;p&gt;上面这些情况都会产生 &lt;code&gt;watcher&lt;/code&gt;，那么问题来了，*&lt;em&gt; 怎么减少 &lt;code&gt;watcher&lt;/code&gt; *&lt;/em&gt; 呢?&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;使用单次绑定语法 &lt;code&gt;{ {::} }&lt;/code&gt; AngularJS 从1.3版本开始支持单向绑定语法 &lt;code&gt;::&lt;/code&gt; ，它可以明确的告诉 AngularJS 哪些绑定获取到数据以后就不用关注了，这可以极大的减少 &lt;code&gt;watcher&lt;/code&gt; 的数量，尤其是在 &lt;code&gt;ng-repeat&lt;/code&gt; 内使用。&lt;/li&gt;
-&lt;li&gt;避免在 &lt;code&gt;ng-repeat&lt;/code&gt; 中使用 &lt;code&gt;filter&lt;/code&gt; 可以先把数据过滤后再传给 &lt;code&gt;ng-repeat&lt;/code&gt;，这样就能避免因为过滤器产生的 &lt;code&gt;watcher&lt;/code&gt; 了。&lt;/li&gt;
-&lt;li&gt;尽可能的使用 &lt;code&gt;ng-if&lt;/code&gt; 而不是 &lt;code&gt;ng-show``ng-if&lt;/code&gt; 可以从 Dom 中移除元素，触发 &lt;code&gt;element.$destory()&lt;/code&gt;，删除 &lt;code&gt;ng-if&lt;/code&gt; 内的元素的 &lt;code&gt;watcher&lt;/code&gt;。&lt;code&gt;ng-show&lt;/code&gt; 仍然会 render 元素，只是设置样式为 &lt;code&gt;display:none&lt;/code&gt;。 但是如果元素需要经常变动隐藏还是显示，那么使用 &lt;code&gt;ng-show&lt;/code&gt; 可能会更好，&lt;code&gt;ng-show&lt;/code&gt; 会缓存 Dom，不需要重复解析。&lt;/li&gt;
+&lt;li&gt;使用单次绑定语法 &lt;code&gt;{ {::} }&lt;/code&gt;&lt;br&gt;AngularJS 从1.3版本开始支持单向绑定语法 &lt;code&gt;::&lt;/code&gt; ，它可以明确的告诉 AngularJS 哪些绑定获取到数据以后就不用关注了，这可以极大的减少 &lt;code&gt;watcher&lt;/code&gt; 的数量，尤其是在 &lt;code&gt;ng-repeat&lt;/code&gt; 内使用。&lt;/li&gt;
+&lt;li&gt;避免在 &lt;code&gt;ng-repeat&lt;/code&gt; 中使用 &lt;code&gt;filter&lt;/code&gt;&lt;br&gt;可以先把数据过滤后再传给 &lt;code&gt;ng-repeat&lt;/code&gt;，这样就能避免因为过滤器产生的 &lt;code&gt;watcher&lt;/code&gt; 了。&lt;/li&gt;
+&lt;li&gt;尽可能的使用 &lt;code&gt;ng-if&lt;/code&gt; 而不是 &lt;code&gt;ng-show``ng-if&lt;/code&gt;&lt;br&gt;可以从 Dom 中移除元素，触发 &lt;code&gt;element.$destory()&lt;/code&gt;，删除 &lt;code&gt;ng-if&lt;/code&gt; 内的元素的 &lt;code&gt;watcher&lt;/code&gt;。&lt;code&gt;ng-show&lt;/code&gt; 仍然会 render 元素，只是设置样式为 &lt;code&gt;display:none&lt;/code&gt;。 但是如果元素需要经常变动隐藏还是显示，那么使用 &lt;code&gt;ng-show&lt;/code&gt; 可能会更好，&lt;code&gt;ng-show&lt;/code&gt; 会缓存 Dom，不需要重复解析。&lt;/li&gt;
 &lt;li&gt;使用 &lt;code&gt;$watchCollection&lt;/code&gt; 替代 &lt;code&gt;$watch&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id=&quot;2-减少-digest-次数和范围&quot;&gt;&lt;a href=&quot;#2-减少-digest-次数和范围&quot; class=&quot;headerlink&quot; title=&quot;2. 减少 digest 次数和范围&quot;&gt;&lt;/a&gt;2. 减少 &lt;code&gt;digest&lt;/code&gt; 次数和范围&lt;/h3&gt;&lt;p&gt;减少 &lt;code&gt;watcher&lt;/code&gt; 是从根本上解决问题，如果 &lt;code&gt;watcher&lt;/code&gt; 的优化已经做到极致了，那么这时候就应该换一种思路了。导致 AngularJS App 变慢的原因是 &lt;code&gt;watcher&lt;/code&gt; 太多导致 &lt;code&gt;digest&lt;/code&gt; 变慢，&lt;code&gt;watcher&lt;/code&gt; 已经无法优化了，那么就应该考虑化优 &lt;code&gt;digest&lt;/code&gt; 的效率了。&lt;/p&gt;
+&lt;h3 id=&quot;2-减少-digest-次数和范围&quot;&gt;&lt;a href=&quot;#2-减少-digest-次数和范围&quot; class=&quot;headerlink&quot; title=&quot;2. 减少 digest 次数和范围&quot;&gt;&lt;/a&gt;2. 减少 &lt;code&gt;digest&lt;/code&gt; 次数和范围&lt;/h3&gt;&lt;p&gt;减少 &lt;code&gt;watcher&lt;/code&gt; 是从根本上解决问题，如果 &lt;code&gt;watcher&lt;/code&gt; 的优化已经做到极致了，那么这时候就应该换一种思路了。导致 AngularJS App 变慢的原因是 &lt;code&gt;watcher&lt;/code&gt; 太多导致 &lt;code&gt;digest&lt;/code&gt; 变慢，&lt;code&gt;watcher&lt;/code&gt; 已经无法优化了，那么就应该考虑从 &lt;code&gt;digest&lt;/code&gt; 的下手了。&lt;/p&gt;
 &lt;p&gt;同样，首先要知道的是，什么情况下会触发 AngularJS 脏检查？&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;用户行为（&lt;code&gt;ng-click&lt;/code&gt;、&lt;code&gt;ng-change&lt;/code&gt;、&lt;code&gt;ng-model&lt;/code&gt;,etc)&lt;/li&gt;
@@ -87,31 +217,28 @@
 &lt;li&gt;使用 &lt;code&gt;$timeout&lt;/code&gt; 和 &lt;code&gt;$interval&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;你手动调用 &lt;code&gt;$scope.$apply&lt;/code&gt; 或 &lt;code&gt;$scope.$digest&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;优化主要从两个方向进行，减少脏检查的次数和缩小脏检查的范围。&lt;/p&gt;
+&lt;p&gt;优化主要从两个方向进行，&lt;strong&gt;减少脏检查的次数&lt;/strong&gt; 和 &lt;strong&gt;缩小脏检查的范围&lt;/strong&gt;。&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;尽量使用 &lt;code&gt;$scope.$digest&lt;/code&gt; 替代 &lt;code&gt;$scope.$apply``$scope.$digest&lt;/code&gt; 从当前 scope 向下进行脏检查，而 &lt;code&gt;$scope.$apply&lt;/code&gt; 会触发整个应用自顶向下进行脏检查，所以，使用 &lt;code&gt;$scope.$digest&lt;/code&gt; 一般能大大的缩小脏检查的范围。&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;尽量使用 &lt;code&gt;$scope.$digest&lt;/code&gt; 替代 &lt;code&gt;$scope.$apply&lt;/code&gt;&lt;br&gt;&lt;code&gt;$scope.$digest&lt;/code&gt; 从当前 scope 向下进行脏检查，而 &lt;code&gt;$scope.$apply&lt;/code&gt; 会触发整个应用自顶向下进行脏检查，所以，使用 &lt;code&gt;$scope.$digest&lt;/code&gt; 一般能大大的缩小脏检查的范围。&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;使用 &lt;code&gt;$applyAsync&lt;/code&gt; 合并 http 请求 通常在 App 启动的时候，会同时发起好几个 http 请求，来获取用户权限或账户信息之类的信息，每次接口返回值的时候，都会触发 AngularJS 的脏检查。这时候，如果可以等到这几个接口都返回以后，再触发脏检查，就能将脏检查的数量由几次减小到1次了。&lt;code&gt;$httpProvider&lt;/code&gt; 的 &lt;a href=&quot;https://code.angularjs.org/1.3.8/docs/api/ng/provider/$httpProvider#useApplyAsync&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;useApplyAsync&lt;/a&gt; 方法就是来解决这个问题，它通过 &lt;a href=&quot;https://code.angularjs.org/1.3.8/docs/api/ng/type/$rootScope.Scope#$applyAsync&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt; $rootScope.$applyAsync&lt;/a&gt; 把大约同一时间（10ms左右）收到的返回值组合到一起处理。&lt;code&gt;applyAsync&lt;/code&gt;的实现机制其实就是事件循环，通过 &lt;code&gt;setTimeout(fn,0)&lt;/code&gt; 来延迟执行函数，可以参考我写的&lt;a href=&quot;/zone&quot;&gt;《深入学习 Zone》&lt;/a&gt;了解更多。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
+&lt;li&gt;&lt;p&gt;使用 &lt;code&gt;$applyAsync&lt;/code&gt; 合并 http 请求&lt;br&gt;通常在 App 启动的时候，会同时发起好几个 http 请求，来获取用户权限或账户信息之类的信息，每次接口返回值的时候，都会触发 AngularJS 的脏检查。这时候，如果可以等到这几个接口都返回以后，再触发脏检查，就能将脏检查的数量由几次减小到1次了。&lt;code&gt;$httpProvider&lt;/code&gt; 的 &lt;a href=&quot;https://code.angularjs.org/1.3.8/docs/api/ng/provider/$httpProvider#useApplyAsync&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;useApplyAsync&lt;/a&gt; 方法就是来解决这个问题，它通过 &lt;a href=&quot;https://code.angularjs.org/1.3.8/docs/api/ng/type/$rootScope.Scope#$applyAsync&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt; $rootScope.$applyAsync&lt;/a&gt; 把大约同一时间（10ms左右）收到的返回值组合到一起处理。&lt;code&gt;applyAsync&lt;/code&gt;的实现机制其实就是事件循环，通过 &lt;code&gt;setTimeout(fn,0)&lt;/code&gt; 来延迟执行函数，可以参考我写的&lt;a href=&quot;/2016/03/13/dive-into-zone/&quot;&gt;《深入学习 Zone》&lt;/a&gt;了解更多。&lt;/p&gt;
 &lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;app.config(&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; (&lt;span class=&quot;params&quot;&gt;$httpProvider&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  $httpProvider.useApplyAsync(&lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;ng-model 防抖动（ Debounce ） 搜索框通常会监听用户的 keyup 事件来进行实时匹配推荐，如果每次用户按下按键都调用接口，会出现多次连续的调用接口，导致连续的触发 AngularJS 脏检查，这样很容易造成页面卡顿。这时，可以通过 &lt;code&gt;ng-model&lt;/code&gt; 的 &lt;code&gt;debounce&lt;/code&gt; 参数来限制脏检查的间隔，比如 &lt;code&gt;ng-model-options=&amp;quot;{ debounce: 250 }&lt;/code&gt;，限制每 250ms 内只进行一次脏检查。&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;使用 &lt;code&gt;$watchCollection&lt;/code&gt; 替代 &lt;code&gt;$watch&lt;/code&gt; 的第三个参数&lt;code&gt;$watch&lt;/code&gt; 只会比较对象引用是否相同，如果新值和原始值指向同一个索引，那么 &lt;code&gt;$digest&lt;/code&gt; 时就不会触发回调函数。如果要监视对象的每个属性，我们可以给 &lt;code&gt;$watch&lt;/code&gt; 传入第三个参数 &lt;code&gt;true&lt;/code&gt;，这样 AngularJS 就会对对象进行深比较（使用 &lt;code&gt;angular.equals&lt;/code&gt;)，遍历对象的每个值判断是否发生了变化。但如果对象比较复杂，这样做就会带来很大的性能损耗。所以，AngularJS 提供了 &lt;code&gt;$watchCollection&lt;/code&gt; 方法来解决这一问题。&lt;code&gt;$watchCollection&lt;/code&gt; 在脏检查的时候对对象进行浅比较，只会比较对象的第一层属性。&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;ng-model 防抖动（ Debounce ）&lt;br&gt;搜索框通常会监听用户的 keyup 事件来进行实时匹配推荐，如果每次用户按下按键都调用接口，会出现多次连续的调用接口，导致连续的触发 AngularJS 脏检查，这样很容易造成页面卡顿。这时，可以通过 &lt;code&gt;ng-model&lt;/code&gt; 的 &lt;code&gt;debounce&lt;/code&gt; 参数来限制脏检查的间隔，比如 &lt;code&gt;ng-model-options=&amp;quot;{ debounce: 250 }&lt;/code&gt;，限制每 250ms 内只进行一次脏检查。&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;尽量把 DOM 操作移到指令中 比如 &lt;code&gt;ng-show&lt;/code&gt; 和 &lt;code&gt;ng-hide&lt;/code&gt;，我们经常通过这些指令来控制元素的显示和隐藏，但这些指令的表达式值都会被 AngularJS 监听，导致 &lt;code&gt;watcher&lt;/code&gt; 增加，而且这些值的变化通常也会引发 AngularJS 的 digest。我们应该尽可能的把这些逻辑移到指令的 &lt;code&gt;link&lt;/code&gt; 函数中。&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;使用 &lt;code&gt;$watchCollection&lt;/code&gt; 替代 &lt;code&gt;$watch&lt;/code&gt; 的第三个参数&lt;br&gt;&lt;code&gt;$watch&lt;/code&gt; 只会比较对象引用是否相同，如果新值和原始值指向同一个索引，那么 &lt;code&gt;$digest&lt;/code&gt; 时就不会触发回调函数。如果要监视对象的每个属性，我们可以给 &lt;code&gt;$watch&lt;/code&gt; 传入第三个参数 &lt;code&gt;true&lt;/code&gt;，这样 AngularJS 就会对对象进行深比较（使用 &lt;code&gt;angular.equals&lt;/code&gt;)，遍历对象的每个值判断是否发生了变化。但如果对象比较复杂，这样做就会带来很大的性能损耗。所以，AngularJS 提供了 &lt;code&gt;$watchCollection&lt;/code&gt; 方法来解决这一问题。&lt;code&gt;$watchCollection&lt;/code&gt; 在脏检查的时候对对象进行浅比较，只会比较对象的第一层属性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;尽量把 DOM 操作移到指令中&lt;br&gt;比如 &lt;code&gt;ng-show&lt;/code&gt; 和 &lt;code&gt;ng-hide&lt;/code&gt;，我们经常通过这些指令来控制元素的显示和隐藏，但这些指令的表达式值都会被 AngularJS 监听，导致 &lt;code&gt;watcher&lt;/code&gt; 增加，而且这些值的变化通常也会引发 AngularJS 的 digest。我们应该尽可能的把这些逻辑移到指令的 &lt;code&gt;link&lt;/code&gt; 函数中。当然，这一点最后考虑。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&quot;3-其他建议&quot;&gt;&lt;a href=&quot;#3-其他建议&quot; class=&quot;headerlink&quot; title=&quot;3. 其他建议&quot;&gt;&lt;/a&gt;3. 其他建议&lt;/h3&gt;&lt;ol&gt;
 &lt;li&gt;&lt;p&gt;使用 &lt;code&gt;track by&lt;/code&gt; 提高 &lt;code&gt;ng-repeat&lt;/code&gt;性能&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;禁用 debug 信息 我们看到使用 AngularJS 指令的元素上被添加了许多类，比如 &lt;code&gt;ng-binding&lt;/code&gt;、&lt;code&gt;ng-scope&lt;/code&gt;等，这些类除了调试没有任何作用，&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
 &lt;figure class=&quot;highlight autoit&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$compileProvider.debugInfoEnabled(&lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;ol&gt;
-&lt;li&gt;耗时的计算考虑移到 web workers 执行&lt;/li&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;耗时的计算考虑移到 web workers 执行&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&quot;工具&quot;&gt;&lt;a href=&quot;#工具&quot; class=&quot;headerlink&quot; title=&quot;工具&quot;&gt;&lt;/a&gt;工具&lt;/h3&gt;&lt;p&gt;怎么测时间都花在哪了？如果我们担心某个函数会很耗时，可以简单的把&lt;code&gt;console.time()&lt;/code&gt; 和 &lt;code&gt;console.timeEnd()&lt;/code&gt; 放在代码的前后来测试代码的运行时间。&lt;/p&gt;
 &lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;console&lt;/span&gt;.time(&lt;span class=&quot;string&quot;&gt;&#39;myTimer&#39;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// your code here&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;console&lt;/span&gt;.timeEnd(&lt;span class=&quot;string&quot;&gt;&#39;myTimer&#39;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
@@ -139,16 +266,16 @@
     </summary>
     
     
-      <category term="AngularJS" scheme="http://codersir.github.com/tags/AngularJS/"/>
+      <category term="AngularJS" scheme="http://codersir.github.io/tags/AngularJS/"/>
     
-      <category term="perf" scheme="http://codersir.github.com/tags/perf/"/>
+      <category term="perf" scheme="http://codersir.github.io/tags/perf/"/>
     
   </entry>
   
   <entry>
     <title>西安四日游</title>
-    <link href="http://codersir.github.com/2016/05/01/4-days-in-xian/"/>
-    <id>http://codersir.github.com/2016/05/01/4-days-in-xian/</id>
+    <link href="http://codersir.github.io/2016/05/01/4-days-in-xian/"/>
+    <id>http://codersir.github.io/2016/05/01/4-days-in-xian/</id>
     <published>2016-05-01T14:59:46.000Z</published>
     <updated>2016-05-29T18:17:32.000Z</updated>
     
@@ -184,14 +311,14 @@
     </summary>
     
     
-      <category term="travel" scheme="http://codersir.github.com/tags/travel/"/>
+      <category term="travel" scheme="http://codersir.github.io/tags/travel/"/>
     
   </entry>
   
   <entry>
     <title>再探 JavaScript 中的作用域</title>
-    <link href="http://codersir.github.com/2016/04/10/learn-javascript-scope-again/"/>
-    <id>http://codersir.github.com/2016/04/10/learn-javascript-scope-again/</id>
+    <link href="http://codersir.github.io/2016/04/10/learn-javascript-scope-again/"/>
+    <id>http://codersir.github.io/2016/04/10/learn-javascript-scope-again/</id>
     <published>2016-04-10T04:59:34.000Z</published>
     <updated>2016-06-01T18:33:20.000Z</updated>
     
@@ -236,14 +363,14 @@
     </summary>
     
     
-      <category term="javascript" scheme="http://codersir.github.com/tags/javascript/"/>
+      <category term="javascript" scheme="http://codersir.github.io/tags/javascript/"/>
     
   </entry>
   
   <entry>
     <title>再探 JavaScript 中的 this</title>
-    <link href="http://codersir.github.com/2016/04/10/learn-javascript-this-again/"/>
-    <id>http://codersir.github.com/2016/04/10/learn-javascript-this-again/</id>
+    <link href="http://codersir.github.io/2016/04/10/learn-javascript-this-again/"/>
+    <id>http://codersir.github.io/2016/04/10/learn-javascript-this-again/</id>
     <published>2016-04-10T04:55:20.000Z</published>
     <updated>2016-05-29T18:17:32.000Z</updated>
     
@@ -269,10 +396,10 @@
   
   <entry>
     <title>理解 Zone 的实现机制</title>
-    <link href="http://codersir.github.com/2016/03/13/dive-into-zone/"/>
-    <id>http://codersir.github.com/2016/03/13/dive-into-zone/</id>
+    <link href="http://codersir.github.io/2016/03/13/dive-into-zone/"/>
+    <id>http://codersir.github.io/2016/03/13/dive-into-zone/</id>
     <published>2016-03-13T13:02:10.000Z</published>
-    <updated>2016-06-16T15:43:47.000Z</updated>
+    <updated>2016-06-18T19:00:43.000Z</updated>
     
     <content type="html">&lt;p&gt;Zone 是一种用来拦截和追踪异步任务的机制。&lt;/p&gt;
 &lt;p&gt;Zone 可以做以下事情：&lt;/p&gt;
@@ -288,7 +415,7 @@
 &lt;p&gt;拦截规则通过 ZoneConfig 来配置。&lt;/p&gt;
 &lt;p&gt;一个系统中可以同时存在多个 zone 的实例，但是在任意时刻都只有一个处于激活状态，可以通过 &lt;code&gt;Zone.current&lt;/code&gt; 获取到。&lt;/p&gt;
 &lt;h3 id=&quot;包装回调函数&quot;&gt;&lt;a href=&quot;#包装回调函数&quot; class=&quot;headerlink&quot; title=&quot;包装回调函数&quot;&gt;&lt;/a&gt;包装回调函数&lt;/h3&gt;&lt;p&gt;zone 的一个重要部分就是在异步操作的过程中保持一致。为了做到这一点，当一个未来任务通过异步API被调用的时候，需要捕获并随后重现当前 zone。&lt;/p&gt;
-&lt;figure class=&quot;highlight actionscript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; oldZone = _currentZone&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;currentZone = &lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;try&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;comment&quot;&gt;// do stuff ...&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125; &lt;span class=&quot;keyword&quot;&gt;finally&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  _currentZone = oldZone&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; oldZone = _currentZone&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;currentZone = &lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;try&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;comment&quot;&gt;// do stuff ...&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125; &lt;span class=&quot;keyword&quot;&gt;finally&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  _currentZone = oldZone&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;p&gt;如果你把异步操作当做线程执行来看，那么当前 Zone 就是线程局部变量。&lt;/p&gt;
 &lt;h3 id=&quot;异步操作调度&quot;&gt;&lt;a href=&quot;#异步操作调度&quot; class=&quot;headerlink&quot; title=&quot;异步操作调度&quot;&gt;&lt;/a&gt;异步操作调度&lt;/h3&gt;&lt;p&gt;基本上有三种类型的任务可以被调度,每个异步 API 都通过以下 API 来建模和路由：&lt;/p&gt;
 &lt;ol&gt;
@@ -324,6 +451,7 @@
 &lt;h3 id=&quot;Zone-cancelTask&quot;&gt;&lt;a href=&quot;#Zone-cancelTask&quot; class=&quot;headerlink&quot; title=&quot;Zone.cancelTask&quot;&gt;&lt;/a&gt;&lt;code&gt;Zone.cancelTask&lt;/code&gt;&lt;/h3&gt;&lt;p&gt;拦截已安排任务的取消，任务取消之前可以通过 &lt;code&gt;ZoneSpec.onCancelTask&lt;/code&gt; 来进行拦截，默认情况下任务取消会调用 &lt;code&gt;Task.cancelFn&lt;/code&gt;。&lt;/p&gt;
 &lt;h2 id=&quot;NgZone-in-Angular2&quot;&gt;&lt;a href=&quot;#NgZone-in-Angular2&quot; class=&quot;headerlink&quot; title=&quot;NgZone in Angular2&quot;&gt;&lt;/a&gt;NgZone in Angular2&lt;/h2&gt;&lt;p&gt;Angular2 通过 &lt;strong&gt;变化检测&lt;/strong&gt; 来更新视图，那么谁来告诉 Angular2 有状态发生了改变呢？那就是 NgZone。在 Angular2 中，将不再需要不停的进行脏检查来保持视图和状态的同步，当有状态发生变化时，NgZone 的事件钩子会通知 Angular 来更新视图。Angular2 的 ZoneSpec 如下：&lt;/p&gt;
 &lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;30&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;31&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;32&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;33&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;34&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;35&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;36&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;37&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;38&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;39&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;40&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;41&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;42&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    name: &lt;span class=&quot;string&quot;&gt;&#39;angular&#39;&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    properties:&lt;span class=&quot;xml&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;any&lt;/span&gt;&amp;gt;&lt;/span&gt;&amp;#123;&#39;isAngularZone&#39;: true&amp;#125;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    onInvokeTask: (delegate: ZoneDelegate, current: Zone, target: Zone, task: Task,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                   applyThis: any, applyArgs: any): any =&amp;gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      try &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        this.onEnter();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        return delegate.invokeTask(target, task, applyThis, applyArgs);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125; finally &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        this.onLeave();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    onInvoke: (delegate: ZoneDelegate, current: Zone, target: Zone, callback: Function,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;               applyThis: any, applyArgs: any[], source: string): any =&amp;gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      try &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        this.onEnter();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        return delegate.invoke(target, callback, applyThis, applyArgs, source);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125; finally &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        this.onLeave();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    onHasTask:(delegate: ZoneDelegate, current: Zone, target: Zone, hasTaskState: HasTaskState) =&amp;gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        delegate.hasTask(target, hasTaskState);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        if (current == target) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          // We are only interested in hasTask events which originate from our zone&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          // (A child hasTask event is not interesting to us)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          if (hasTaskState.change == &#39;microTask&#39;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            this.setMicrotask(hasTaskState.microTask);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          &amp;#125; else if (hasTaskState.change == &#39;macroTask&#39;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            this.setMacrotask(hasTaskState.macroTask);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    onHandleError: (delegate: ZoneDelegate, current: Zone, target: Zone, error: any): boolean =&amp;gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;       delegate.handleError(target, error);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;       this.onError(new NgZoneError(error, error.stack));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;       return false;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;其中 &lt;code&gt;onEnter&lt;/code&gt; 和 &lt;code&gt;onLeave&lt;/code&gt; 就是相应事件的回调函数。&lt;/p&gt;
 &lt;p&gt;下面这些情况会被 Angular2 判断为有状态发生了改变：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;用户行为&lt;/li&gt;
@@ -350,16 +478,16 @@
     </summary>
     
     
-      <category term="angular2" scheme="http://codersir.github.com/tags/angular2/"/>
+      <category term="angular2" scheme="http://codersir.github.io/tags/angular2/"/>
     
-      <category term="zone" scheme="http://codersir.github.com/tags/zone/"/>
+      <category term="zone" scheme="http://codersir.github.io/tags/zone/"/>
     
   </entry>
   
   <entry>
     <title>angular2 中的依赖注入</title>
-    <link href="http://codersir.github.com/2016/02/20/dependency-injection-in-angular-2/"/>
-    <id>http://codersir.github.com/2016/02/20/dependency-injection-in-angular-2/</id>
+    <link href="http://codersir.github.io/2016/02/20/dependency-injection-in-angular-2/"/>
+    <id>http://codersir.github.io/2016/02/20/dependency-injection-in-angular-2/</id>
     <published>2016-02-20T09:14:07.000Z</published>
     <updated>2016-05-29T18:17:32.000Z</updated>
     
@@ -372,16 +500,16 @@
     </summary>
     
     
-      <category term="angular2" scheme="http://codersir.github.com/tags/angular2/"/>
+      <category term="angular2" scheme="http://codersir.github.io/tags/angular2/"/>
     
-      <category term="di" scheme="http://codersir.github.com/tags/di/"/>
+      <category term="di" scheme="http://codersir.github.io/tags/di/"/>
     
   </entry>
   
   <entry>
     <title>JavaScript 中的装饰器是什么？</title>
-    <link href="http://codersir.github.com/2016/01/31/what-is-decorator-in-javascript/"/>
-    <id>http://codersir.github.com/2016/01/31/what-is-decorator-in-javascript/</id>
+    <link href="http://codersir.github.io/2016/01/31/what-is-decorator-in-javascript/"/>
+    <id>http://codersir.github.io/2016/01/31/what-is-decorator-in-javascript/</id>
     <published>2016-01-30T16:36:01.000Z</published>
     <updated>2016-05-29T18:17:32.000Z</updated>
     
@@ -483,18 +611,18 @@
     </summary>
     
     
-      <category term="typescript" scheme="http://codersir.github.com/tags/typescript/"/>
+      <category term="typescript" scheme="http://codersir.github.io/tags/typescript/"/>
     
-      <category term="es2016" scheme="http://codersir.github.com/tags/es2016/"/>
+      <category term="es2016" scheme="http://codersir.github.io/tags/es2016/"/>
     
-      <category term="decorator" scheme="http://codersir.github.com/tags/decorator/"/>
+      <category term="decorator" scheme="http://codersir.github.io/tags/decorator/"/>
     
   </entry>
   
   <entry>
     <title>深入学习 redux</title>
-    <link href="http://codersir.github.com/2016/01/25/dive-deep-in-redux/"/>
-    <id>http://codersir.github.com/2016/01/25/dive-deep-in-redux/</id>
+    <link href="http://codersir.github.io/2016/01/25/dive-deep-in-redux/"/>
+    <id>http://codersir.github.io/2016/01/25/dive-deep-in-redux/</id>
     <published>2016-01-25T08:33:25.000Z</published>
     <updated>2016-05-29T18:17:32.000Z</updated>
     
@@ -550,16 +678,16 @@
     </summary>
     
     
-      <category term="react" scheme="http://codersir.github.com/tags/react/"/>
+      <category term="react" scheme="http://codersir.github.io/tags/react/"/>
     
-      <category term="redux" scheme="http://codersir.github.com/tags/redux/"/>
+      <category term="redux" scheme="http://codersir.github.io/tags/redux/"/>
     
   </entry>
   
   <entry>
     <title>TypeScript 入门教程</title>
-    <link href="http://codersir.github.com/2016/01/12/learn-typescript/"/>
-    <id>http://codersir.github.com/2016/01/12/learn-typescript/</id>
+    <link href="http://codersir.github.io/2016/01/12/learn-typescript/"/>
+    <id>http://codersir.github.io/2016/01/12/learn-typescript/</id>
     <published>2016-01-12T04:58:51.000Z</published>
     <updated>2016-05-29T18:17:32.000Z</updated>
     
@@ -631,65 +759,16 @@
     </summary>
     
     
-      <category term="angular2" scheme="http://codersir.github.com/tags/angular2/"/>
+      <category term="angular2" scheme="http://codersir.github.io/tags/angular2/"/>
     
-      <category term="typescript" scheme="http://codersir.github.com/tags/typescript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>oauth2</title>
-    <link href="http://codersir.github.com/2016/01/08/oauth2/"/>
-    <id>http://codersir.github.com/2016/01/08/oauth2/</id>
-    <published>2016-01-08T10:52:29.000Z</published>
-    <updated>2016-05-29T18:17:32.000Z</updated>
-    
-    <content type="html">&lt;h3 id=&quot;授权类型&quot;&gt;&lt;a href=&quot;#授权类型&quot; class=&quot;headerlink&quot; title=&quot;授权类型&quot;&gt;&lt;/a&gt;授权类型&lt;/h3&gt;&lt;p&gt;OAuth2 允许采用不同的授权类型(grant_type) 获取 access_token&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Authorization Code&lt;br&gt;这是最常见也是最安全的授权方式，这种方式为 confidential 客户端设计，通过这种方式可以同时获得 access_token 和 refresh_token&lt;/p&gt;
-&lt;figure class=&quot;highlight gherkin&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;+----------+&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt; Resource &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt;   Owner  &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt;          &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;+----------+&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     ^&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     |&lt;span class=&quot;string&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    (B)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;+----&lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;-----+          Client Identifier      +---------------+&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;         -+----(A)-- &amp;amp; Redirection URI ----&amp;gt;&lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;               &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt;  User-   &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;                                 &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt; Authorization &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt;  Agent  -+----(B)-- User authenticates ---&amp;gt;&lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;     Server    &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt;          &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;                                 &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;               &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt;         -+----(C)-- Authorization Code ---&amp;lt;&lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;               &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;+-|&lt;span class=&quot;string&quot;&gt;----&lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;---+                                 +---------------+&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;    &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;                                         ^      v&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; (A)  (C)                                        &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;      &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  |&lt;span class=&quot;string&quot;&gt;    &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;                                         &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;      &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  ^    v                                         |&lt;span class=&quot;string&quot;&gt;      &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;+---------+                                      |&lt;span class=&quot;string&quot;&gt;      &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt;         &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;&amp;gt;---(D)-- Authorization Code ---------&#39;      &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt;  Client &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;          &amp;amp; Redirection URI                  &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt;         &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;                                             &lt;/span&gt;|&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;|&lt;span class=&quot;string&quot;&gt;         &lt;/span&gt;|&lt;span class=&quot;string&quot;&gt;&amp;lt;---(E)----- Access Token -------------------&#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;+---------+       (w/ Optional Refresh Token)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Implicit&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ul&gt;
-&lt;li&gt;Resource Owner Password Credentials&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ul&gt;
-&lt;li&gt;Client Credentials&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;请求认证&quot;&gt;&lt;a href=&quot;#请求认证&quot; class=&quot;headerlink&quot; title=&quot;请求认证&quot;&gt;&lt;/a&gt;请求认证&lt;/h3&gt;&lt;p&gt;在向资源方请求数据时，需要将获得的 Access_token 传递给资源方进行认证，主要有三种传递方式。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;放在请求头传递&lt;br&gt;使用请求头传递 access_token 时，客户端采用 &lt;a href=&quot;https://tools.ietf.org/html/rfc2617&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Bearer 认证方案&lt;/a&gt;，比如：&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure class=&quot;highlight http&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;GET&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;/resource&lt;/span&gt; HTTP/1.1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;attribute&quot;&gt;Host&lt;/span&gt;: server.example.com&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;attribute&quot;&gt;Authorization&lt;/span&gt;: Bearer mF_9.B5f-4.1JqM&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;ul&gt;
-&lt;li&gt;作为 Form 表单参数传递&lt;br&gt;当使用 form 表单来传递 access_token 时， HTTP 请求头实体必须包含 &lt;code&gt;Content_Type&lt;/code&gt; 字段，并且该字段值必须为 &lt;code&gt;application/x-www-form-urlencoded&lt;/code&gt;，比如：&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure class=&quot;highlight http&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;POST&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;/resource&lt;/span&gt; HTTP/1.1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;attribute&quot;&gt;Host&lt;/span&gt;: server.example.com&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;attribute&quot;&gt;Content-Type&lt;/span&gt;: application/x-www-form-urlencoded&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;ini&quot;&gt;&lt;span class=&quot;attr&quot;&gt;access_token&lt;/span&gt;=mF_9.B5f-&lt;span class=&quot;number&quot;&gt;4.1&lt;/span&gt;JqM&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;ul&gt;
-&lt;li&gt;作为 URI query 参数传递&lt;br&gt;直接把 access_token 放在 URI 中是不推荐的做法，除非另外两种办法都无法进行，因为这样会有安全问题，参数会在浏览器记录中留存下来。资源服务器可以选择不提供这种认证方式。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;客户端使用 URI query 参数传递 access_token 时，&lt;strong&gt;应该&lt;/strong&gt;在头部添加一个 &lt;code&gt;Cache-Control&lt;/code&gt; 的字段，值为 &lt;code&gt;no-store&lt;/code&gt; 。客户端成功返回这类请求的响应时，也&lt;strong&gt;应该&lt;/strong&gt;在头部添加一个 &lt;code&gt;Cache-Control&lt;/code&gt; 字段，值为 &lt;code&gt;private&lt;/code&gt;。&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;授权类型&quot;&gt;&lt;a href=&quot;#授权类型&quot; class=&quot;headerlink&quot; title=&quot;授权类型&quot;&gt;&lt;/a&gt;授权类型&lt;/h3&gt;&lt;p&gt;OAuth2 允许采用不同的授权类型(grant_type) 获取 access_token&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p
-    
-    </summary>
-    
-    
-      <category term="oauth2" scheme="http://codersir.github.com/tags/oauth2/"/>
+      <category term="typescript" scheme="http://codersir.github.io/tags/typescript/"/>
     
   </entry>
   
   <entry>
     <title>盒模型以及 box-sizing</title>
-    <link href="http://codersir.github.com/2015/12/08/box-model-and-box-sizing/"/>
-    <id>http://codersir.github.com/2015/12/08/box-model-and-box-sizing/</id>
+    <link href="http://codersir.github.io/2015/12/08/box-model-and-box-sizing/"/>
+    <id>http://codersir.github.io/2015/12/08/box-model-and-box-sizing/</id>
     <published>2015-12-08T05:14:27.000Z</published>
     <updated>2016-05-29T18:17:32.000Z</updated>
     
@@ -741,7 +820,7 @@
     </summary>
     
     
-      <category term="css" scheme="http://codersir.github.com/tags/css/"/>
+      <category term="css" scheme="http://codersir.github.io/tags/css/"/>
     
   </entry>
   

@@ -18,7 +18,7 @@ zone 的原理zone 本身并不做任何事情，它依赖其他代码让平台A
 最简单的形式是，zone 通过 patch 异步API，允许我们拦截异步操作的调用和">
 <meta property="og:type" content="article">
 <meta property="og:title" content="理解 Zone 的实现机制">
-<meta property="og:url" content="http://codersir.github.com/2016/03/13/dive-into-zone/index.html">
+<meta property="og:url" content="http://codersir.github.io/2016/03/13/dive-into-zone/index.html">
 <meta property="og:site_name" content="Coder Sir">
 <meta property="og:description" content="Zone 是一种用来拦截和追踪异步任务的机制。
 Zone 可以做以下事情：
@@ -31,7 +31,7 @@ Zone 可以做以下事情：
 
 zone 的原理zone 本身并不做任何事情，它依赖其他代码让平台API穿过它。
 最简单的形式是，zone 通过 patch 异步API，允许我们拦截异步操作的调用和">
-<meta property="og:updated_time" content="2016-06-16T15:43:47.000Z">
+<meta property="og:updated_time" content="2016-06-18T19:00:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="理解 Zone 的实现机制">
 <meta name="twitter:description" content="Zone 是一种用来拦截和追踪异步任务的机制。
@@ -157,7 +157,7 @@ zone 的原理zone 本身并不做任何事情，它依赖其他代码让平台A
 <p>拦截规则通过 ZoneConfig 来配置。</p>
 <p>一个系统中可以同时存在多个 zone 的实例，但是在任意时刻都只有一个处于激活状态，可以通过 <code>Zone.current</code> 获取到。</p>
 <h3 id="包装回调函数"><a href="#包装回调函数" class="headerlink" title="包装回调函数"></a>包装回调函数</h3><p>zone 的一个重要部分就是在异步操作的过程中保持一致。为了做到这一点，当一个未来任务通过异步API被调用的时候，需要捕获并随后重现当前 zone。</p>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> oldZone = _currentZone</span><br><span class="line">currentZone = <span class="keyword">this</span></span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">  <span class="comment">// do stuff ...</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  _currentZone = oldZone</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> oldZone = _currentZone</span><br><span class="line">currentZone = <span class="keyword">this</span></span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">  <span class="comment">// do stuff ...</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  _currentZone = oldZone</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果你把异步操作当做线程执行来看，那么当前 Zone 就是线程局部变量。</p>
 <h3 id="异步操作调度"><a href="#异步操作调度" class="headerlink" title="异步操作调度"></a>异步操作调度</h3><p>基本上有三种类型的任务可以被调度,每个异步 API 都通过以下 API 来建模和路由：</p>
 <ol>
@@ -193,6 +193,7 @@ zone 的原理zone 本身并不做任何事情，它依赖其他代码让平台A
 <h3 id="Zone-cancelTask"><a href="#Zone-cancelTask" class="headerlink" title="Zone.cancelTask"></a><code>Zone.cancelTask</code></h3><p>拦截已安排任务的取消，任务取消之前可以通过 <code>ZoneSpec.onCancelTask</code> 来进行拦截，默认情况下任务取消会调用 <code>Task.cancelFn</code>。</p>
 <h2 id="NgZone-in-Angular2"><a href="#NgZone-in-Angular2" class="headerlink" title="NgZone in Angular2"></a>NgZone in Angular2</h2><p>Angular2 通过 <strong>变化检测</strong> 来更新视图，那么谁来告诉 Angular2 有状态发生了改变呢？那就是 NgZone。在 Angular2 中，将不再需要不停的进行脏检查来保持视图和状态的同步，当有状态发生变化时，NgZone 的事件钩子会通知 Angular 来更新视图。Angular2 的 ZoneSpec 如下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    name: <span class="string">'angular'</span>,</span><br><span class="line">    properties:<span class="xml"><span class="tag">&lt;<span class="name">any</span>&gt;</span>&#123;'isAngularZone': true&#125;,</span><br><span class="line">    onInvokeTask: (delegate: ZoneDelegate, current: Zone, target: Zone, task: Task,</span><br><span class="line">                   applyThis: any, applyArgs: any): any =&gt; &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        this.onEnter();</span><br><span class="line">        return delegate.invokeTask(target, task, applyThis, applyArgs);</span><br><span class="line">      &#125; finally &#123;</span><br><span class="line">        this.onLeave();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    onInvoke: (delegate: ZoneDelegate, current: Zone, target: Zone, callback: Function,</span><br><span class="line">               applyThis: any, applyArgs: any[], source: string): any =&gt; &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        this.onEnter();</span><br><span class="line">        return delegate.invoke(target, callback, applyThis, applyArgs, source);</span><br><span class="line">      &#125; finally &#123;</span><br><span class="line">        this.onLeave();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    onHasTask:(delegate: ZoneDelegate, current: Zone, target: Zone, hasTaskState: HasTaskState) =&gt; &#123;</span><br><span class="line">        delegate.hasTask(target, hasTaskState);</span><br><span class="line">        if (current == target) &#123;</span><br><span class="line">          // We are only interested in hasTask events which originate from our zone</span><br><span class="line">          // (A child hasTask event is not interesting to us)</span><br><span class="line">          if (hasTaskState.change == 'microTask') &#123;</span><br><span class="line">            this.setMicrotask(hasTaskState.microTask);</span><br><span class="line">          &#125; else if (hasTaskState.change == 'macroTask') &#123;</span><br><span class="line">            this.setMacrotask(hasTaskState.macroTask);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    onHandleError: (delegate: ZoneDelegate, current: Zone, target: Zone, error: any): boolean =&gt; &#123;</span><br><span class="line">       delegate.handleError(target, error);</span><br><span class="line">       this.onError(new NgZoneError(error, error.stack));</span><br><span class="line">       return false;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>其中 <code>onEnter</code> 和 <code>onLeave</code> 就是相应事件的回调函数。</p>
 <p>下面这些情况会被 Angular2 判断为有状态发生了改变：</p>
 <ul>
 <li>用户行为</li>
@@ -216,9 +217,9 @@ zone 的原理zone 本身并不做任何事情，它依赖其他代码让平台A
             
             ，并被添加标签「
              
-	<a class="article_meta-tag" title="3篇文章" href="http://codersir.github.com/tags/angular2/">angular2</a>
+	<a class="article_meta-tag" title="3篇文章" href="http://codersir.github.io/tags/angular2/">angular2</a>
  
-	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.com/tags/zone/">zone</a>
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/zone/">zone</a>
 
             」
             
@@ -226,7 +227,7 @@ zone 的原理zone 本身并不做任何事情，它依赖其他代码让平台A
              
               ，更新于
               
-	<time class="article__meta-updated" datetime="2016-06-16T15:43:47.000Z" itemprop="datePublished">Jun 6, 2016 23:43:47</time>
+	<time class="article__meta-updated" datetime="2016-06-18T19:00:43.000Z" itemprop="datePublished">Jun 6, 2016 03:00:43</time>
 
             。
           </small>
@@ -235,7 +236,7 @@ zone 的原理zone 本身并不做任何事情，它依赖其他代码让平台A
   </div>
   
     <section id="comments">
-      <h1 class="title" href="http://codersir.github.com/2016/03/13/dive-into-zone/#disqus_thread">Comments</h1>
+      <h1 class="title" href="http://codersir.github.io/2016/03/13/dive-into-zone/#disqus_thread">Comments</h1>
       <div id="disqus_thread">
         <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
       </div>
@@ -275,7 +276,7 @@ zone 的原理zone 本身并不做任何事情，它依赖其他代码让平台A
   var pageHeight = Math.max(body.scrollHeight,body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight)
 
   
-  var disqus_url = 'http://codersir.github.com/2016/03/13/dive-into-zone/';
+  var disqus_url = 'http://codersir.github.io/2016/03/13/dive-into-zone/';
   
 
   if(clientHeight == pageHeight){
