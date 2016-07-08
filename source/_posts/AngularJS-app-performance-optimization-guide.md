@@ -33,8 +33,8 @@ tags:
 AngularJS 从1.3版本开始支持单向绑定语法 `::` ，它可以明确的告诉 AngularJS 哪些绑定获取到数据以后就不用关注了，这可以极大的减少 `watcher` 的数量，尤其是在 `ng-repeat` 内使用。
 2.	避免在 `ng-repeat` 中使用 `filter`
 可以先把数据过滤后再传给 `ng-repeat`，这样就能避免因为过滤器产生的 `watcher` 了。
-3.	尽可能的使用 `ng-if` 而不是 `ng-show``ng-if`
-可以从 Dom 中移除元素，触发 `element.$destory()`，删除 `ng-if` 内的元素的 `watcher`。`ng-show` 仍然会 render 元素，只是设置样式为 `display:none`。 但是如果元素需要经常变动隐藏还是显示，那么使用 `ng-show` 可能会更好，`ng-show` 会缓存 Dom，不需要重复解析。
+3.	尽可能的使用 `ng-if` 而不是 `ng-show`
+`ng-if` 可以从 Dom 中移除元素，触发 `element.$destory()`，删除 `ng-if` 内的元素的 `watcher`。`ng-show` 仍然会 render 元素，只是设置样式为 `display:none`。 但是如果元素需要经常变动隐藏还是显示，那么使用 `ng-show` 可能会更好，`ng-show` 会缓存 Dom，不需要重复解析。
 4.	使用 `$watchCollection` 替代 `$watch`
 
 ### 2. 减少 `digest` 次数和范围
