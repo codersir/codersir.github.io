@@ -12,6 +12,7 @@ redux 是 react 的一个状态管理方案，它的名称来自 `array.reduce`�
 ```
 
 `reduce` 函数接受两个参数，一个回调函数和一个可选的初始值。回调函数接受四个可选参数：
+
 - previousValue: 上次调用回调函数的返回值，或者初始值，如果有的话。
 - currentValue: 当前被传入回调函数的值
 - currentIndex: 当前值在数组中的索引
@@ -25,6 +26,12 @@ redux 中有3个概念，分别是：
 它们之间的转换流程图如下：
 ![redux-flow](/image/blog/redux-flow.png)
 
+redux 有三个原则：
+
+- 单一数据源：整个应用的状态都存在单一 store 的对象树里面
+- 状态只读：改变状态的唯一方法就是触发一个 action，action 是一个描述发生了什么的对象
+- 变化都由纯函数生成：通过 reducers 来指定状态树怎么被 action 转化
+
 ### 什么是 action
 action 是简单的 JavaScript 对象，包含一个值唯一的 `type` 属性用**来描述状态的变化**。比如添加评论的 action:
 
@@ -35,6 +42,7 @@ action 是简单的 JavaScript 对象，包含一个值唯一的 `type` 属性�
     }
 ```
 通常我们会写个 action creator 用来帮助创建 action，简化输入：
+
 ```
     addComment(text){
         return {
@@ -65,10 +73,20 @@ reducer 就对应这个名称来源，是 redux 中最重要的概念。和 `arr
 - 进行有副作用的操作，比如调用API和路由过渡
 - 调用非纯函数，比如 `Date.now()` 和 `Math.random()`
 
+我们可以把单一 reducers 拆分为不同的子 reducers，然后通过 `combineReducers()` 函数组合到一起。`combineReducers()` 函数的作用就是生成一个函数，根据你传入的对象的 key 把相应的 state 片段传入你的 reducers 来调用。
+
 ### store 是什么
-**store 用来存储应用的状态**。在 redux 中，store 是状态的中心，提供以下 API：
+
+**store 用来存储应用的状态**。在 redux 中，store 是状态的中心，主要负责：
+
+- 保持应用状态
+- 通过 `store.getState()` 读取应用状态
 - 通过 `store.dispatch(action)` 分发 action
 - 通过 `store.subscribe(callback)` 添加事件监听，触发时调用回调函数
-- 通过 `store.getState()` 读取应用状态
+- `store.subscribe(callback)` 返回一个函数，调用这个函数注销事件监听
 
 一个应用只有一个 `store`，它包含该应用完整的状态树。
+
+### 参考资料
+- [redux doc](http://redux.js.org/)
+- [slim-redux.js](https://gist.github.com/gaearon/ffd88b0e4f00b22c3159)

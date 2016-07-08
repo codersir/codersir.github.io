@@ -35,7 +35,7 @@ doFoo(obj.foo)  //2
 
 箭头函数
 
-`this` 指向定义时的作用于，且不会改变
+`this` 指向定义时的作用域，且不会改变
 ```
 var count = 9
 var obj = {
