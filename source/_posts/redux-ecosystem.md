@@ -4,6 +4,7 @@ tags:
 - react
 - redux
 ---
+
 在学习 React 的过程中，我们了解到 React 组件其实是[状态机](https://github.com/nixzhu/dev-blog/blob/master/2015-04-23-state-machine.md)，那么，随着应用庞大组件多起来，就不可避免的会面临状态管理的问题。最初，facebook 官方推荐的状态管理方案是 [Flux](https://facebook.github.io/flux)，开源社区也产生了许多基于 Flux 的变种，比如 ，相较 Flux 都有所改进，但和官方背景顶多能达到分庭抗礼，却无法一统江湖。直到 Redux 横空出世，以更简洁直接的方案和对中间件的支持，在社区中迅速获得大量的拥趸，现在几乎已经成了 React 应用的标配。由于对中间件的支持，开源社区产出了许多优秀的 Redux 中间件，比如 redux-logger, redux-undo, redux-thunk 等，慢慢的形成了一个完善的生态系统。官方文档页面也有一个 [Ecosystem](http://redux.js.org/docs/introduction/Ecosystem.html) 页面，列出了各种 Reudx 相关的中间件、组件和小工具等，本文主要介绍我日常开发中用到并且深入学习了的中间件，并结合源码解释其工作原理。
 
 > 如果你还不了解 Redux，可以看我写的「[深入学习 Redux](/2016/01/25/dive-into-redux/)」。
@@ -11,7 +12,7 @@ tags:
 <!-- more -->
 ## Redux 中间件
 
-如果你了解 express 或 koa，那么你应该对中间件的概念很熟悉了，这些框架的中间件作用在在接到请求和返回响应之间，进行 log 日志、添加 CORS 头等任务，中间件的最大特点就是它们可以链式组合。 Redux 中间件虽然处理的问题不一样，但是它们概念上是相似的。Redux 中间件**作用在分发 action 和被 reducer 处理之间**。官方文档对 [Redux middleware](http://redux.js.org/docs/advanced/Middleware.html) 有一个很好的介绍，通过一步步改进一个 logger 中间件让你理解中间件的机制，推荐查看。以文档 logger 中间件为例，展示一个标准 Redux 中间件的写法：
+如果你了解 express 或 koa，那么你应该对中间件的概念很熟悉了，这些框架的中间件作用在接到请求和返回响应之间，进行 log 日志、添加 CORS 头等任务，中间件的最大特点就是它们可以链式组合。 Redux 中间件虽然处理的问题不一样，但是它们概念上是相似的。Redux 中间件**作用在分发 action 和被 reducer 处理之间**。官方文档对 [Redux middleware](http://redux.js.org/docs/advanced/Middleware.html) 有一个很好的介绍，通过一步步改进一个 logger 中间件让你理解中间件的机制，推荐查看。以文档 logger 中间件为例，展示一个标准 Redux 中间件的写法：
 
 ```
 const logger = store => next => action => {

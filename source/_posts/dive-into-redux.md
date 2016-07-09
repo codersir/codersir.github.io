@@ -5,18 +5,11 @@ tags:
 - redux
 ---
 
-Redux 是 React 的一个状态管理方案，它的名称来自 `array.reduce`，要掌握它的要义，首先要知道数组 `reduce` 方法的用法。
+当我们谈 Redux 的时候，一般都会把它和 React 联系到一起。但是，Redux 作为一种状态管理方案，并不限于和 React 一起使用，你可以扩展到其他任何合适的框架，比如 Angular。Redux 的目标是 **使状态的改变可预测**。Redux 通过下面三个原则约束来实现这一目标：
 
-```
-    array.reduce(callback[, initialValue])
-```
-
-`reduce` 函数接受两个参数，一个回调函数和一个可选的初始值。回调函数接受四个可选参数：
-
-- previousValue: 上次调用回调函数的返回值，或者初始值，如果有的话。
-- currentValue: 当前被传入回调函数的值
-- currentIndex: 当前值在数组中的索引
-- array: 调用 `reduce` 方法的数组
+- 单一数据源：整个应用的状态都存在单一 store 的对象树里面
+- 状态只读：改变状态的唯一方法就是触发一个 action，action 是一个描述发生了什么的对象
+- 变化都由纯函数生成：通过 reducers 来指定状态树怎么被 action 转化
 
 Redux 中有3个概念，分别是：
 
@@ -26,12 +19,6 @@ Redux 中有3个概念，分别是：
 
 它们之间的转换流程图如下：
 ![Redux-flow](/image/blog/redux-flow.png)
-
-redux 有三个原则：
-
-- 单一数据源：整个应用的状态都存在单一 store 的对象树里面
-- 状态只读：改变状态的唯一方法就是触发一个 action，action 是一个描述发生了什么的对象
-- 变化都由纯函数生成：通过 reducers 来指定状态树怎么被 action 转化
 
 ### 什么是 action
 
@@ -60,7 +47,7 @@ addComment(text){
 
 async action（异步操作）是准备传递给 `dispatch()` 函数但却还没准备好被 `reducer` 调用的 `action`，它们会在传递给 `dispatch()` 函数前被 `middleware(中间件)` 转化为 `action`。
 
-action 的结构并没有什么限制，只要是 JavaScript 对象并且包含 `type` 字段即可。当然，为了团队协作和编码风格的统一，有个规范总是好的，可以参照 [flux-aciton](https://github.com/acdlite/flux-actions) 和 [redux-actions](https://github.com/acdlite/redux-actions)。
+action 的结构并没有什么限制，只要是 JavaScript 对象并且包含 `type` 字段即可。当然，为了团队协作和编码风格的统一，有个规范总是好的，可以通过[redux-actions](https://github.com/acdlite/redux-actions) 来写 FSA(Flux Standard Action)。
 
 ### reducer 怎么工作
 
@@ -116,7 +103,7 @@ function combineReducers (reducers) {
 }
 ```
 
-`combineReducers` 函数是个闭包，它的作用是返回一个调用 reducers 的函数，调用每个 reducer 函数时传入 key 值相对应的 state 片段作为对应 reducer 的初始 state。
+`combineReducers` 函数是个闭包，它的作用是返回一个调用 reducers 的函数，调用每个 reducer 函数时传入 key 值对应的 state 片段作为相应 reducer 的初始 state。
 
 需要注意的是：
 
@@ -183,7 +170,39 @@ function applyMiddleware(...middlewares) {
 }
 ```
 
-### 参考资料
+那么新的 dispatch 函数究竟是怎样的呢？这里调用了 `compose` 函数，`compose` 函数实现如下：
+
+```
+function compose (...funcs) {
+  if (funcs.length === 0) {
+    return arg => arg
+  }
+
+  if (funcs.length === 1) {
+    return funcs[0]
+  }
+
+  const last = funcs[funcs.length - 1]
+  const rest = funcs.slice(0, -1)
+  return (...args) => rest.reduceRight((composed, f) => f(composed), last(...args))
+}
+```
+
+`compose` 函数的作用就是把中间件组合起来，通过 `Array.reduceRight` 函数实现柯里化，比如有两个中间件 f 和 g，被 compose 函数调用后结果为：
+
+```
+function f(){}
+function g(){}
+compose(f,g)(store.dispatch) // 得到 f(g(store.dispatch))，注意我们把 store.dispatch 作为初始值
+```
+
+这样处理后，以后每次调用 `store.dispatch` 函数时，都会依次穿过各个中间件，得到链式调用中间件的效果，有一点 express 中间件的感觉了。
+
+## 总结
+
+Redux 的代码非常简单，也很好理解，作者在 gist 有一个[瘦身版的 Redux](https://gist.github.com/gaearon/ffd88b0e4f00b22c3159)，去掉了不必要的条件判断和错误处理，只有百来行代码。虽然简单，但它背后的思想非常值得玩味，比如单一数据源、纯函数等。Redux 作者的表达能力非常好，这一点在文档上得到了充分的展示，对一些概念的解释非常老练，由浅入深，层层推进，真是让人佩服。
+
+## 参考资料
 - [redux doc](http://redux.js.org/)
 - [slim-redux.js](https://gist.github.com/gaearon/ffd88b0e4f00b22c3159)
 - [Getting Started with Redux](https://egghead.io/series/getting-started-with-redux)
