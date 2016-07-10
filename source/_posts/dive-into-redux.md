@@ -188,7 +188,7 @@ function compose (...funcs) {
 }
 ```
 
-`compose` 函数的作用就是把中间件组合起来，通过 `Array.reduceRight` 函数实现柯里化，比如有两个中间件 f 和 g，被 compose 函数调用后结果为：
+`compose` 函数的作用就是把中间件组合起来，通过 `Array.reduceRight` 函数实现柯里化，比如有两个中间件返回函数 f 和 g，被 compose 函数调用后结果为：
 
 ```
 function f(){}
@@ -200,7 +200,7 @@ compose(f,g)(store.dispatch) // 得到 f(g(store.dispatch))，注意我们把 st
 
 ## 总结
 
-Redux 的代码非常简单，也很好理解，作者在 gist 有一个[瘦身版的 Redux](https://gist.github.com/gaearon/ffd88b0e4f00b22c3159)，去掉了不必要的条件判断和错误处理，只有百来行代码。虽然简单，但它背后的思想非常值得玩味，比如单一数据源、纯函数等。Redux 作者的表达能力非常好，这一点在文档上得到了充分的展示，对一些概念的解释非常老练，由浅入深，层层推进，真是让人佩服。
+Redux 的代码非常简单，也很好理解，作者在 gist 有一个[瘦身版的 Redux](https://gist.github.com/gaearon/ffd88b0e4f00b22c3159)，去掉了不必要的条件判断和错误处理，只有百来行代码。虽然简单，但它背后的思想非常值得玩味，比如单一数据源、纯函数等。另外，Redux 作者的表达能力非常好，这一点在文档上得到了充分的展示，对一些概念的解释非常老练，由浅入深，层层推进，真是让人佩服。
 
 ## 参考资料
 - [redux doc](http://redux.js.org/)
