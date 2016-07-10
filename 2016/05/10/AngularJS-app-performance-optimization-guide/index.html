@@ -13,7 +13,7 @@
 <meta property="og:description" content="前两天因为想用国内的 JS CDN，访问到 staticfile（七牛提供的一个免费 CDN 服务），导致我的 Chrome 直接卡死了两次，页面关也关不掉，只能退出重启。后来换到 Chrome Canary 才勉强可以访问，用谷歌开发者工具一看，发现前端是用的 AngularJS ，大量的 ng-repeat，5万多 watcher，没有做任何性能优化，怎么可能不卡。">
 <meta property="og:image" content="http://codersir.github.io/image/ng-perf/batarang.jpg">
 <meta property="og:image" content="http://codersir.github.io/image/ng-perf/staticfile.png">
-<meta property="og:updated_time" content="2016-06-18T14:50:56.000Z">
+<meta property="og:updated_time" content="2016-07-07T17:34:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AngularJS 应用优化指南">
 <meta name="twitter:description" content="前两天因为想用国内的 JS CDN，访问到 staticfile（七牛提供的一个免费 CDN 服务），导致我的 Chrome 直接卡死了两次，页面关也关不掉，只能退出重启。后来换到 Chrome Canary 才勉强可以访问，用谷歌开发者工具一看，发现前端是用的 AngularJS ，大量的 ng-repeat，5万多 watcher，没有做任何性能优化，怎么可能不卡。">
@@ -134,7 +134,7 @@
 <ol>
 <li>使用单次绑定语法 <code>{ {::} }</code><br>AngularJS 从1.3版本开始支持单向绑定语法 <code>::</code> ，它可以明确的告诉 AngularJS 哪些绑定获取到数据以后就不用关注了，这可以极大的减少 <code>watcher</code> 的数量，尤其是在 <code>ng-repeat</code> 内使用。</li>
 <li>避免在 <code>ng-repeat</code> 中使用 <code>filter</code><br>可以先把数据过滤后再传给 <code>ng-repeat</code>，这样就能避免因为过滤器产生的 <code>watcher</code> 了。</li>
-<li>尽可能的使用 <code>ng-if</code> 而不是 <code>ng-show``ng-if</code><br>可以从 Dom 中移除元素，触发 <code>element.$destory()</code>，删除 <code>ng-if</code> 内的元素的 <code>watcher</code>。<code>ng-show</code> 仍然会 render 元素，只是设置样式为 <code>display:none</code>。 但是如果元素需要经常变动隐藏还是显示，那么使用 <code>ng-show</code> 可能会更好，<code>ng-show</code> 会缓存 Dom，不需要重复解析。</li>
+<li>尽可能的使用 <code>ng-if</code> 而不是 <code>ng-show</code><br><code>ng-if</code> 可以从 Dom 中移除元素，触发 <code>element.$destory()</code>，删除 <code>ng-if</code> 内的元素的 <code>watcher</code>。<code>ng-show</code> 仍然会 render 元素，只是设置样式为 <code>display:none</code>。 但是如果元素需要经常变动隐藏还是显示，那么使用 <code>ng-show</code> 可能会更好，<code>ng-show</code> 会缓存 Dom，不需要重复解析。</li>
 <li>使用 <code>$watchCollection</code> 替代 <code>$watch</code></li>
 </ol>
 <h3 id="2-减少-digest-次数和范围"><a href="#2-减少-digest-次数和范围" class="headerlink" title="2. 减少 digest 次数和范围"></a>2. 减少 <code>digest</code> 次数和范围</h3><p>减少 <code>watcher</code> 是从根本上解决问题，如果 <code>watcher</code> 的优化已经做到极致了，那么这时候就应该换一种思路了。导致 AngularJS App 变慢的原因是 <code>watcher</code> 太多导致 <code>digest</code> 变慢，<code>watcher</code> 已经无法优化了，那么就应该考虑从 <code>digest</code> 的下手了。</p>
@@ -207,7 +207,7 @@
              
               ，更新于
               
-	<time class="article__meta-updated" datetime="2016-06-18T14:50:56.000Z" itemprop="datePublished">Jun 6, 2016 22:50:56</time>
+	<time class="article__meta-updated" datetime="2016-07-07T17:34:07.000Z" itemprop="datePublished">Jul 7, 2016 01:34:07</time>
 
             。
           </small>

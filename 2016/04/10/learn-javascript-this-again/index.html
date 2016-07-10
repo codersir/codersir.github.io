@@ -5,22 +5,16 @@
   
   <title>再探 JavaScript 中的 this | Coder Sir</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="JavaScript 中的 this
-动态作用域this 指的是 函数调用时的上下文。
-1234567891011var obj = &amp;#123;    a: 1,    foo: function foo()&amp;#123;        console.log(this.a)    &amp;#125;&amp;#125;function doFoo(fn)&amp;#123;    fn()&amp;#125;var a =">
+  <meta name="description" content="JavaScript 中的 this 关键字其实并不复杂，之所以需要再学一次是因为标准的推进，this 的值在不同的情况下表现的与之前有所不同。在 ES6 之前，我们谈 this 的时候，说的最多的就是 this 是动态作用域的。但随着 ES6 箭头函数的引入，现在也会经常看到大家说起 词法作用域 的 this。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="再探 JavaScript 中的 this">
 <meta property="og:url" content="http://codersir.github.io/2016/04/10/learn-javascript-this-again/index.html">
 <meta property="og:site_name" content="Coder Sir">
-<meta property="og:description" content="JavaScript 中的 this
-动态作用域this 指的是 函数调用时的上下文。
-1234567891011var obj = &amp;#123;    a: 1,    foo: function foo()&amp;#123;        console.log(this.a)    &amp;#125;&amp;#125;function doFoo(fn)&amp;#123;    fn()&amp;#125;var a =">
-<meta property="og:updated_time" content="2016-05-29T18:17:32.000Z">
+<meta property="og:description" content="JavaScript 中的 this 关键字其实并不复杂，之所以需要再学一次是因为标准的推进，this 的值在不同的情况下表现的与之前有所不同。在 ES6 之前，我们谈 this 的时候，说的最多的就是 this 是动态作用域的。但随着 ES6 箭头函数的引入，现在也会经常看到大家说起 词法作用域 的 this。">
+<meta property="og:updated_time" content="2016-07-08T15:42:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="再探 JavaScript 中的 this">
-<meta name="twitter:description" content="JavaScript 中的 this
-动态作用域this 指的是 函数调用时的上下文。
-1234567891011var obj = &amp;#123;    a: 1,    foo: function foo()&amp;#123;        console.log(this.a)    &amp;#125;&amp;#125;function doFoo(fn)&amp;#123;    fn()&amp;#125;var a =">
+<meta name="twitter:description" content="JavaScript 中的 this 关键字其实并不复杂，之所以需要再学一次是因为标准的推进，this 的值在不同的情况下表现的与之前有所不同。在 ES6 之前，我们谈 this 的时候，说的最多的就是 this 是动态作用域的。但随着 ES6 箭头函数的引入，现在也会经常看到大家说起 词法作用域 的 this。">
   
     <link rel="alternative" href="/atom.xml" title="Coder Sir" type="application/atom+xml">
   
@@ -119,13 +113,18 @@
     
     <div class="article__entry" itemprop="articleBody">
       
-        <p>JavaScript 中的 <code>this</code></p>
-<p>动态作用域<br>this 指的是 函数<strong>调用时</strong>的上下文。</p>
+        <p>JavaScript 中的 <code>this</code> 关键字其实并不复杂，之所以需要再学一次是因为标准的推进，<code>this</code> 的值在不同的情况下表现的与之前有所不同。在 ES6 之前，我们谈 <code>this</code> 的时候，说的最多的就是 <code>this</code> 是动态作用域的。但随着 ES6 箭头函数的引入，现在也会经常看到大家说起 <em>词法作用域</em> 的 <code>this</code>。</p>
+<a id="more"></a>
+<h2 id="动态作用域"><a href="#动态作用域" class="headerlink" title="动态作用域"></a>动态作用域</h2><p>大多数情况下，<code>this</code> 的值由函数<strong>调用时</strong>的上下文决定，也就是我们常说的动态作用域。它不能在函数运行时指定，而且可能因为每次调用的位置不同而不同。</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">var</span> obj = &#123;</span><br><span class="line">    <span class="selector-tag">a</span>: <span class="number">1</span>,</span><br><span class="line">    foo: function foo()&#123;</span><br><span class="line">        console.log(this.a)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">function doFoo(fn)&#123;</span><br><span class="line">    fn()</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">var</span> <span class="selector-tag">a</span> = <span class="number">2</span></span><br><span class="line"><span class="function"><span class="title">doFoo</span><span class="params">(obj.foo)</span></span>  <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
-<p>箭头函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> count = <span class="number">9</span></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    count: <span class="number">0</span>,</span><br><span class="line">    plus: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        setTimeout(() =&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.count++;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.count)</span><br><span class="line">        &#125;,<span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.plus()  <span class="comment">//1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> count = <span class="number">9</span></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    count: <span class="number">0</span>,</span><br><span class="line">    plus: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.count++;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.count)</span><br><span class="line">        &#125;,<span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.plus()  <span class="comment">//10</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="bind-函数"><a href="#bind-函数" class="headerlink" title="bind 函数"></a><code>bind</code> 函数</h2><p>前面我们说到 <code>this</code> 可能会因为调用位置不同而不同，所以 ES5 中引入了 <code>bind</code> 函数，<code>bind</code> 函数可以设置函数的 <code>this</code> 值而不管它如何调用。</p>
+<h2 id="词法作用域"><a href="#词法作用域" class="headerlink" title="词法作用域"></a>词法作用域</h2><p>箭头函数</p>
+<p><code>this</code> 指向定义时的作用域，且不会改变<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> count = <span class="number">9</span></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    count: <span class="number">0</span>,</span><br><span class="line">    plus: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        setTimeout(() =&gt; &#123;</span><br><span class="line">            <span class="keyword">this</span>.count++;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.count)</span><br><span class="line">        &#125;,<span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.plus()  <span class="comment">//1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> count = <span class="number">9</span></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    count: <span class="number">0</span>,</span><br><span class="line">    plus: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.count++;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.count)</span><br><span class="line">        &#125;,<span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.plus()  <span class="comment">//10</span></span><br></pre></td></tr></table></figure></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>bind(this)</p>
 <p>call(…) 和 apply(…)</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="external">MDN this</a></li>
+</ul>
 
         <br>
         <p>--EOF--</p>
@@ -136,11 +135,19 @@
  发表
             
             
+            ，并被添加标签「
+             
+	<a class="article_meta-tag" title="2篇文章" href="http://codersir.github.io/tags/JavaScript/">JavaScript</a>
+ 
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/ecma/">ecma</a>
+
+            」
+            
             
              
               ，更新于
               
-	<time class="article__meta-updated" datetime="2016-05-29T18:17:32.000Z" itemprop="datePublished">May 5, 2016 02:17:32</time>
+	<time class="article__meta-updated" datetime="2016-07-08T15:42:58.000Z" itemprop="datePublished">Jul 7, 2016 23:42:58</time>
 
             。
           </small>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Redux 生态系统 | Coder Sir</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在学习 React 的过程中，我们了解到 React 组件其实是状态机，那么，随着应用庞大组件多起来，就不可避免的会面临状态管理的问题。最初，facebook 官方推荐的状态管理方案是 Flux，开源社区也产生了许多基于 Flux 的变种，比如 ，相较 Flux 都有所改进，但和官方背景顶多能达到分庭抗礼，却无法一统江湖。直到 Redux 横空出世，以更简洁直接的方案和对中间件的支持，在社区中迅速">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redux 生态系统">
+<meta property="og:url" content="http://codersir.github.io/2016/07/06/redux-ecosystem/index.html">
+<meta property="og:site_name" content="Coder Sir">
+<meta property="og:description" content="在学习 React 的过程中，我们了解到 React 组件其实是状态机，那么，随着应用庞大组件多起来，就不可避免的会面临状态管理的问题。最初，facebook 官方推荐的状态管理方案是 Flux，开源社区也产生了许多基于 Flux 的变种，比如 ，相较 Flux 都有所改进，但和官方背景顶多能达到分庭抗礼，却无法一统江湖。直到 Redux 横空出世，以更简洁直接的方案和对中间件的支持，在社区中迅速">
+<meta property="og:updated_time" content="2016-07-10T16:02:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redux 生态系统">
+<meta name="twitter:description" content="在学习 React 的过程中，我们了解到 React 组件其实是状态机，那么，随着应用庞大组件多起来，就不可避免的会面临状态管理的问题。最初，facebook 官方推荐的状态管理方案是 Flux，开源社区也产生了许多基于 Flux 的变种，比如 ，相较 Flux 都有所改进，但和官方背景顶多能达到分庭抗礼，却无法一统江湖。直到 Redux 横空出世，以更简洁直接的方案和对中间件的支持，在社区中迅速">
+  
+    <link rel="alternative" href="/atom.xml" title="Coder Sir" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <header class="sidebar" role="header">
+    
+      <div class="sidebar__profile">
+	<a class="sidebar__profile-link" href="/">
+		<figure>
+			<img class="sidebar__profile-img" src="/image/site/gravatar.png" alt="">
+		</figure>
+	</a>
+	<h1 class="sidebar__profile-name">Codersir</h1>
+	<div class="sidebar__profile-bio">
+		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insterested in JavaScript, AngularJS, ReactJS and NodeJS.</p>
+	</div>
+</div>
+<nav class="sidebar__profile-nav" role="nav">
+	<ul>
+	
+		<li>
+			<a href="/archives">Archives</a>
+		</li>
+	
+		<li>
+			<a href="/about">About</a>
+		</li>
+	
+		<li>
+			<a href="/tags">Tags</a>
+		</li>
+	 
+	</ul>
+</nav>
+<aside class="sidebar__profile-social" role="social">
+	
+		
+			
+			<a class="social-github" target="_blank" href="http://github.com/codersir">
+				<span class="fa fa-github"></span>
+			</a>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+			<a class="social-instagram" target="_blank" href="http://instagram.com/codersir">
+				<span class="fa fa-instagram"></span>
+			</a>
+			
+		
+			
+			<a class="social-rss" target="_blank" href="/atom.xml">
+				<span class="fa fa-rss"></span>
+			</a>
+			
+		 
+	
+</aside>
+    
+  </header>
+  <main class="main" role="main">
+    <article id="post-redux-ecosystem" class="article article--type-post" itemscope itemprop="blogPost">
+  <div class="article__inner">
+    
+    
+      <header class="article__header">
+        
+  
+    <h1 class="article__title" itemprop="name">
+      Redux 生态系统
+    </h1>
+  
+
+      </header>
+      <div class="article__meta">
+        <a href="https://github.com/codersir/codersir.github.io/tree/master/source/_posts/redux-ecosystem.md" class="article__meta-edit">
+	<i class="fa fa-github"></i> Edit this page on GitHub
+</a>
+
+        
+	<time class="article__meta-date" datetime="2016-07-05T17:35:39.000Z" itemprop="datePublished">Jul 7, 2016</time>
+
+      </div>
+    
+    <div class="article__entry" itemprop="articleBody">
+      
+        <p>在学习 React 的过程中，我们了解到 React 组件其实是<a href="https://github.com/nixzhu/dev-blog/blob/master/2015-04-23-state-machine.md" target="_blank" rel="external">状态机</a>，那么，随着应用庞大组件多起来，就不可避免的会面临状态管理的问题。最初，facebook 官方推荐的状态管理方案是 <a href="https://facebook.github.io/flux" target="_blank" rel="external">Flux</a>，开源社区也产生了许多基于 Flux 的变种，比如 ，相较 Flux 都有所改进，但和官方背景顶多能达到分庭抗礼，却无法一统江湖。直到 Redux 横空出世，以更简洁直接的方案和对中间件的支持，在社区中迅速获得大量的拥趸，现在几乎已经成了 React 应用的标配。由于对中间件的支持，开源社区产出了许多优秀的 Redux 中间件，比如 redux-logger, redux-undo, redux-thunk 等，慢慢的形成了一个完善的生态系统。官方文档页面也有一个 <a href="http://redux.js.org/docs/introduction/Ecosystem.html" target="_blank" rel="external">Ecosystem</a> 页面，列出了各种 Reudx 相关的中间件、组件和小工具等，本文主要介绍我日常开发中用到并且深入学习了的中间件，并结合源码解释其工作原理。</p>
+<blockquote>
+<p>如果你还不了解 Redux，可以看我写的「<a href="/2016/01/25/dive-into-redux/">深入学习 Redux</a>」。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Redux-中间件"><a href="#Redux-中间件" class="headerlink" title="Redux 中间件"></a>Redux 中间件</h2><p>如果你了解 express 或 koa，那么你应该对中间件的概念很熟悉了，这些框架的中间件作用在接到请求和返回响应之间，进行 log 日志、添加 CORS 头等任务，中间件的最大特点就是它们可以链式组合。 Redux 中间件虽然处理的问题不一样，但是它们概念上是相似的。Redux 中间件<strong>作用在分发 action 和被 reducer 处理之间</strong>。官方文档对 <a href="http://redux.js.org/docs/advanced/Middleware.html" target="_blank" rel="external">Redux middleware</a> 有一个很好的介绍，通过一步步改进一个 logger 中间件让你理解中间件的机制，推荐查看。以文档 logger 中间件为例，展示一个标准 Redux 中间件的写法：</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> logger = store =&gt; <span class="keyword">next</span> =&gt; action =&gt; &#123;</span><br><span class="line">  console.<span class="built_in">log</span>(<span class="string">'dispatching'</span>, action)</span><br><span class="line">  let result = <span class="keyword">next</span>(action)</span><br><span class="line">  console.<span class="built_in">log</span>(<span class="string">'next state'</span>, store.getState())</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Redux 中间件接受 store 作为参数，并返回一个新的函数，这个函数会成为 Redux 中间件链上的一环，当调用 dispatch 函数的时候，会依次穿过所有的中间件。</p>
+<h2 id="react-redux"><a href="#react-redux" class="headerlink" title="react-redux"></a>react-redux</h2><p>Redux 是一种状态管理方案，虽然主要在 React 社区大放异彩，但是它并不限于和 React 一起使用。如果结合 React 使用，则最好配合这个包一起用，这个包提供两个 API，<code>Provider</code> 组件和 <code>connect()</code> 方法：</p>
+<ul>
+<li><code>Provider</code><br><code>Provider</code> 组件的作用是挂载 store 到全局，使得每个组件都可以方便的获取 <code>store</code>。它的实现很简单，就是把 <code>Provider</code> 组件作为根组件，通过 React <a href="https://facebook.github.io/react/docs/context.html" target="_blank" rel="external">context</a> 机制，挂载 <code>store</code> 到所有子组件 context 的上。</li>
+<li><code>connect</code><br><code>connect</code> 函数的作用是关联 store 到 React 组件。</li>
+</ul>
+<h2 id="redux-actions"><a href="#redux-actions" class="headerlink" title="redux-actions"></a>redux-actions</h2><p>action 是描述发生了什么的对象，它是 Redux 中最简单的概念。对 action 对象只有一个限制，那就是包含一个合适的 <code>type</code> 字段，所以大家可能写出各种各样的 action。宽松对个人是一种自由，但是对团队则会造成混乱，产生不必要的沟通成本。所以 action 需要一个规范，社区用的最多的是 <a href="https://github.com/acdlite/flux-standard-action" target="_blank" rel="external">FSA</a>。redux-actions 就是用来创建符合 FSA 规范的 actions，同时提供工具函数方便处理 actions。它有下面三个 API：</p>
+<ul>
+<li><code>createAction(type, payloadCreator = Identity, ?metaCreator)</code><br>其实这个函数名叫<code>createActionCreator</code> 更合理，它将会返回一个 action creator 函数，creator 函数的返回值是一个符合 FSA 标准的 action，但是也有自己的扩展，也就是 <code>meta</code>，结构如下：</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">type</span>: <span class="built_in">String</span></span><br><span class="line">  payload, <span class="built_in">any</span></span><br><span class="line">  error?: <span class="built_in">Boolean</span></span><br><span class="line">  meta?: <span class="built_in">any</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>handleAction(type, reducer | reducerMap, ?defaultState)</code><br>这个函数包装 reducer 让它只处理特定类型的 FSA。第二个参数可以是 reducer 函数或者是 reducer 对象，如果是对象，要采用下面的格式（灵感来自 generator）：</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  next(state, action)<span class="meta">&#123;...&#125;</span>,</span><br><span class="line">  throw(state, action)<span class="meta">&#123;...&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>handleActions(reducerMap, ?defaultState)</code><br>这个函数通过 <code>handleAction</code> 创建多个 reducers，并且把它们组合成一个可以处理多个 actions 的单一 reducer，合并 reducers 调用的是下面这个函数：</p>
+</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">export <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">reduceReducers</span><span class="params">(<span class="rest_arg">...reducers</span>)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 改成 `return (defaultState, action)` 更好理解</span></span><br><span class="line">  <span class="keyword">return</span> (previous, current) =&gt;</span><br><span class="line">    reducers.reduce(</span><br><span class="line">      (p, r) =&gt; r(p, current),</span><br><span class="line">      previous</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个函数返回函数的参数名让人容易误解，把它改成 <code>(defaultState, action)</code> 就容易理解了，举个例子：</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reducersMap = &#123;</span><br><span class="line">    <span class="type">ADD_TODO</span>: (state, action) =&gt; <span class="meta">&#123;...&#125;</span>,</span><br><span class="line">    <span class="type">TOGGLE_TODO</span>: (state, action) =&gt; <span class="meta">&#123;...&#125;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> reducer = handleActions(reducersMap, &#123;todos: []&#125;)</span><br><span class="line">// 最后返回的 reducer 为：</span><br><span class="line">（defaultState, action) =&gt; reducersMap['<span class="type">TOGGLE_TODO</span>'](reducersMap['<span class="type">ADD_TODO</span>'](defaultState, action), action)</span><br></pre></td></tr></table></figure>
+<h2 id="redux-logger"><a href="#redux-logger" class="headerlink" title="redux-logger"></a>redux-logger</h2><p>官方文档的 logger 示例还是太简单了，有时候我们需要更详细的日志信息，比如 action 的具体信息、触发的时间、异步 action 的耗时、state 的具体变化等，甚至 log 的级别和颜色、格式化 log 信息，这些 <a href="https://github.com/evgenyrodionov/redux-logger" target="_blank" rel="external">redux-logger</a> 都很贴心的提供了。logger 中间件很简单，API 可以去 github 查看，使用时需要注意的就是<strong> Logger 只能是最后一个中间件</strong>。</p>
+<h2 id="redux-thunk"><a href="#redux-thunk" class="headerlink" title="redux-thunk"></a>redux-thunk</h2><p>通常说 <a href="https://en.wikipedia.org/wiki/Thunk" target="_blank" rel="external">thunk</a> 函数是指通过包裹表达式使之延迟执行的函数，以达到“传名调用”提高性能的效果。JS 是“传值调用”的语言，它的 thunk 函数其实是指“部分函数”（或者说部分柯里化），把一个多参数函数变成一个单参数函数，而且参数为回调函数。redux-thunk 允许 action creator 返回一个函数而不是 action，它的功能就是使 dispatch action 延迟执行。它源码是最简单的，只有区区十几行:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createThunkMiddleware</span><span class="params">(extraArgument)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (&#123; dispatch, getState &#125;) =&gt; next =&gt; action =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (typeof action === <span class="string">'function'</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> action(dispatch, getState, extraArgument);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> next(action);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> thunk = createThunkMiddleware();</span><br><span class="line">thunk.withExtraArgument = createThunkMiddleware;</span><br><span class="line"></span><br><span class="line">export <span class="keyword">default</span> thunk;</span><br></pre></td></tr></table></figure>
+<p>源码也很容易理解，如果 action 是一个函数，那么就传入一些参数调用它，否则就不进行任何操作直接传给下一个中间件。 <a href="https://github.com/gaearon/redux-thunk#composition" target="_blank" rel="external">github</a> 上有个详细的例子，用来解释 redux-thunk 是如何优化异步流程控制的。</p>
+<h2 id="redux-saga"><a href="#redux-saga" class="headerlink" title="redux-saga"></a>redux-saga</h2><p>当看到 redux-thunk 的时候，心里就想着那么是否有 「redux-co」 呢？同样是异步流程控制，NodeJS 中有 <a href="https://github.com/thunks/thunks" target="_blank" rel="external">thunks</a> 和 <a href="https://github.com/tj/co" target="_blank" rel="external">co</a>，分别代表基于 callback 和基于 generator 的的异步流程控制。后来发现还真有，那就是 <a href="https://github.com/yelouafi/redux-saga" target="_blank" rel="external">redux-saga</a>。虽然官方文档主推 redux-thunk，但是 redux-saga 凭借自身机制的优势，已经超越 redux-thunk 获得了更大的关注，成为事实的标准，算是另一个社区产出超越官方主推的例子。</p>
+<blockquote>
+<p>如果你还不了解 co， 可以看我写的 「<a href="/2016/06/17/dive-into-koa/">Koa 是怎么让你爽的？</a>」</p>
+</blockquote>
+<p>和 co 一样，redux-saga 也是基于 generator 的。redux-saga 是测试驱动的典型，它提供了许多 effect 构造器，用来处理异步操作的同时保持代码的可测试性。redux-saga 比较复杂，详细介绍和 API 可以查看<a href="https://yelouafi.github.io/redux-saga" target="_blank" rel="external">官方文档</a>，后面也许会单独写一篇博客分析它的工作原理。</p>
+<h2 id="reselect"><a href="#reselect" class="headerlink" title="reselect"></a>reselect</h2><p>学习这些组件的过程中，最让我开心的是 <strong>看到思想的闪光</strong>，以及大家对这些想法的热情。很多组件实现其实都很简单，短短几十行或上百行代码，但却能完美的达到某一目的。比如 reselect，只有几十行代码，实现功能也非常简单，通过记忆函数来优化 React 性能，收获了 3000 多的 star，前端组件生态终于开始有点 NodeJS package 的感觉了。</p>
+
+        <br>
+        <p>--EOF--</p>
+        <p>
+          <small>于 
+            
+	<time class="article__meta-date" datetime="2016-07-05T17:35:39.000Z" itemprop="datePublished">Jul 7, 2016 01:35:39</time>
+ 发表
+            
+            
+            ，并被添加标签「
+             
+	<a class="article_meta-tag" title="2篇文章" href="http://codersir.github.io/tags/react/">react</a>
+ 
+	<a class="article_meta-tag" title="2篇文章" href="http://codersir.github.io/tags/redux/">redux</a>
+
+            」
+            
+            
+             
+              ，更新于
+              
+	<time class="article__meta-updated" datetime="2016-07-10T16:02:27.000Z" itemprop="datePublished">Jul 7, 2016 00:02:27</time>
+
+            。
+          </small>
+      
+    </div>
+  </div>
+  
+    <section id="comments">
+      <h1 class="title" href="http://codersir.github.io/2016/07/06/redux-ecosystem/#disqus_thread">Comments</h1>
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </section>
+  
+  
+    
+<nav class="article__nav">
+  
+    <span class="article__nav-newer article__nav--disable article__nav-link-wrap">
+      <strong class="article__nav-caption">Newer</strong>
+      <div class="article__nav-title">No more newer post</div>
+    </span>
+  
+  
+    <a href="/2016/06/17/dive-into-koa/" class="article__nav-older article__nav-link-wrap">
+      <strong class="article__nav-caption">Older</strong>
+      <div class="article__nav-title">Koa 是怎么让你爽的？</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<script>
+  var disqus_shortname = 'codsirblog';
+  var disqus_loaded = false;
+  var body = document.body;
+  var html = document.documentElement;
+  var clientHeight = html.clientHeight
+  var pageHeight = Math.max(body.scrollHeight,body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight)
+
+  
+  var disqus_url = 'http://codersir.github.io/2016/07/06/redux-ecosystem/';
+  
+
+  if(clientHeight == pageHeight){
+    loadDisqus()
+    disqus_loaded = true
+  }
+  
+  document.addEventListener('scroll', function(e){
+    if(disqus_loaded){
+      return
+    }else{
+      var scrollTop = body.scrollTop;
+      if(scrollTop + clientHeight + 100 > pageHeight){
+        loadDisqus()
+        disqus_loaded = true
+      }
+    }
+  })
+  
+  function loadDisqus(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }
+</script>
+
+
+  </main>
+  <script src="/js/script.js"></script>
+</body>
+</html>
