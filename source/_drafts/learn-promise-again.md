@@ -5,7 +5,7 @@ tags:
 - promise
 ---
 
-
+Promise 的概念很简单，掌握使用方法后你很开心地就用它替换掉了 callback，感觉自己的代码一下子通畅了许多，内心十分高兴。但是，尽管你已经用了很久的 Promise，你可能并没有用对。
 Promise 对象用来处理异步操作,promise 永远都是异步的。Promise 有三种状态：
 
 - pending 初始状态
@@ -70,3 +70,4 @@ p.then(function() {
 
 - [lie](https://github.com/calvinmetcalf/lie)：一个很小的promise库，用简洁的代码实现了 promise A+ 标准，推荐阅读
 - [We have a problem with promises](https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html)
+- [Promises: All The Wrong Ways](https://blog.getify.com/promises-wrong-ways/)
