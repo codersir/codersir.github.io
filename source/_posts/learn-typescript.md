@@ -1,6 +1,6 @@
 title: TypeScript 入门教程
 date: 2016-01-12 12:58:51
-tags: 
+tags:
 - typescript
 - angular2
 ---
@@ -14,9 +14,9 @@ TypeScript 为你添加了你期望 JavaScript 拥有的基本数据类型：num
     var isDone: boolean = false;    //boolean
     var height: number = 6;         //number
     var name:string = 'xuhong';     //string
-    var list:number[] = [1,2,3];    //array 
+    var list:number[] = [1,2,3];    //array
     var list:Array<number> = [1,2,3]//generic array type
-    
+
     enum Color {Red:1, Green, Blue}
     var c: Color = Color.Red;       //enum
     var colorName:string = Color[2] //get enum value use number
@@ -63,7 +63,7 @@ sayHello 函数接受一个参数，该参数必须是个对象并且有一个�
 #### 函数类型
 接口可以描述许多 JavaScript 对象的形状。除了可以描述拥有属性的对象，接口也可以描述函数类型。
 
-``` 
+```
     interface SearchFunc {
         (source: string, subString: string): boolean
     }
@@ -159,7 +159,7 @@ TypeScript 支持两种索引类型：数字和字符串。而且可以同时支
     class Rhino extends Animal {
         constructor(){ super('Rhino')
     }
-    
+
     var animal = new Animal('Goat');
     var rhino = new Rhino();
 ```
@@ -211,15 +211,11 @@ TypeScript 支持静态属性声明，所有的静态属性只在类的内部可
 
     var point3d: Point3d = {x:1, y:2, z:3}
 ```
-
-### 模块
-
-
 ### 函数
 
 和 JavaScript 一样，函数可以被定义为命名函数和匿名函数。在 JavaScript 中，这两种命名方式如下：
 
-``` 
+```
     // named function
     function add(x, y){
         return x+y
@@ -247,7 +243,7 @@ TypeScript 支持静态属性声明，所有的静态属性只在类的内部可
 #### 可选参数和默认参数
 和 JavaScript 不一样的是，TypeScript 默认所有参数都是必须的。但是我们可以在参数后面添加 '?' 来表示该参数是可选的。
 
-``` 
+```
     function buildName(firstName: string, middleName?: string, lastName = "xuhong){
         if(middleName){ return firstName + " " + middleName + " " + lastName }
         else { return firstName + " " + lastName }
@@ -318,7 +314,7 @@ Angular2 的 Component 就是通过泛型实现复用。
 
 ```
     interface Lengthwise {
-        length: number; 
+        length: number;
     }
 
     function identity<T extends Lengthwise>(arg: T): T {
@@ -353,7 +349,7 @@ TypeScript 的 mixin 并不够优雅。在 TypeScript 中，mixin 使用关键�
         interact() {
             this.activate();
         }
-        
+
         //这里要再写一遍
         isDisposed: boolean = false;
         dispose: () => void;
@@ -374,5 +370,3 @@ TypeScript 的 mixin 并不够优雅。在 TypeScript 中，mixin 使用关键�
 声明模块会同时创建命名空间和值：
 - 命名空间的合并： 每个模块中  `export` 的类型定义自行合并，组成一个新的命名空间
 - 值的合并：如果模块已经有同名的值，合并时会把第二个模块中 `export` 的值添加到第一个模块中
-
-
