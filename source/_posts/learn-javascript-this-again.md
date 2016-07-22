@@ -115,9 +115,17 @@ obj.log.bind(this) // 10
 
 当通过 `new` 操作符创建对象时，JavaScript 编译器会先创建一个新的空对象，然后设置一些内部的属性，并调用新对象的构造函数。因此，当通过构造函数创建新的函数时，`this` 指向这个新创建的对象：
 
+## `eval`
+
+
+
 ## `class` 类里面的 `this`
 
 类会在调用 constructor 函数的时候初始化 `this`，子类 constructor 函数中在调用 `super()` 以后才能使用 `this`，否则会报 `ReferenceError: this is not defined`。
+
+## 总结
+
+上面基本上列出了 JavaScript 中与 `this` 相关的方方面面了，掌握 `this` 并不难
 
 ## 参考资料
 
