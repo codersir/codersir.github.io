@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://codersir.github.io/2016/04/10/learn-javascript-scope-again/index.html">
 <meta property="og:site_name" content="Coder Sir">
 <meta property="og:description" content="我们常说，JS 是一门动态（类型）语言，但当我们讨论 JS 中的作用域的时候，大多数时候说的都是静态作用域，也叫词法作用域。作用域是和变量息息相关的，所以当我们谈变量的时候，提到的全局变量、局部变量这些术语，其实说的就是在不同范围（作用域）中的变量。">
-<meta property="og:updated_time" content="2016-06-01T18:33:20.000Z">
+<meta property="og:updated_time" content="2016-07-21T12:18:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="再探 JavaScript 中的作用域">
 <meta name="twitter:description" content="我们常说，JS 是一门动态（类型）语言，但当我们讨论 JS 中的作用域的时候，大多数时候说的都是静态作用域，也叫词法作用域。作用域是和变量息息相关的，所以当我们谈变量的时候，提到的全局变量、局部变量这些术语，其实说的就是在不同范围（作用域）中的变量。">
@@ -36,7 +36,7 @@
 	</a>
 	<h1 class="sidebar__profile-name">Codersir</h1>
 	<div class="sidebar__profile-bio">
-		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insterested in JavaScript, AngularJS, ReactJS and NodeJS.</p>
+		<p>Focus on the web development. <br>Insterested in JavaScript, Angular, React and Node.js.</p>
 	</div>
 </div>
 <nav class="sidebar__profile-nav" role="nav">
@@ -47,24 +47,22 @@
 		</li>
 	
 		<li>
-			<a href="/about">About</a>
+			<a href="/resume">Resume</a>
 		</li>
 	
 		<li>
 			<a href="/tags">Tags</a>
 		</li>
-	 
+	
 	</ul>
 </nav>
 <aside class="sidebar__profile-social" role="social">
 	
 		
 			
-			<a class="social-github" target="_blank" href="http://github.com/codersir">
+			<a class="social-github" target="_blank" href="http://github.com/xuhong">
 				<span class="fa fa-github"></span>
 			</a>
-			
-		
 			
 		
 			
@@ -82,9 +80,10 @@
 				<span class="fa fa-rss"></span>
 			</a>
 			
-		 
+		
 	
 </aside>
+
     
   </header>
   <main class="main" role="main">
@@ -123,16 +122,16 @@
 </ul>
 <h3 id="全局作用域"><a href="#全局作用域" class="headerlink" title="全局作用域"></a>全局作用域</h3><p>全局作用域的一种判定方式就是看它是否影响到整个程序。在浏览器中，全局作用域就是 <code>window</code> 对象。NodeJS 采用全局命名空间对象（<a href="https://nodejs.org/api/globals.html" target="_blank" rel="external">global</a>）来存放全局变量，但是需要注意的是，<code>global</code> 对象中存放却不一定都是全局变量，有些变量是属于模块的，比如 <code>__dirname</code>、<code>__filename</code>。</p>
 <p>定义在全局作用域中的变量就是全局变量，全局变量在代码的各个位置都可以被访问，所以就可能会出现命名冲突，特别是在使用第三方脚本的时候。为了尽量避免暴露太多的全局变量到全局作用域，推荐使用命名空间或者模块化来解决这个问题。</p>
-<h3 id="函数作用域"><a href="#函数作用域" class="headerlink" title="函数作用域"></a>函数作用域</h3><p>函数作用域的含义是：在函数内定义的变量可以在整个函数范围内（包括嵌套的作用域中）使用。在函数外的作用域中是无法访问函数内部定义的变量很函数的。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function foo()&#123;</span><br><span class="line">	<span class="selector-tag">var</span> <span class="selector-tag">a</span> = <span class="number">1</span></span><br><span class="line">	function bar()&#123;</span><br><span class="line">		<span class="selector-tag">var</span> <span class="selector-tag">b</span> = <span class="number">2</span></span><br><span class="line">		console.log(a+b)</span><br><span class="line">	&#125;</span><br><span class="line">	bar()</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="title">foo</span><span class="params">()</span></span> <span class="comment">// 3</span></span><br><span class="line">console.log(a) <span class="comment">// ReferenceError: a is not defined</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="函数作用域"><a href="#函数作用域" class="headerlink" title="函数作用域"></a>函数作用域</h3><p>函数作用域的含义是：在函数内定义的变量可以在整个函数范围内（包括嵌套的作用域中）使用。在函数外的作用域中是无法访问函数内部定义的变量很函数的。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function foo()&#123;</div><div class="line">	<span class="selector-tag">var</span> <span class="selector-tag">a</span> = <span class="number">1</span></div><div class="line">	function bar()&#123;</div><div class="line">		<span class="selector-tag">var</span> <span class="selector-tag">b</span> = <span class="number">2</span></div><div class="line">		console.log(a+b)</div><div class="line">	&#125;</div><div class="line">	bar()</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="title">foo</span><span class="params">()</span></span> <span class="comment">// 3</span></div><div class="line">console.log(a) <span class="comment">// ReferenceError: a is not defined</span></div></pre></td></tr></table></figure></p>
 <p>通常，我们习惯的思维方式是：先定义一个函数，然后再在里面添加代码。但是反过来想，我们可以认为：从已有的代码中选择一些片段来进行封装，把它们放进一个函数作用域中“隐藏”起来。这种“隐藏”的思维是非常有用的，它能让我们规避命名冲突，同时符合最小暴露原则（再进一步其实就是模块的概念了）。同时，为了避免产生新的变量污染，一般采用立即执行函数表达式（IIFE）来“封闭”一个作用域。</p>
-<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">function</span> IIFE(<span class="name">global</span>, undefined)&#123;</span><br><span class="line">	// balabala</span><br><span class="line">&#125;)(<span class="name">window</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h3><p>在 ES6 之前，我们通常会说 JS 是没有块级作用域的，最常用的一个例子就是 <code>for</code> 循环：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(i)	<span class="comment">// 10</span></span><br></pre></td></tr></table></figure></p>
-<p>这段代码会输出 10 而不是 <code>undefined</code>，这就是由于缺少块级作用域导致的问题：我们原想定义在循环体内的变量在外部也可以访问。ES6 为了改变现状，新增了 <code>let</code> 用来解决这一问题。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(i)	<span class="comment">// ReferenceError: i is not defined</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="name">function</span> IIFE(<span class="name">global</span>, undefined)&#123;</div><div class="line">	// balabala</div><div class="line">&#125;)(<span class="name">window</span>)</div></pre></td></tr></table></figure>
+<h3 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h3><p>在 ES6 之前，我们通常会说 JS 是没有块级作用域的，最常用的一个例子就是 <code>for</code> 循环：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(i)	<span class="comment">// 10</span></div></pre></td></tr></table></figure></p>
+<p>这段代码会输出 10 而不是 <code>undefined</code>，这就是由于缺少块级作用域导致的问题：我们原想定义在循环体内的变量在外部也可以访问。ES6 为了改变现状，新增了 <code>let</code> 用来解决这一问题。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(i)	<span class="comment">// ReferenceError: i is not defined</span></div></pre></td></tr></table></figure></p>
 <p><code>var</code> 和 <code>let</code> 的另一个区别在于，<code>var</code> 和 <code>let</code> 声明的变量都会被提升到代码块的顶部，但 <code>var</code> 在声明前使用会得到 <code>undefined</code>，<code>let</code> 在声明前使用则会报<code>ReferenceError</code>的错误。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a)	<span class="comment">//undefined</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(b)	<span class="comment">//ReferenceError: b is not defined</span></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(a)	<span class="comment">//undefined</span></div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(b)	<span class="comment">//ReferenceError: b is not defined</span></div><div class="line"><span class="keyword">let</span> b = <span class="number">2</span></div></pre></td></tr></table></figure>
 <p>同样会创建块级作用域的除了 <code>let</code> 还有 <code>const</code>，但它的值是固定的。</p>
 <p>那么 ES6 之前的 JavaScript 是否真的没有块级作用域呢？其实还是有的。那就是 <code>try/catch</code> 代码块所创建的作用域。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">	<span class="literal">undefined</span>()	<span class="comment">//TypeError: undefined is not a function(…)</span></span><br><span class="line">&#125; <span class="keyword">catch</span>(err)&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(err)	<span class="comment">//ReferenceError: err is not defined</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>&#123;</div><div class="line">	<span class="literal">undefined</span>()	<span class="comment">//TypeError: undefined is not a function(…)</span></div><div class="line">&#125; <span class="keyword">catch</span>(err)&#123;</div><div class="line">	<span class="built_in">console</span>.log(err)</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(err)	<span class="comment">//ReferenceError: err is not defined</span></div></pre></td></tr></table></figure>
 <h3 id="模块作用域"><a href="#模块作用域" class="headerlink" title="模块作用域"></a>模块作用域</h3><p>模块作用域的含义是：在模块中定义的变量，只在这个模块范围内可以访问。在 ES6 之前，JavaScript 中并没有原生的模块的支持，所以模块作用域只对 NodeJS 有意义。ES6 引入了对模块的支持。</p>
 <h3 id="其他作用域"><a href="#其他作用域" class="headerlink" title="其他作用域"></a>其他作用域</h3><p>和模块作用域类似的还有文件作用域，比如 C/C+++ 采用的就是文件作用域，定义在文件中的全局变量和全局函数都属于这个文件，在更高级的语言中，文件作用域被模块作用域所取代，比如 Python、NodeJS、ES6 module。</p>
 <h2 id="词法作用域查找的特点"><a href="#词法作用域查找的特点" class="headerlink" title="词法作用域查找的特点"></a>词法作用域查找的特点</h2><ul>
@@ -143,7 +142,7 @@
 <p>动态类型的好处是书写简单，我们写 JS 的时候不需要定义类型或接口，也不需要担心把 string 变量赋值 boolean 会报错。但任何事物都是两面的，享受了书写代码时的便利，就要付出不便于调试和理解的代价。如果你对<br>“静态 JavaScript ”感兴趣的话，强烈推荐你试一试 TypeScript，可以参考我写的<a href="/2016/01/12/learn-typescript/">TypeScript 入门教程</a></p>
 <h2 id="其他资源"><a href="#其他资源" class="headerlink" title="其他资源"></a>其他资源</h2><ul>
 <li><a href="https://en.wikipedia.org/wiki/Scope_(computer_science)" target="_blank" rel="external">Wikipedia scope</a></li>
-<li>(JavaScript Scoping and Hoisting)[<a href="http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html" target="_blank" rel="external">http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html</a>]</li>
+<li><a href="http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html" target="_blank" rel="external">JavaScript Scoping and Hoisting</a></li>
 </ul>
 
         <br>
@@ -157,7 +156,7 @@
             
             ，并被添加标签「
              
-	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/javascript/">javascript</a>
+	<a class="article_meta-tag" title="2篇文章" href="http://codersir.github.io/tags/javascript/">javascript</a>
 
             」
             
@@ -165,7 +164,7 @@
              
               ，更新于
               
-	<time class="article__meta-updated" datetime="2016-06-01T18:33:20.000Z" itemprop="datePublished">Jun 6, 2016 02:33:20</time>
+	<time class="article__meta-updated" datetime="2016-07-21T12:18:32.000Z" itemprop="datePublished">Jul 7, 2016 20:18:32</time>
 
             。
           </small>

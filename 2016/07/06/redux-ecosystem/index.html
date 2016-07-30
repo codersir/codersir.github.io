@@ -36,7 +36,7 @@
 	</a>
 	<h1 class="sidebar__profile-name">Codersir</h1>
 	<div class="sidebar__profile-bio">
-		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insterested in JavaScript, AngularJS, ReactJS and NodeJS.</p>
+		<p>Focus on the web development. <br>Insterested in JavaScript, Angular, React and Node.js.</p>
 	</div>
 </div>
 <nav class="sidebar__profile-nav" role="nav">
@@ -47,24 +47,22 @@
 		</li>
 	
 		<li>
-			<a href="/about">About</a>
+			<a href="/resume">Resume</a>
 		</li>
 	
 		<li>
 			<a href="/tags">Tags</a>
 		</li>
-	 
+	
 	</ul>
 </nav>
 <aside class="sidebar__profile-social" role="social">
 	
 		
 			
-			<a class="social-github" target="_blank" href="http://github.com/codersir">
+			<a class="social-github" target="_blank" href="http://github.com/xuhong">
 				<span class="fa fa-github"></span>
 			</a>
-			
-		
 			
 		
 			
@@ -82,9 +80,10 @@
 				<span class="fa fa-rss"></span>
 			</a>
 			
-		 
+		
 	
 </aside>
+
     
   </header>
   <main class="main" role="main">
@@ -119,7 +118,7 @@
 </blockquote>
 <a id="more"></a>
 <h2 id="Redux-中间件"><a href="#Redux-中间件" class="headerlink" title="Redux 中间件"></a>Redux 中间件</h2><p>如果你了解 express 或 koa，那么你应该对中间件的概念很熟悉了，这些框架的中间件作用在接到请求和返回响应之间，进行 log 日志、添加 CORS 头等任务，中间件的最大特点就是它们可以链式组合。 Redux 中间件虽然处理的问题不一样，但是它们概念上是相似的。Redux 中间件<strong>作用在分发 action 和被 reducer 处理之间</strong>。官方文档对 <a href="http://redux.js.org/docs/advanced/Middleware.html" target="_blank" rel="external">Redux middleware</a> 有一个很好的介绍，通过一步步改进一个 logger 中间件让你理解中间件的机制，推荐查看。以文档 logger 中间件为例，展示一个标准 Redux 中间件的写法：</p>
-<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> logger = store =&gt; <span class="keyword">next</span> =&gt; action =&gt; &#123;</span><br><span class="line">  console.<span class="built_in">log</span>(<span class="string">'dispatching'</span>, action)</span><br><span class="line">  let result = <span class="keyword">next</span>(action)</span><br><span class="line">  console.<span class="built_in">log</span>(<span class="string">'next state'</span>, store.getState())</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> logger = store =&gt; <span class="keyword">next</span> =&gt; action =&gt; &#123;</div><div class="line">  console.<span class="built_in">log</span>(<span class="string">'dispatching'</span>, action)</div><div class="line">  let result = <span class="keyword">next</span>(action)</div><div class="line">  console.<span class="built_in">log</span>(<span class="string">'next state'</span>, store.getState())</div><div class="line">  <span class="keyword">return</span> result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>Redux 中间件接受 store 作为参数，并返回一个新的函数，这个函数会成为 Redux 中间件链上的一环，当调用 dispatch 函数的时候，会依次穿过所有的中间件。</p>
 <h2 id="react-redux"><a href="#react-redux" class="headerlink" title="react-redux"></a>react-redux</h2><p>Redux 是一种状态管理方案，虽然主要在 React 社区大放异彩，但是它并不限于和 React 一起使用。如果结合 React 使用，则最好配合这个包一起用，这个包提供两个 API，<code>Provider</code> 组件和 <code>connect()</code> 方法：</p>
 <ul>
@@ -130,20 +129,20 @@
 <ul>
 <li><code>createAction(type, payloadCreator = Identity, ?metaCreator)</code><br>其实这个函数名叫<code>createActionCreator</code> 更合理，它将会返回一个 action creator 函数，creator 函数的返回值是一个符合 FSA 标准的 action，但是也有自己的扩展，也就是 <code>meta</code>，结构如下：</li>
 </ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">type</span>: <span class="built_in">String</span></span><br><span class="line">  payload, <span class="built_in">any</span></span><br><span class="line">  error?: <span class="built_in">Boolean</span></span><br><span class="line">  meta?: <span class="built_in">any</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="keyword">type</span>: <span class="built_in">String</span></div><div class="line">  payload, <span class="built_in">any</span></div><div class="line">  error?: <span class="built_in">Boolean</span></div><div class="line">  meta?: <span class="built_in">any</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ul>
 <li><p><code>handleAction(type, reducer | reducerMap, ?defaultState)</code><br>这个函数包装 reducer 让它只处理特定类型的 FSA。第二个参数可以是 reducer 函数或者是 reducer 对象，如果是对象，要采用下面的格式（灵感来自 generator）：</p>
-<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  next(state, action)<span class="meta">&#123;...&#125;</span>,</span><br><span class="line">  throw(state, action)<span class="meta">&#123;...&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  next(state, action)<span class="meta">&#123;...&#125;</span>,</div><div class="line">  throw(state, action)<span class="meta">&#123;...&#125;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 <li><p><code>handleActions(reducerMap, ?defaultState)</code><br>这个函数通过 <code>handleAction</code> 创建多个 reducers，并且把它们组合成一个可以处理多个 actions 的单一 reducer，合并 reducers 调用的是下面这个函数：</p>
 </li>
 </ul>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">export <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">reduceReducers</span><span class="params">(<span class="rest_arg">...reducers</span>)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 改成 `return (defaultState, action)` 更好理解</span></span><br><span class="line">  <span class="keyword">return</span> (previous, current) =&gt;</span><br><span class="line">    reducers.reduce(</span><br><span class="line">      (p, r) =&gt; r(p, current),</span><br><span class="line">      previous</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">export <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">reduceReducers</span><span class="params">(<span class="rest_arg">...reducers</span>)</span> </span>&#123;</div><div class="line">  <span class="comment">// 改成 `return (defaultState, action)` 更好理解</span></div><div class="line">  <span class="keyword">return</span> (previous, current) =&gt;</div><div class="line">    reducers.reduce(</div><div class="line">      (p, r) =&gt; r(p, current),</div><div class="line">      previous</div><div class="line">    );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这个函数返回函数的参数名让人容易误解，把它改成 <code>(defaultState, action)</code> 就容易理解了，举个例子：</p>
-<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reducersMap = &#123;</span><br><span class="line">    <span class="type">ADD_TODO</span>: (state, action) =&gt; <span class="meta">&#123;...&#125;</span>,</span><br><span class="line">    <span class="type">TOGGLE_TODO</span>: (state, action) =&gt; <span class="meta">&#123;...&#125;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> reducer = handleActions(reducersMap, &#123;todos: []&#125;)</span><br><span class="line">// 最后返回的 reducer 为：</span><br><span class="line">（defaultState, action) =&gt; reducersMap['<span class="type">TOGGLE_TODO</span>'](reducersMap['<span class="type">ADD_TODO</span>'](defaultState, action), action)</span><br></pre></td></tr></table></figure>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> reducersMap = &#123;</div><div class="line">    <span class="type">ADD_TODO</span>: (state, action) =&gt; <span class="meta">&#123;...&#125;</span>,</div><div class="line">    <span class="type">TOGGLE_TODO</span>: (state, action) =&gt; <span class="meta">&#123;...&#125;</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">const</span> reducer = handleActions(reducersMap, &#123;todos: []&#125;)</div><div class="line">// 最后返回的 reducer 为：</div><div class="line">（defaultState, action) =&gt; reducersMap['<span class="type">TOGGLE_TODO</span>'](reducersMap['<span class="type">ADD_TODO</span>'](defaultState, action), action)</div></pre></td></tr></table></figure>
 <h2 id="redux-logger"><a href="#redux-logger" class="headerlink" title="redux-logger"></a>redux-logger</h2><p>官方文档的 logger 示例还是太简单了，有时候我们需要更详细的日志信息，比如 action 的具体信息、触发的时间、异步 action 的耗时、state 的具体变化等，甚至 log 的级别和颜色、格式化 log 信息，这些 <a href="https://github.com/evgenyrodionov/redux-logger" target="_blank" rel="external">redux-logger</a> 都很贴心的提供了。logger 中间件很简单，API 可以去 github 查看，使用时需要注意的就是<strong> Logger 只能是最后一个中间件</strong>。</p>
 <h2 id="redux-thunk"><a href="#redux-thunk" class="headerlink" title="redux-thunk"></a>redux-thunk</h2><p>通常说 <a href="https://en.wikipedia.org/wiki/Thunk" target="_blank" rel="external">thunk</a> 函数是指通过包裹表达式使之延迟执行的函数，以达到“传名调用”提高性能的效果。JS 是“传值调用”的语言，它的 thunk 函数其实是指“部分函数”（或者说部分柯里化），把一个多参数函数变成一个单参数函数，而且参数为回调函数。redux-thunk 允许 action creator 返回一个函数而不是 action，它的功能就是使 dispatch action 延迟执行。它源码是最简单的，只有区区十几行:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createThunkMiddleware</span><span class="params">(extraArgument)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (&#123; dispatch, getState &#125;) =&gt; next =&gt; action =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (typeof action === <span class="string">'function'</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> action(dispatch, getState, extraArgument);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> next(action);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> thunk = createThunkMiddleware();</span><br><span class="line">thunk.withExtraArgument = createThunkMiddleware;</span><br><span class="line"></span><br><span class="line">export <span class="keyword">default</span> thunk;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createThunkMiddleware</span><span class="params">(extraArgument)</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> (&#123; dispatch, getState &#125;) =&gt; next =&gt; action =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (typeof action === <span class="string">'function'</span>) &#123;</div><div class="line">      <span class="keyword">return</span> action(dispatch, getState, extraArgument);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> next(action);</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> thunk = createThunkMiddleware();</div><div class="line">thunk.withExtraArgument = createThunkMiddleware;</div><div class="line"></div><div class="line">export <span class="keyword">default</span> thunk;</div></pre></td></tr></table></figure>
 <p>源码也很容易理解，如果 action 是一个函数，那么就传入一些参数调用它，否则就不进行任何操作直接传给下一个中间件。 <a href="https://github.com/gaearon/redux-thunk#composition" target="_blank" rel="external">github</a> 上有个详细的例子，用来解释 redux-thunk 是如何优化异步流程控制的。</p>
 <h2 id="redux-saga"><a href="#redux-saga" class="headerlink" title="redux-saga"></a>redux-saga</h2><p>当看到 redux-thunk 的时候，心里就想着那么是否有 「redux-co」 呢？同样是异步流程控制，NodeJS 中有 <a href="https://github.com/thunks/thunks" target="_blank" rel="external">thunks</a> 和 <a href="https://github.com/tj/co" target="_blank" rel="external">co</a>，分别代表基于 callback 和基于 generator 的的异步流程控制。后来发现还真有，那就是 <a href="https://github.com/yelouafi/redux-saga" target="_blank" rel="external">redux-saga</a>。虽然官方文档主推 redux-thunk，但是 redux-saga 凭借自身机制的优势，已经超越 redux-thunk 获得了更大的关注，成为事实的标准，算是另一个社区产出超越官方主推的例子。</p>
 <blockquote>
@@ -192,10 +191,14 @@
     
 <nav class="article__nav">
   
-    <span class="article__nav-newer article__nav--disable article__nav-link-wrap">
+    <a href="/2016/07/17/async-await-versus-generator-yield/" class="article__nav-newer article__nav-link-wrap">
       <strong class="article__nav-caption">Newer</strong>
-      <div class="article__nav-title">No more newer post</div>
-    </span>
+      <div class="article__nav-title">
+        
+          async/await VS generator/yield
+        
+      </div>
+    </a>
   
   
     <a href="/2016/06/17/dive-into-koa/" class="article__nav-older article__nav-link-wrap">

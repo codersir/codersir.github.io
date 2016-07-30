@@ -39,7 +39,7 @@
 	</a>
 	<h1 class="sidebar__profile-name">Codersir</h1>
 	<div class="sidebar__profile-bio">
-		<p>Coder behind the <a href="http://codersir.com">Codersir</a>. <br> Focus on the web development. <br>Insterested in JavaScript, AngularJS, ReactJS and NodeJS.</p>
+		<p>Focus on the web development. <br>Insterested in JavaScript, Angular, React and Node.js.</p>
 	</div>
 </div>
 <nav class="sidebar__profile-nav" role="nav">
@@ -50,24 +50,22 @@
 		</li>
 	
 		<li>
-			<a href="/about">About</a>
+			<a href="/resume">Resume</a>
 		</li>
 	
 		<li>
 			<a href="/tags">Tags</a>
 		</li>
-	 
+	
 	</ul>
 </nav>
 <aside class="sidebar__profile-social" role="social">
 	
 		
 			
-			<a class="social-github" target="_blank" href="http://github.com/codersir">
+			<a class="social-github" target="_blank" href="http://github.com/xuhong">
 				<span class="fa fa-github"></span>
 			</a>
-			
-		
 			
 		
 			
@@ -85,9 +83,10 @@
 				<span class="fa fa-rss"></span>
 			</a>
 			
-		 
+		
 	
 </aside>
+
     
   </header>
   <main class="main" role="main">
@@ -151,7 +150,7 @@
 <li><p>尽量使用 <code>$scope.$digest</code> 替代 <code>$scope.$apply</code><br><code>$scope.$digest</code> 从当前 scope 向下进行脏检查，而 <code>$scope.$apply</code> 会触发整个应用自顶向下进行脏检查，所以，使用 <code>$scope.$digest</code> 一般能大大的缩小脏检查的范围。</p>
 </li>
 <li><p>使用 <code>$applyAsync</code> 合并 http 请求<br>通常在 App 启动的时候，会同时发起好几个 http 请求，来获取用户权限或账户信息之类的信息，每次接口返回值的时候，都会触发 AngularJS 的脏检查。这时候，如果可以等到这几个接口都返回以后，再触发脏检查，就能将脏检查的数量由几次减小到1次了。<code>$httpProvider</code> 的 <a href="https://code.angularjs.org/1.3.8/docs/api/ng/provider/$httpProvider#useApplyAsync" target="_blank" rel="external">useApplyAsync</a> 方法就是来解决这个问题，它通过 <a href="https://code.angularjs.org/1.3.8/docs/api/ng/type/$rootScope.Scope#$applyAsync" target="_blank" rel="external"> $rootScope.$applyAsync</a> 把大约同一时间（10ms左右）收到的返回值组合到一起处理。<code>applyAsync</code>的实现机制其实就是事件循环，通过 <code>setTimeout(fn,0)</code> 来延迟执行函数，可以参考我写的<a href="/2016/03/13/dive-into-zone/">《深入学习 Zone》</a>了解更多。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app.config(<span class="function"><span class="keyword">function</span> (<span class="params">$httpProvider</span>) </span>&#123;</span><br><span class="line">  $httpProvider.useApplyAsync(<span class="literal">true</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">app.config(<span class="function"><span class="keyword">function</span> (<span class="params">$httpProvider</span>) </span>&#123;</div><div class="line">  $httpProvider.useApplyAsync(<span class="literal">true</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 </li>
 <li><p>ng-model 防抖动（ Debounce ）<br>搜索框通常会监听用户的 keyup 事件来进行实时匹配推荐，如果每次用户按下按键都调用接口，会出现多次连续的调用接口，导致连续的触发 AngularJS 脏检查，这样很容易造成页面卡顿。这时，可以通过 <code>ng-model</code> 的 <code>debounce</code> 参数来限制脏检查的间隔，比如 <code>ng-model-options=&quot;{ debounce: 250 }</code>，限制每 250ms 内只进行一次脏检查。</p>
 </li>
@@ -164,13 +163,13 @@
 <li><p>使用 <code>track by</code> 提高 <code>ng-repeat</code>性能</p>
 </li>
 <li><p>禁用 debug 信息 我们看到使用 AngularJS 指令的元素上被添加了许多类，比如 <code>ng-binding</code>、<code>ng-scope</code>等，这些类除了调试没有任何作用，</p>
-<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$compileProvider.debugInfoEnabled(<span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$compileProvider.debugInfoEnabled(<span class="literal">false</span>)</div></pre></td></tr></table></figure>
 </li>
 <li><p>耗时的计算考虑移到 web workers 执行</p>
 </li>
 </ol>
 <h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><p>怎么测时间都花在哪了？如果我们担心某个函数会很耗时，可以简单的把<code>console.time()</code> 和 <code>console.timeEnd()</code> 放在代码的前后来测试代码的运行时间。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.time(<span class="string">'myTimer'</span>)</span><br><span class="line"><span class="comment">// your code here</span></span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'myTimer'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.time(<span class="string">'myTimer'</span>)</div><div class="line"><span class="comment">// your code here</span></div><div class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'myTimer'</span>)</div></pre></td></tr></table></figure>
 <p>这两个函数可以帮助我们测试某一小段代码的运行时间，如果要观测整个应用的运行时间，就要使用下面这两个工具了：</p>
 <ul>
 <li><a href="https://chrome.google.com/webstore/detail/angularjs-batarang/ighdmehidhipcmcojjgiloacoafjmpfk" target="_blank" rel="external">AngularJS Batarang</a></li>
