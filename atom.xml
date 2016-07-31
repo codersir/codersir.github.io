@@ -5,7 +5,7 @@
   <link href="//atom.xml" rel="self"/>
   
   <link href="http://codersir.github.io/"/>
-  <updated>2016-07-17T07:48:17.000Z</updated>
+  <updated>2016-07-10T16:02:27.000Z</updated>
   <id>http://codersir.github.io/</id>
   
   <author>
@@ -14,27 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>async/await VS generator/yield</title>
-    <link href="http://codersir.github.io/2016/07/17/async-await-versus-generator-yield/"/>
-    <id>http://codersir.github.io/2016/07/17/async-await-versus-generator-yield/</id>
-    <published>2016-07-17T06:59:27.000Z</published>
-    <updated>2016-07-17T07:48:17.000Z</updated>
-    
-    <content type="html">&lt;h2 id=&quot;参考资料&quot;&gt;&lt;a href=&quot;#参考资料&quot; class=&quot;headerlink&quot; title=&quot;参考资料:&quot;&gt;&lt;/a&gt;参考资料:&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://cnodejs.org/topic/5759bef0e5fa62531af6e151&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;async/await 比 yield 好在哪里？&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;http://es6.ruanyifeng.com/#docs/async&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;异步操作和Async函数&lt;/a&gt;&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;参考资料&quot;&gt;&lt;a href=&quot;#参考资料&quot; class=&quot;headerlink&quot; title=&quot;参考资料:&quot;&gt;&lt;/a&gt;参考资料:&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://cnodejs.org/topic/5759bef0e5fa62531af6e151&quot;
-    
-    </summary>
-    
-    
-      <category term="javascript" scheme="http://codersir.github.io/tags/javascript/"/>
-    
-  </entry>
   
   <entry>
     <title>Redux 生态系统</title>
@@ -348,57 +327,6 @@
   </entry>
   
   <entry>
-    <title>再探 JavaScript 中的 this</title>
-    <link href="http://codersir.github.io/2016/04/10/learn-javascript-this-again/"/>
-    <id>http://codersir.github.io/2016/04/10/learn-javascript-this-again/</id>
-    <published>2016-04-10T04:55:20.000Z</published>
-    <updated>2016-07-22T13:51:13.000Z</updated>
-    
-    <content type="html">&lt;p&gt;JavaScript 中的 &lt;code&gt;this&lt;/code&gt; 关键字其实并不复杂，之所以需要再学一次是因为标准的推进，&lt;code&gt;this&lt;/code&gt; 的值在不同的情况下表现的与之前有所不同。在 ES6 之前，我们谈 &lt;code&gt;this&lt;/code&gt; 的时候，说的最多的就是 &lt;code&gt;this&lt;/code&gt; 是动态作用域的。但随着 ES6 箭头函数的引入，现在也会经常看到大家说起 &lt;em&gt;词法作用域&lt;/em&gt; 的 &lt;code&gt;this&lt;/code&gt;。&lt;/p&gt;
-&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;h2 id=&quot;this-是什么？&quot;&gt;&lt;a href=&quot;#this-是什么？&quot; class=&quot;headerlink&quot; title=&quot;this 是什么？&quot;&gt;&lt;/a&gt;&lt;code&gt;this&lt;/code&gt; 是什么？&lt;/h2&gt;&lt;p&gt;&lt;code&gt;this&lt;/code&gt; 是一个&lt;strong&gt;关键字&lt;/strong&gt;，ECMAScirpt 标准定义 &lt;code&gt;this&lt;/code&gt; 为 &lt;strong&gt;ThisBindings 计算的值为当前执行上下文&lt;/strong&gt;。&lt;/p&gt;
-&lt;h2 id=&quot;动态作用域&quot;&gt;&lt;a href=&quot;#动态作用域&quot; class=&quot;headerlink&quot; title=&quot;动态作用域&quot;&gt;&lt;/a&gt;动态作用域&lt;/h2&gt;&lt;p&gt;大多数情况下，&lt;code&gt;this&lt;/code&gt; 的值由函数&lt;strong&gt;调用时&lt;/strong&gt;的上下文决定，也就是我们常说的动态作用域。它不能在函数运行时指定，而且可能因为每次调用的位置不同而不同。&lt;code&gt;this&lt;/code&gt; 和作用域的关系，引用权威指南的原句：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;和变量不同，关键字 this 没有作用域限制，嵌套的函数不会从调用它的函数中继承 this。如果嵌套函数作为函数调用，其 &lt;code&gt;this&lt;/code&gt; 值指向调用它的对象，如果嵌套函数作为函数调用，其 &lt;code&gt;this&lt;/code&gt; 值不是全局对象（非严格模式下）就是 undefined（严格模式下）。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;figure class=&quot;highlight stylus&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;selector-tag&quot;&gt;var&lt;/span&gt; obj = &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &lt;span class=&quot;selector-tag&quot;&gt;a&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;,&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    foo: function foo()&amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        console.log(this.a)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;function doFoo(fn)&amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    fn()&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;selector-tag&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;selector-tag&quot;&gt;a&lt;/span&gt; = &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;title&quot;&gt;doFoo&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(obj.foo)&lt;/span&gt;&lt;/span&gt;  &lt;span class=&quot;comment&quot;&gt;//2&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h2 id=&quot;词法作用域&quot;&gt;&lt;a href=&quot;#词法作用域&quot; class=&quot;headerlink&quot; title=&quot;词法作用域&quot;&gt;&lt;/a&gt;词法作用域&lt;/h2&gt;&lt;p&gt;&lt;code&gt;this&lt;/code&gt; 指向定义时的作用域，且不会改变&lt;/p&gt;
-&lt;h2 id=&quot;bind-函数&quot;&gt;&lt;a href=&quot;#bind-函数&quot; class=&quot;headerlink&quot; title=&quot;bind 函数&quot;&gt;&lt;/a&gt;&lt;code&gt;bind&lt;/code&gt; 函数&lt;/h2&gt;&lt;p&gt;前面我们说到 &lt;code&gt;this&lt;/code&gt; 可能会因为调用位置不同而不同，所以 ES5 中引入了 &lt;code&gt;bind&lt;/code&gt; 函数，&lt;code&gt;bind&lt;/code&gt; 函数可以设置函数的 &lt;code&gt;this&lt;/code&gt; 值而不管它如何调用。&lt;/p&gt;
-&lt;h2 id=&quot;箭头函数&quot;&gt;&lt;a href=&quot;#箭头函数&quot; class=&quot;headerlink&quot; title=&quot;箭头函数&quot;&gt;&lt;/a&gt;箭头函数&lt;/h2&gt;&lt;p&gt;ES6 中新加入了对箭头函数的支持，&lt;strong&gt;箭头函数没有自己的 &lt;code&gt;this&lt;/code&gt;，箭头函数的 &lt;code&gt;this&lt;/code&gt; 是从包裹它的作用域继承过来的&lt;/strong&gt;。&lt;/p&gt;
-&lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; count = &lt;span class=&quot;number&quot;&gt;9&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; obj = &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    count: &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;,&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    plus: &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        setTimeout(&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;            &lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;.count++;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;            &lt;span class=&quot;built_in&quot;&gt;console&lt;/span&gt;.log(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;.count)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        &amp;#125;,&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;obj.plus()  &lt;span class=&quot;comment&quot;&gt;//10&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;在 ES6 之前，我们经常看到下面这样的写法来规避上面的问题，通过定义一个变量 &lt;code&gt;self/that&lt;/code&gt; 来保存对 &lt;code&gt;this&lt;/code&gt; 的引用：&lt;/p&gt;
-&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;12&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; count = &lt;span class=&quot;number&quot;&gt;9&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; obj = &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    count: &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;,&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    plus: &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;self&lt;/span&gt; = this&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        setTimeout(&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;            &lt;span class=&quot;keyword&quot;&gt;self&lt;/span&gt;.count++;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;            console.log(&lt;span class=&quot;keyword&quot;&gt;self&lt;/span&gt;.count)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        &amp;#125;,&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;obj.plus()  &lt;span class=&quot;comment&quot;&gt;//1&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;在 ES6 后，你几乎不需要再提心吊胆担心掉进 &lt;code&gt;this&lt;/code&gt; 的坑里，只要你遵循下面两条规则：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;对方法都使用 &lt;strong&gt;非&lt;/strong&gt; 箭头函数&lt;/li&gt;
-&lt;li&gt;其他的地方都使用箭头函数&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure class=&quot;highlight gradle&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;var &lt;span class=&quot;keyword&quot;&gt;count&lt;/span&gt; = &lt;span class=&quot;number&quot;&gt;9&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;var obj = &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;count&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;,&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;plus&lt;/span&gt;() &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        setTimeout(() =&amp;gt; &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;            &lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;.&lt;span class=&quot;keyword&quot;&gt;count&lt;/span&gt;++;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;            console.log(&lt;span class=&quot;keyword&quot;&gt;this&lt;/span&gt;.&lt;span class=&quot;keyword&quot;&gt;count&lt;/span&gt;)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        &amp;#125;,&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;obj.&lt;span class=&quot;keyword&quot;&gt;plus&lt;/span&gt;()  &lt;span class=&quot;comment&quot;&gt;//1&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h2 id=&quot;call-…-和-apply-…&quot;&gt;&lt;a href=&quot;#call-…-和-apply-…&quot; class=&quot;headerlink&quot; title=&quot;call(…) 和 apply(…)&quot;&gt;&lt;/a&gt;call(…) 和 apply(…)&lt;/h2&gt;&lt;p&gt;JavaScript 中除了 &lt;code&gt;bind&lt;/code&gt; 函数可以手动绑定 &lt;code&gt;this&lt;/code&gt; 以外，还提供了 &lt;code&gt;call&lt;/code&gt; 和 &lt;code&gt;apply&lt;/code&gt; 函数用来在调用函数的时候，改变函数调用上下文。&lt;code&gt;call&lt;/code&gt; 和 &lt;code&gt;apply&lt;/code&gt; 函数的第一个参数就是本次调用的上下文：&lt;/p&gt;
-&lt;figure class=&quot;highlight stylus&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;selector-tag&quot;&gt;var&lt;/span&gt; obj = &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  &lt;span class=&quot;selector-tag&quot;&gt;a&lt;/span&gt;:&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;,&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  log()&amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    console.log(this.a)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;selector-tag&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;selector-tag&quot;&gt;a&lt;/span&gt; = &lt;span class=&quot;number&quot;&gt;10&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;obj.log() &lt;span class=&quot;comment&quot;&gt;// 1&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;obj&lt;span class=&quot;selector-class&quot;&gt;.log&lt;/span&gt;&lt;span class=&quot;selector-class&quot;&gt;.bind&lt;/span&gt;(this) &lt;span class=&quot;comment&quot;&gt;// 10&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h2 id=&quot;new-构造函数&quot;&gt;&lt;a href=&quot;#new-构造函数&quot; class=&quot;headerlink&quot; title=&quot;new 构造函数&quot;&gt;&lt;/a&gt;&lt;code&gt;new&lt;/code&gt; 构造函数&lt;/h2&gt;&lt;p&gt;当通过 &lt;code&gt;new&lt;/code&gt; 操作符创建对象时，JavaScript 编译器会先创建一个新的空对象，然后设置一些内部的属性，并调用新对象的构造函数。因此，当通过构造函数创建新的函数时，&lt;code&gt;this&lt;/code&gt; 指向这个新创建的对象：&lt;/p&gt;
-&lt;h2 id=&quot;eval&quot;&gt;&lt;a href=&quot;#eval&quot; class=&quot;headerlink&quot; title=&quot;eval&quot;&gt;&lt;/a&gt;&lt;code&gt;eval&lt;/code&gt;&lt;/h2&gt;&lt;h2 id=&quot;class-类里面的-this&quot;&gt;&lt;a href=&quot;#class-类里面的-this&quot; class=&quot;headerlink&quot; title=&quot;class 类里面的 this&quot;&gt;&lt;/a&gt;&lt;code&gt;class&lt;/code&gt; 类里面的 &lt;code&gt;this&lt;/code&gt;&lt;/h2&gt;&lt;p&gt;类会在调用 constructor 函数的时候初始化 &lt;code&gt;this&lt;/code&gt;，子类 constructor 函数中在调用 &lt;code&gt;super()&lt;/code&gt; 以后才能使用 &lt;code&gt;this&lt;/code&gt;，否则会报 &lt;code&gt;ReferenceError: this is not defined&lt;/code&gt;。&lt;/p&gt;
-&lt;h2 id=&quot;总结&quot;&gt;&lt;a href=&quot;#总结&quot; class=&quot;headerlink&quot; title=&quot;总结&quot;&gt;&lt;/a&gt;总结&lt;/h2&gt;&lt;p&gt;上面基本上列出了 JavaScript 中与 &lt;code&gt;this&lt;/code&gt; 相关的方方面面了，掌握 &lt;code&gt;this&lt;/code&gt; 并不难&lt;/p&gt;
-&lt;h2 id=&quot;参考资料&quot;&gt;&lt;a href=&quot;#参考资料&quot; class=&quot;headerlink&quot; title=&quot;参考资料&quot;&gt;&lt;/a&gt;参考资料&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/3127429/how-does-the-this-keyword-work&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;stackoverflow: How does the “this” keyword work?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;MDN this&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;JavaScript 中的 &lt;code&gt;this&lt;/code&gt; 关键字其实并不复杂，之所以需要再学一次是因为标准的推进，&lt;code&gt;this&lt;/code&gt; 的值在不同的情况下表现的与之前有所不同。在 ES6 之前，我们谈 &lt;code&gt;this&lt;/code&gt; 的时候，说的最多的就是 &lt;code&gt;this&lt;/code&gt; 是动态作用域的。但随着 ES6 箭头函数的引入，现在也会经常看到大家说起 &lt;em&gt;词法作用域&lt;/em&gt; 的 &lt;code&gt;this&lt;/code&gt;。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="JavaScript" scheme="http://codersir.github.io/tags/JavaScript/"/>
-    
-      <category term="ecma" scheme="http://codersir.github.io/tags/ecma/"/>
-    
-  </entry>
-  
-  <entry>
     <title>理解 Zone 的实现机制</title>
     <link href="http://codersir.github.io/2016/03/13/dive-into-zone/"/>
     <id>http://codersir.github.io/2016/03/13/dive-into-zone/</id>
@@ -485,28 +413,6 @@
       <category term="angular2" scheme="http://codersir.github.io/tags/angular2/"/>
     
       <category term="zone" scheme="http://codersir.github.io/tags/zone/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>angular2 中的依赖注入</title>
-    <link href="http://codersir.github.io/2016/02/20/dependency-injection-in-angular-2/"/>
-    <id>http://codersir.github.io/2016/02/20/dependency-injection-in-angular-2/</id>
-    <published>2016-02-20T09:14:07.000Z</published>
-    <updated>2016-05-29T18:17:32.000Z</updated>
-    
-    <content type="html">&lt;h3 id=&quot;什么是依赖注入&quot;&gt;&lt;a href=&quot;#什么是依赖注入&quot; class=&quot;headerlink&quot; title=&quot;什么是依赖注入&quot;&gt;&lt;/a&gt;什么是依赖注入&lt;/h3&gt;&lt;h3 id=&quot;Angular1-中的依赖注入&quot;&gt;&lt;a href=&quot;#Angular1-中的依赖注入&quot; class=&quot;headerlink&quot; title=&quot;Angular1 中的依赖注入&quot;&gt;&lt;/a&gt;Angular1 中的依赖注入&lt;/h3&gt;&lt;h3 id=&quot;Angular2-中的依赖注入&quot;&gt;&lt;a href=&quot;#Angular2-中的依赖注入&quot; class=&quot;headerlink&quot; title=&quot;Angular2 中的依赖注入&quot;&gt;&lt;/a&gt;Angular2 中的依赖注入&lt;/h3&gt;</content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;什么是依赖注入&quot;&gt;&lt;a href=&quot;#什么是依赖注入&quot; class=&quot;headerlink&quot; title=&quot;什么是依赖注入&quot;&gt;&lt;/a&gt;什么是依赖注入&lt;/h3&gt;&lt;h3 id=&quot;Angular1-中的依赖注入&quot;&gt;&lt;a href=&quot;#Angular1-中的依赖注入&quot; c
-    
-    </summary>
-    
-    
-      <category term="angular2" scheme="http://codersir.github.io/tags/angular2/"/>
-    
-      <category term="di" scheme="http://codersir.github.io/tags/di/"/>
     
   </entry>
   
