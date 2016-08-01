@@ -103,4 +103,4 @@ console.log(err)	//ReferenceError: err is not defined
 ## 其他资源
 
 - <a href="https://en.wikipedia.org/wiki/Scope_(computer_science)">Wikipedia scope</a>
-- (JavaScript Scoping and Hoisting)[http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html]
+- [JavaScript Scoping and Hoisting](http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html)

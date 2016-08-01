@@ -14,22 +14,22 @@ gravatar: /image/site/gravatar.png
 
 nav:
   Archives: /archives
-  About: /about
+  Resume: /resume
   Tags: /tags
 
 social:
-  github: http://github.com/codersir
-  dribbble: 
-  weibo: 
-  wechat: 
+  github: http://github.com/xuhong
+  dribbble:
+  weibo:
+  # wechat: HUSTecho
   instagram: http://instagram.com/codersir
   rss: /atom.xml
 
 # Miscellaneous
-disqus_shortname: codsirblog
+disqus_shortname: codersirblog
 google_analytics:
 favicon: /favicon.png
 twitter:
 google_plus:
 fb_admins:
-fb_app_id: 
+fb_app_id:
