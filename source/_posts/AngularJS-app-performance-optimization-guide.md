@@ -18,16 +18,16 @@ tags:
 
 我们知道 AngularJS 通过 *脏检查*（digest cicle）来更新视图，保持数据和视图的同步，脏检查的效率是和 `watcher` 的多少成正相关的，一般来说超过 2000 后就会明显感觉到变慢，所以提高 AngularJS 性能的关键就是减少 `watcher` 的数量。
 
-首先，我们要知道的是，\** 什么会产生 `watcher` \** ？
+首先，我们要知道的是，**什么会产生 `watcher`** ？
 
 -	`$scope.$watch`
 -	`{ { stuff } }` 类模板语法
--	大多数指令 (比如 `ng-show`、`ng-if`\)
+-	大多数指令 (比如 `ng-show`、`ng-if`)
 -	Scope 变量 `scope: { bar: '='}`
 -	过滤器 `{ { value | myFilter } }`
 -	`ng-repeat` 指令
 
-上面这些情况都会产生 `watcher`，那么问题来了，\** 怎么减少 `watcher` \** 呢?
+上面这些情况都会产生 `watcher`，那么问题来了，**怎么减少 `watcher`** 呢?
 
 1.	使用单次绑定语法 `{ {::} }`
 AngularJS 从1.3版本开始支持单向绑定语法 `::` ，它可以明确的告诉 AngularJS 哪些绑定获取到数据以后就不用关注了，这可以极大的减少 `watcher` 的数量，尤其是在 `ng-repeat` 内使用。

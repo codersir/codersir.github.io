@@ -5,7 +5,7 @@ tags:
 - redux
 ---
 
-在学习 React 的过程中，我们了解到 React 组件其实是[状态机](https://github.com/nixzhu/dev-blog/blob/master/2015-04-23-state-machine.md)，那么，随着应用庞大组件多起来，就不可避免的会面临状态管理的问题。最初，facebook 官方推荐的状态管理方案是 [Flux](https://facebook.github.io/flux)，开源社区也产生了许多基于 Flux 的变种，比如 ，相较 Flux 都有所改进，但和官方背景顶多能达到分庭抗礼，却无法一统江湖。直到 Redux 横空出世，以更简洁直接的方案和对中间件的支持，在社区中迅速获得大量的拥趸，现在几乎已经成了 React 应用的标配。由于对中间件的支持，开源社区产出了许多优秀的 Redux 中间件，比如 redux-logger, redux-undo, redux-thunk 等，慢慢的形成了一个完善的生态系统。官方文档页面也有一个 [Ecosystem](http://redux.js.org/docs/introduction/Ecosystem.html) 页面，列出了各种 Reudx 相关的中间件、组件和小工具等，本文主要介绍我日常开发中用到并且深入学习了的中间件，并结合源码解释其工作原理。
+在学习 React 的过程中，我们了解到 React 组件其实是[状态机](https://github.com/nixzhu/dev-blog/blob/master/2015-04-23-state-machine.md)，那么，随着应用庞大组件多起来，就不可避免的会面临状态管理的问题。最初，facebook 官方推荐的状态管理方案是 [Flux](https://facebook.github.io/flux)，开源社区也产生了许多基于 Flux 的变种，比如 [fluxxor](http://fluxxor.com/)，相较 Flux 都有所改进，但和官方背景顶多能达到分庭抗礼，却无法一统江湖。直到 Redux 横空出世，以更简洁直接的方案和对中间件的支持，在社区中迅速获得大量的拥趸，现在几乎已经成了 React 应用的标配。由于对中间件的支持，开源社区产出了许多优秀的 Redux 中间件，比如 redux-logger, redux-undo, redux-thunk 等，慢慢的形成了一个完善的生态系统。官方文档页面也有一个 [Ecosystem](http://redux.js.org/docs/introduction/Ecosystem.html) 页面，列出了各种 Reudx 相关的中间件、组件和小工具等，本文主要介绍我日常开发中用到并且深入学习了的中间件，并结合源码解释其工作原理。
 
 > 如果你还不了解 Redux，可以看我写的「[深入学习 Redux](/2016/01/25/dive-into-redux/)」。
 
@@ -32,7 +32,7 @@ Redux 是一种状态管理方案，虽然主要在 React 社区大放异彩，�
 - `Provider`
 `Provider` 组件的作用是挂载 store 到全局，使得每个组件都可以方便的获取 `store`。它的实现很简单，就是把 `Provider` 组件作为根组件，通过 React [context](https://facebook.github.io/react/docs/context.html) 机制，挂载 `store` 到所有子组件 context 的上。
 - `connect`
-`connect` 函数的作用是关联 store 到 React 组件。
+`connect` 是一个工具函数，它的作用是关联 state 到 React 组件，通过映射函数，关联 store 上相关的 state 到 React 组件的 props，在 store 发生变化时自动更新组件的 props。
 
 ## redux-actions
 
