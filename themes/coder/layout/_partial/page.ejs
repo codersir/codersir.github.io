@@ -5,10 +5,10 @@
       <header class="article__header">
         <%- partial('post/title', {class_name: 'article__title'}) %>
       </header>
-      <!-- <div class="article__meta">
+      <div class="article__meta">
         <%- partial('post/edit', {class_name: 'article__meta-edit'}) %>
         <%- partial('post/date', {class_name: 'article__meta-date', index: false, date_format: 'MMM M, YYYY'}) %>
-      </div> -->
+      </div>
     <% } %>
     <div class="article__entry" itemprop="articleBody">
       <% if (post.excerpt && index){ %>
@@ -21,7 +21,7 @@
       <% } else { %>
         <%- post.content %>
         <br>
-        <!-- <p>--EOF--</p>
+        <p>--EOF--</p>
         <p>
           <small>于
             <%- partial('post/date', {class_name: 'article__meta-date', index: false, date_format: 'MMM M, YYYY HH:mm:ss'}) %> 发表
@@ -32,17 +32,16 @@
             <% } %>。
           </small>
       <% } %>
-    </p> -->
     </div>
   </div>
-  <!-- <% if (!index && post.comments && config.disqus_shortname){ %>
+  <% if (!index && post.comments && config.disqus_shortname){ %>
     <section id="comments">
       <h1 class="title" href="<%- post.permalink %>#disqus_thread">Comments</h1>
       <div id="disqus_thread">
         <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
       </div>
     </section>
-  <% } %> -->
+  <% } %>
 </article>
 
-<!-- <%- partial('comments') %> -->
+<%- partial('comments') %>
