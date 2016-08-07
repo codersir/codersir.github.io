@@ -13,7 +13,7 @@
 <meta property="og:description" content="前两天因为想用国内的 JS CDN，访问到 staticfile（七牛提供的一个免费 CDN 服务），导致我的 Chrome 直接卡死了两次，页面关也关不掉，只能退出重启。后来换到 Chrome Canary 才勉强可以访问，用谷歌开发者工具一看，发现前端是用的 AngularJS ，大量的 ng-repeat，5万多 watcher，没有做任何性能优化，怎么可能不卡。">
 <meta property="og:image" content="http://codersir.github.io/image/ng-perf/batarang.jpg">
 <meta property="og:image" content="http://codersir.github.io/image/ng-perf/staticfile.png">
-<meta property="og:updated_time" content="2016-07-07T17:34:07.000Z">
+<meta property="og:updated_time" content="2016-08-01T13:24:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AngularJS 应用优化指南">
 <meta name="twitter:description" content="前两天因为想用国内的 JS CDN，访问到 staticfile（七牛提供的一个免费 CDN 服务），导致我的 Chrome 直接卡死了两次，页面关也关不掉，只能退出重启。后来换到 Chrome Canary 才勉强可以访问，用谷歌开发者工具一看，发现前端是用的 AngularJS ，大量的 ng-repeat，5万多 watcher，没有做任何性能优化，怎么可能不卡。">
@@ -120,7 +120,7 @@
 <p><img src="/image/ng-perf/staticfile.png" alt="Profile"></p>
 <p>今年以来一直在陆陆续续的优化公司基于 AngularJS 开发的应用，也积累了一些经验，正好总结一下 AngularJS webapp 的性能优化指南。</p>
 <h3 id="1-减少-watcher"><a href="#1-减少-watcher" class="headerlink" title="1. 减少 watcher"></a>1. 减少 <code>watcher</code></h3><p>我们知道 AngularJS 通过 <em>脏检查</em>（digest cicle）来更新视图，保持数据和视图的同步，脏检查的效率是和 <code>watcher</code> 的多少成正相关的，一般来说超过 2000 后就会明显感觉到变慢，所以提高 AngularJS 性能的关键就是减少 <code>watcher</code> 的数量。</p>
-<p>首先，我们要知道的是，*<em> 什么会产生 <code>watcher</code> *</em> ？</p>
+<p>首先，我们要知道的是，<strong>什么会产生 <code>watcher</code></strong> ？</p>
 <ul>
 <li><code>$scope.$watch</code></li>
 <li><code>{ { stuff } }</code> 类模板语法</li>
@@ -129,7 +129,7 @@
 <li>过滤器 <code>{ { value | myFilter } }</code></li>
 <li><code>ng-repeat</code> 指令</li>
 </ul>
-<p>上面这些情况都会产生 <code>watcher</code>，那么问题来了，*<em> 怎么减少 <code>watcher</code> *</em> 呢?</p>
+<p>上面这些情况都会产生 <code>watcher</code>，那么问题来了，<strong>怎么减少 <code>watcher</code></strong> 呢?</p>
 <ol>
 <li>使用单次绑定语法 <code>{ {::} }</code><br>AngularJS 从1.3版本开始支持单向绑定语法 <code>::</code> ，它可以明确的告诉 AngularJS 哪些绑定获取到数据以后就不用关注了，这可以极大的减少 <code>watcher</code> 的数量，尤其是在 <code>ng-repeat</code> 内使用。</li>
 <li>避免在 <code>ng-repeat</code> 中使用 <code>filter</code><br>可以先把数据过滤后再传给 <code>ng-repeat</code>，这样就能避免因为过滤器产生的 <code>watcher</code> 了。</li>
@@ -206,7 +206,7 @@
              
               ，更新于
               
-	<time class="article__meta-updated" datetime="2016-07-07T17:34:07.000Z" itemprop="datePublished">Jul 7, 2016 01:34:07</time>
+	<time class="article__meta-updated" datetime="2016-08-01T13:24:58.000Z" itemprop="datePublished">Aug 8, 2016 21:24:58</time>
 
             。
           </small>

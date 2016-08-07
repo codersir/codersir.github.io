@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>再探 JavaScript 中的 this | Coder Sir</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JavaScript 中的 this 关键字其实并不复杂，之所以需要再学一次是因为标准的推进，this 的值在不同的情况下表现的与之前有所不同。在 ES6 之前，我们谈 this 的时候，说的最多的就是 this 是动态作用域的。但随着 ES6 箭头函数的引入，现在也会经常看到大家说起 词法作用域 的 this。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再探 JavaScript 中的 this">
+<meta property="og:url" content="http://codersir.github.io/2016/04/10/learn-javascript-this-again/index.html">
+<meta property="og:site_name" content="Coder Sir">
+<meta property="og:description" content="JavaScript 中的 this 关键字其实并不复杂，之所以需要再学一次是因为标准的推进，this 的值在不同的情况下表现的与之前有所不同。在 ES6 之前，我们谈 this 的时候，说的最多的就是 this 是动态作用域的。但随着 ES6 箭头函数的引入，现在也会经常看到大家说起 词法作用域 的 this。">
+<meta property="og:updated_time" content="2016-08-07T14:01:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="再探 JavaScript 中的 this">
+<meta name="twitter:description" content="JavaScript 中的 this 关键字其实并不复杂，之所以需要再学一次是因为标准的推进，this 的值在不同的情况下表现的与之前有所不同。在 ES6 之前，我们谈 this 的时候，说的最多的就是 this 是动态作用域的。但随着 ES6 箭头函数的引入，现在也会经常看到大家说起 词法作用域 的 this。">
+  
+    <link rel="alternative" href="/atom.xml" title="Coder Sir" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+<body>
+  <header class="sidebar" role="header">
+    
+      <div class="sidebar__profile">
+	<a class="sidebar__profile-link" href="/">
+		<figure>
+			<img class="sidebar__profile-img" src="/image/site/gravatar.png" alt="">
+		</figure>
+	</a>
+	<h1 class="sidebar__profile-name">Codersir</h1>
+	<div class="sidebar__profile-bio">
+		<p>Focus on the web development. <br>Insterested in JavaScript, Angular, React and Node.js.</p>
+	</div>
+</div>
+<nav class="sidebar__profile-nav" role="nav">
+	<ul>
+	
+		<li>
+			<a href="/archives">Archives</a>
+		</li>
+	
+		<li>
+			<a href="/resume">Resume</a>
+		</li>
+	
+		<li>
+			<a href="/tags">Tags</a>
+		</li>
+	
+	</ul>
+</nav>
+<aside class="sidebar__profile-social" role="social">
+	
+		
+			
+			<a class="social-github" target="_blank" href="http://github.com/xuhong">
+				<span class="fa fa-github"></span>
+			</a>
+			
+		
+			
+		
+			
+		
+			
+			<a class="social-instagram" target="_blank" href="http://instagram.com/codersir">
+				<span class="fa fa-instagram"></span>
+			</a>
+			
+		
+			
+			<a class="social-rss" target="_blank" href="/atom.xml">
+				<span class="fa fa-rss"></span>
+			</a>
+			
+		
+	
+</aside>
+
+    
+  </header>
+  <main class="main" role="main">
+    <article id="post-learn-javascript-this-again" class="article article--type-post" itemscope itemprop="blogPost">
+  <div class="article__inner">
+    
+    
+      <header class="article__header">
+        
+  
+    <h1 class="article__title" itemprop="name">
+      再探 JavaScript 中的 this
+    </h1>
+  
+
+      </header>
+      <div class="article__meta">
+        <a href="https://github.com/codersir/codersir.github.io/tree/master/source/_posts/learn-javascript-this-again.md" class="article__meta-edit">
+	<i class="fa fa-github"></i> Edit this page on GitHub
+</a>
+
+        
+	<time class="article__meta-date" datetime="2016-04-10T04:55:20.000Z" itemprop="datePublished">Apr 4, 2016</time>
+
+      </div>
+    
+    <div class="article__entry" itemprop="articleBody">
+      
+        <p>JavaScript 中的 <code>this</code> 关键字其实并不复杂，之所以需要再学一次是因为标准的推进，<code>this</code> 的值在不同的情况下表现的与之前有所不同。在 ES6 之前，我们谈 <code>this</code> 的时候，说的最多的就是 <code>this</code> 是动态作用域的。但随着 ES6 箭头函数的引入，现在也会经常看到大家说起 <em>词法作用域</em> 的 <code>this</code>。</p>
+<a id="more"></a>
+<h2 id="this-是什么？"><a href="#this-是什么？" class="headerlink" title="this 是什么？"></a><code>this</code> 是什么？</h2><p><code>this</code> 是一个<strong>关键字</strong>，ECMAScirpt 标准定义 <code>this</code> 为 <strong>ThisBindings 计算的值为当前执行上下文</strong>。</p>
+<h2 id="词法作用域与“动态作用域”"><a href="#词法作用域与“动态作用域”" class="headerlink" title="词法作用域与“动态作用域”"></a>词法作用域与“动态作用域”</h2><p>我们都知道 ECMAScript 是没有动态作用域的，变量属于它定义时所在的作用域且不会发生改变。但是，大多数情况下，<code>this</code> 的值由函数<strong>调用时</strong>的上下文决定，也就是 <code>this</code> 表现的却像是“动态作用域”。它不能在函数运行前指定，而且可能因为每次调用的位置不同而不同。<code>this</code> 和作用域的关系，引用权威指南的原句：</p>
+<blockquote>
+<p>和变量不同，关键字 this 没有作用域限制，嵌套的函数不会从调用它的函数中继承 this。如果嵌套函数作为方法调用，其 <code>this</code> 值指向调用它的对象，如果嵌套函数作为函数调用，其 <code>this</code> 值不是全局对象（非严格模式下）就是 undefined（严格模式下）。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> count = <span class="number">9</span></div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    count: <span class="number">0</span>,</div><div class="line">    plus: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="comment">// this 指向全局对象</span></div><div class="line">            <span class="keyword">this</span>.count++;</div><div class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.count)</div><div class="line">        &#125;,<span class="number">0</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">obj.plus()  <span class="comment">//10</span></div></pre></td></tr></table></figure>
+<p>解决这一问题的常见方法是定义一个变量 <code>self/that</code> 来保存当前的执行上下文：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> count = <span class="number">9</span></div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    count: <span class="number">0</span>,</div><div class="line">    plus: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">var</span> <span class="keyword">self</span> = this</div><div class="line">        setTimeout(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">self</span>.count++;</div><div class="line">            console.log(<span class="keyword">self</span>.count)</div><div class="line">        &#125;,<span class="number">0</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">obj.plus()  <span class="comment">//1</span></div></pre></td></tr></table></figure>
+<p>这样虽然解决了问题，但是却也容易带来困惑，人们容易记住使用这个方法就可以解决问题，却不去深究 <code>this</code> 的实现机制到底是怎样的，也不会去寻找更好的方法来解决这个问题：那就是词法作用域。</p>
+<h2 id="bind-函数"><a href="#bind-函数" class="headerlink" title="bind 函数"></a><code>bind</code> 函数</h2><p>为了更好的解决上面的问题，回到 JavaScript 熟悉的词法作用域来，ES5 中引入了 <code>bind</code> 函数，<code>bind</code> 函数可以设置函数的 <code>this</code> 值而不管它如何调用，将 <code>this</code> 绑定到当前的词法作用域。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> count = <span class="number">9</span></div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    count: <span class="number">0</span>,</div><div class="line">    plus: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">this</span>.count++;</div><div class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.count)</div><div class="line">        &#125;.bind(<span class="keyword">this</span>),<span class="number">0</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">obj.plus() <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<h2 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h2><p>ES6 中新加入了对箭头函数的支持，<code>this</code> 指向定义时它的上下文且不会改变，遵循词法作用域规则。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var <span class="keyword">count</span> = <span class="number">9</span></div><div class="line">var obj = &#123;</div><div class="line">    <span class="keyword">count</span>: <span class="number">0</span>,</div><div class="line">    <span class="keyword">plus</span>() &#123;</div><div class="line">        setTimeout(() =&gt; &#123;</div><div class="line">            <span class="keyword">this</span>.<span class="keyword">count</span>++;</div><div class="line">            console.log(<span class="keyword">this</span>.<span class="keyword">count</span>)</div><div class="line">        &#125;,<span class="number">0</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">obj.<span class="keyword">plus</span>()  <span class="comment">//1</span></div></pre></td></tr></table></figure>
+<p>之所以这样，背后真正的原因是：<strong>箭头函数没有自己的 <code>this</code>，箭头函数的 <code>this</code> 是从包裹它的作用域继承过来的</strong>。</p>
+<p>所以，在 ES6 后，你几乎不需要再提心吊胆担心掉进 <code>this</code> 的坑里，只要你遵循下面两条规则：</p>
+<ul>
+<li>对方法都使用 <strong>非</strong> 箭头函数</li>
+<li>其他的地方都使用箭头函数</li>
+</ul>
+<h2 id="call-…-和-apply-…"><a href="#call-…-和-apply-…" class="headerlink" title="call(…) 和 apply(…)"></a>call(…) 和 apply(…)</h2><p>JavaScript 中除了 <code>bind</code> 函数可以手动绑定 <code>this</code> 以外，还提供了 <code>call</code> 和 <code>apply</code> 函数用来在调用函数的时候，手动改变函数调用上下文。<code>call</code> 和 <code>apply</code> 函数的第一个参数就是本次调用的上下文：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> count = <span class="number">9</span></div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    count: <span class="number">0</span>,</div><div class="line">    plus: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">this</span>.count++;</div><div class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.count)</div><div class="line">        &#125;.bind(<span class="keyword">this</span>),<span class="number">0</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">obj.plus() <span class="comment">// 1</span></div><div class="line">obj.plus.apply(<span class="keyword">this</span>) <span class="comment">// 10</span></div></pre></td></tr></table></figure>
+<h2 id="new-构造函数"><a href="#new-构造函数" class="headerlink" title="new 构造函数"></a><code>new</code> 构造函数</h2><p>当通过 <code>new</code> 操作符创建对象时，JavaScript 编译器会先创建一个新的空对象，然后设置一些内部的属性，并调用新对象的构造函数。因此，当通过 <code>new</code> 调用构造函数时，<code>this</code> 指向这个新创建的对象：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> F = ()=&gt;&#123;</div><div class="line">  <span class="keyword">this</span>.a = <span class="number">1</span></div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line">F() <span class="comment">// Window</span></div><div class="line"><span class="keyword">new</span> F() <span class="comment">// &#123;a:1&#125;</span></div></pre></td></tr></table></figure>
+<h2 id="eval"><a href="#eval" class="headerlink" title="eval"></a><code>eval</code></h2><p>直接调用 <code>eval</code>，<code>this</code> 和 <code>eval()</code> 执行环境中的 <code>this</code> 保持一致。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">eval</span>(<span class="string">'this===window'</span>) <span class="comment">// true</span></div><div class="line"><span class="keyword">use</span> <span class="title">strict</span>; <span class="comment">// 严格模式下</span></div><div class="line"><span class="keyword">eval</span>(<span class="string">'this===undefined'</span>) <span class="comment">// true</span></div><div class="line"><span class="comment">// 方法中</span></div><div class="line"><span class="keyword">var</span> obj = &#123;  </div><div class="line">  method: <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">    console.log(<span class="keyword">eval</span>(<span class="string">'this'</span>) === obj)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">obj.method() <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<h2 id="class-类里面的-this"><a href="#class-类里面的-this" class="headerlink" title="class 类里面的 this"></a><code>class</code> 类里面的 <code>this</code></h2><p>类会在调用 constructor 函数的时候初始化 <code>this</code>，子类 constructor 函数中在调用 <code>super()</code> 以后才能使用 <code>this</code>，否则会报 <code>ReferenceError: this is not defined</code>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面基本上列出了 JavaScript 中与 <code>this</code> 相关的方方面面了，掌握 <code>this</code> 并不难，随着 ES6 的推进，善用箭头函数，掉进坑的机会就更少了。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="http://stackoverflow.com/questions/3127429/how-does-the-this-keyword-work" target="_blank" rel="external">stackoverflow: How does the “this” keyword work?</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="external">MDN this</a></li>
+<li><a href="https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&amp;%20closures/apC.md" target="_blank" rel="external">You-Dont-Know-This</a></li>
+</ul>
+
+        <br>
+        <p>--EOF--</p>
+        <p>
+          <small>于 
+            
+	<time class="article__meta-date" datetime="2016-04-10T04:55:20.000Z" itemprop="datePublished">Apr 4, 2016 12:55:20</time>
+ 发表
+            
+            
+            ，并被添加标签「
+             
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/JavaScript/">JavaScript</a>
+ 
+	<a class="article_meta-tag" title="1篇文章" href="http://codersir.github.io/tags/ecma/">ecma</a>
+
+            」
+            
+            
+             
+              ，更新于
+              
+	<time class="article__meta-updated" datetime="2016-08-07T14:01:19.000Z" itemprop="datePublished">Aug 8, 2016 22:01:19</time>
+
+            。
+          </small>
+      
+    </div>
+  </div>
+  
+    <section id="comments">
+      <h1 class="title" href="http://codersir.github.io/2016/04/10/learn-javascript-this-again/#disqus_thread">Comments</h1>
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </section>
+  
+  
+    
+<nav class="article__nav">
+  
+    <a href="/2016/04/10/learn-javascript-scope-again/" class="article__nav-newer article__nav-link-wrap">
+      <strong class="article__nav-caption">Newer</strong>
+      <div class="article__nav-title">
+        
+          再探 JavaScript 中的作用域
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/13/dive-into-zone/" class="article__nav-older article__nav-link-wrap">
+      <strong class="article__nav-caption">Older</strong>
+      <div class="article__nav-title">理解 Zone 的实现机制</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<script>
+  var disqus_shortname = 'codsirblog';
+  var disqus_loaded = false;
+  var body = document.body;
+  var html = document.documentElement;
+  var clientHeight = html.clientHeight
+  var pageHeight = Math.max(body.scrollHeight,body.offsetHeight,html.clientHeight, html.scrollHeight, html.offsetHeight)
+
+  
+  var disqus_url = 'http://codersir.github.io/2016/04/10/learn-javascript-this-again/';
+  
+
+  if(clientHeight == pageHeight){
+    loadDisqus()
+    disqus_loaded = true
+  }
+  
+  document.addEventListener('scroll', function(e){
+    if(disqus_loaded){
+      return
+    }else{
+      var scrollTop = body.scrollTop;
+      if(scrollTop + clientHeight + 100 > pageHeight){
+        loadDisqus()
+        disqus_loaded = true
+      }
+    }
+  })
+  
+  function loadDisqus(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }
+</script>
+
+
+  </main>
+  <script src="/js/script.js"></script>
+</body>
+</html>
