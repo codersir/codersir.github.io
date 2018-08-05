@@ -5,7 +5,7 @@
   <link href="//atom.xml" rel="self"/>
   
   <link href="http://codersir.github.io/"/>
-  <updated>2016-09-05T16:56:00.000Z</updated>
+  <updated>2018-08-05T08:34:01.123Z</updated>
   <id>http://codersir.github.io/</id>
   
   <author>
@@ -20,14 +20,15 @@
     <link href="http://codersir.github.io/2016/09/05/Three-Gorges-Tour/"/>
     <id>http://codersir.github.io/2016/09/05/Three-Gorges-Tour/</id>
     <published>2016-09-04T17:37:46.000Z</published>
-    <updated>2016-09-05T16:56:00.000Z</updated>
+    <updated>2018-08-05T08:34:01.123Z</updated>
     
     <content type="html"><![CDATA[<p>趁着离职的空档，和家人去宜昌三峡游玩了两天。第一次全家人一起出去游玩，本来就是想着休闲游，放松一下心情，所以尽兴倒是谈不上，开心更多的是因为满足了自己长久以来的一个小目标：<strong>带家人出去旅游</strong>。工作以后，陪家人的时间是越来越少了，从今年开始，希望以后每年都能至少全家人一起旅游一次。</p>
 <a id="more"></a>
 <h3 id="Day-1"><a href="#Day-1" class="headerlink" title="Day 1"></a>Day 1</h3><p>第一天（8.30）去了三峡人家。三峡人家过去需要坐船，好多年没坐船了，还是有点兴奋的，船上景色也非常不错。</p>
 <p><img src="/image/threegores/xingchuan.jpeg" alt="行船"></p>
-<p>自拍一张。</p>
-<p><img src="/image/threegores/selfie.jpeg" alt="selfie"></p>
+<!-- 自拍一张。
+
+![selfie](/image/threegores/selfie.jpeg) -->
 <p>船上偶遇 CCTV 拍纪录片。</p>
 <p><img src="/image/threegores/cctv.jpeg" alt="CCTV"></p>
 <p>三峡人家确实很美，你可以拍出和网上一模一样的照片。在山谷间溯流散步，空气清新，好不舒服。</p>
