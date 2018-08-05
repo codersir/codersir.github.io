@@ -615,11 +615,11 @@
     </summary>
     
     
-      <category term="typescript" scheme="http://codersir.github.io/tags/typescript/"/>
-    
       <category term="es2016" scheme="http://codersir.github.io/tags/es2016/"/>
     
       <category term="decorator" scheme="http://codersir.github.io/tags/decorator/"/>
+    
+      <category term="typescript" scheme="http://codersir.github.io/tags/typescript/"/>
     
   </entry>
   
